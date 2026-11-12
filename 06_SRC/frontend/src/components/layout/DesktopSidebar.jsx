@@ -1,0 +1,66 @@
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Home, Compass, Package, Clock, Plus, User, Shield } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth';
+
+export const DesktopSidebar = () => {
+  const { user } = useAuth();
+
+  const links = [
+    { to: '/app', label: 'Dashboard', icon: Home, end: true },
+    { to: '/app/explore', label: 'Explore Items', icon: Compass },
+    { to: '/app/listings', label: 'My Listings', icon: Package },
+    { to: '/app/activity', label: 'Activity & Requests', icon: Clock },
+    { to: '/app/profile', label: 'My Profile', icon: User },
+  ];
+
+  if (user?.role === 'admin') {
+    links.push({ to: '/admin', label: 'Admin Portal', icon: Shield });
+  }
+
+  return (
+    <aside className="hidden md:flex flex-col w-64 border-r border-surface-border bg-surface-card p-4 shrink-0 min-h-[calc(100vh-3.5rem)]">
+      <div className="mb-4">
+        <NavLink
+          to="/app/items/new"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm transition-colors shadow-sm"
+        >
+          <Plus size={18} />
+          <span>List an Item</span>
+        </NavLink>
+      </div>
+
+      <nav className="flex flex-col gap-1 flex-1">
+        {links.map((link) => {
+          const Icon = link.icon;
+          return (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-brand-50 text-brand-700 font-semibold'
+                    : 'text-ink-muted hover:text-ink-primary hover:bg-slate-50'
+                }`
+              }
+            >
+              <Icon size={18} />
+              <span>{link.label}</span>
+            </NavLink>
+          );
+        })}
+      </nav>
+
+      <div className="pt-4 border-t border-surface-border text-xs text-ink-muted">
+        <p className="font-semibold text-ink-primary truncate">{user?.full_name}</p>
+        <p className="truncate text-ink-muted">{user?.email}</p>
+        <span className="inline-block mt-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-medium text-[10px] border border-emerald-200">
+          Verified Student
+        </span>
+      </div>
+    </aside>
+  );
+};
+
