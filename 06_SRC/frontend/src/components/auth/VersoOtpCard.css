@@ -126,6 +126,8 @@
     height: 124%;
     margin-top: -12%;
     margin-bottom: -12%;
+    margin-left: -8%;
+    width: 108%;
     transform: skewX(-8deg);
     transform-origin: center center;
     box-shadow: 6px 0 28px rgba(212, 168, 83, 0.35), inset -2px 0 0 var(--otp-accent-gold);
@@ -212,7 +214,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 2rem 2.5rem 3.5rem;
   background: var(--otp-surface-card);
   position: relative;
 }

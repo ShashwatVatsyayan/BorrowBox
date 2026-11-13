@@ -136,7 +136,7 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
               <p className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-bold">UID: {immutableUid}</p>
             </div>
             <div className="text-right">
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 whitespace-nowrap">
                 Verified Student
               </span>
               <p className="text-[10px] text-ink-light mt-0.5">{department.split('&')[0].trim()}</p>

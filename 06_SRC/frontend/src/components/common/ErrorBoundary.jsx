@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component {
           </header>
 
           <main className="max-w-md w-full mx-auto my-auto text-center py-12 px-6 rounded-2xl bg-surface-card border border-surface-border shadow-xl">
-            <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-[#D4A853] flex items-center justify-center border border-[#D4A853]/30 mx-auto mb-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#D4A853]/10 dark:bg-[#D4A853]/15 text-[#D4A853] flex items-center justify-center border border-[#D4A853]/30 mx-auto mb-4">
               <AlertTriangle size={26} />
             </div>
 

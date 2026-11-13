@@ -91,7 +91,7 @@ export const ProfilePage = () => {
           className="p-4 rounded-xl bg-surface-card border border-surface-border hover:border-brand-200 flex items-center justify-between transition-colors shadow-xs"
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-teal-50 text-brand-600">
+            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400">
               <Package size={18} />
             </div>
             <div>
