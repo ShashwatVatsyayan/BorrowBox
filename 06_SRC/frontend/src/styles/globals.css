@@ -73,20 +73,19 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
 }
 
-/* Ink Bleed Theme Transition (adapted from https://github.com/codemure-official/ink-bleed-theme-changer) */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+/* Ink Bleed WebGL2 Canvas Overlay (https://github.com/codemure-official/ink-bleed-theme-changer) */
+.ink-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  visibility: hidden;
 }
 
-::view-transition-old(root) {
-  z-index: 1;
-}
-
-::view-transition-new(root) {
-  z-index: 9999;
-  filter: url(#ink-bleed-filter);
+.ink-canvas.is-active {
+  visibility: visible;
 }
 
 /* CSS fallback cross-fade transition when View Transitions are not available or reduced-motion is active */

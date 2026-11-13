@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import { InkTransition, applyTheme as applyDomThemeHelper } from '../lib/inkBleed';
 
 const ThemeContext = createContext();
 
@@ -24,20 +25,18 @@ export function ThemeProvider({ children }) {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  const isTransitioningRef = useRef(false);
+  const inkTransitionRef = useRef(null);
 
   const applyDomTheme = (activeTheme) => {
-    const root = document.documentElement;
     let effective = activeTheme;
     if (activeTheme === 'system') {
-      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      effective =
+        typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
     }
     setResolvedTheme(effective);
-    if (effective === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    applyDomThemeHelper(effective);
   };
 
   useEffect(() => {
@@ -54,109 +53,102 @@ export function ThemeProvider({ children }) {
     return () => mediaQuery.removeEventListener('change', handleSystemChange);
   }, [theme]);
 
-  /**
-   * Organic Ink Bleed theme transition
-   * Inspired by https://github.com/codemure-official/ink-bleed-theme-changer
-   */
-  const executeInkBleed = (targetTheme, eventOrPoint) => {
-    if (isTransitioningRef.current) return;
-
-    // Determine click/touch origin coordinates
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
-
-    if (eventOrPoint) {
-      if (typeof eventOrPoint.clientX === 'number' && typeof eventOrPoint.clientY === 'number' && (eventOrPoint.clientX !== 0 || eventOrPoint.clientY !== 0)) {
-        x = eventOrPoint.clientX;
-        y = eventOrPoint.clientY;
-      } else if (typeof eventOrPoint.x === 'number' && typeof eventOrPoint.y === 'number') {
-        x = eventOrPoint.x;
-        y = eventOrPoint.y;
-      } else if (eventOrPoint.currentTarget && typeof eventOrPoint.currentTarget.getBoundingClientRect === 'function') {
-        const rect = eventOrPoint.currentTarget.getBoundingClientRect();
-        x = rect.left + rect.width / 2;
-        y = rect.top + rect.height / 2;
-      }
-    }
-
-    // Distance to farthest viewport corner
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-
-    const prefersReducedMotion = typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Save state
-    setThemeState(targetTheme);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, targetTheme);
-    } catch {
-      // Ignore write errors
-    }
-
-    // Native View Transition with tactile SVG ink bleed filter
-    if (typeof document.startViewTransition === 'function' && !prefersReducedMotion) {
-      isTransitioningRef.current = true;
-
-      // Seed variety for procedural ink variation on every click
-      const turbulence = document.querySelector('#ink-bleed-filter feTurbulence');
-      if (turbulence) {
-        turbulence.setAttribute('seed', String(Math.floor(Math.random() * 9999)));
-      }
-
-      const transition = document.startViewTransition(() => {
-        applyDomTheme(targetTheme);
-      });
-
-      transition.ready
-        .then(() => {
-          const animation = document.documentElement.animate(
-            {
-              clipPath: [
-                `circle(0px at ${x}px ${y}px)`,
-                `circle(${endRadius * 1.05}px at ${x}px ${y}px)`
-              ]
-            },
-            {
-              duration: 800,
-              easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-              pseudoElement: '::view-transition-new(root)'
+  // Initialize WebGL2 Ink Transition from https://github.com/codemure-official/ink-bleed-theme-changer
+  useEffect(() => {
+    const canvas = document.getElementById('ink-canvas');
+    if (canvas) {
+      try {
+        inkTransitionRef.current = new InkTransition(canvas, null, {
+          onThemeChange: (newTheme) => {
+            setResolvedTheme(newTheme);
+            setThemeState(newTheme);
+            try {
+              localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+            } catch {
+              // Ignore storage errors
             }
-          );
-          return animation.finished;
-        })
-        .catch(() => {
-          // Fallback if animation rejected
-        })
-        .finally(() => {
-          isTransitioningRef.current = false;
+          },
         });
+      } catch (err) {
+        console.warn('Ink transition initialization skipped:', err);
+      }
+    }
+
+    return () => {
+      inkTransitionRef.current?.destroy();
+    };
+  }, []);
+
+  const extractPoint = (eventOrPoint) => {
+    if (!eventOrPoint) return undefined;
+    if (
+      typeof eventOrPoint.clientX === 'number' &&
+      typeof eventOrPoint.clientY === 'number' &&
+      (eventOrPoint.clientX !== 0 || eventOrPoint.clientY !== 0)
+    ) {
+      return { x: eventOrPoint.clientX, y: eventOrPoint.clientY };
+    }
+    if (typeof eventOrPoint.x === 'number' && typeof eventOrPoint.y === 'number') {
+      return { x: eventOrPoint.x, y: eventOrPoint.y };
+    }
+    if (eventOrPoint.currentTarget && typeof eventOrPoint.currentTarget.getBoundingClientRect === 'function') {
+      const rect = eventOrPoint.currentTarget.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+    return undefined;
+  };
+
+  const toggleTheme = (eventOrPoint) => {
+    const point = extractPoint(eventOrPoint);
+    if (inkTransitionRef.current) {
+      inkTransitionRef.current.toggle(point);
     } else {
-      // Codemure CSS Cross-Fade Fallback
-      const root = document.documentElement;
-      root.classList.add('theme-fade');
-      root.style.setProperty('--theme-fade', '0.45s');
-      applyDomTheme(targetTheme);
-      window.setTimeout(() => {
-        root.classList.remove('theme-fade');
-      }, 500);
+      const next = resolvedTheme === 'dark' ? 'light' : 'dark';
+      applyDomTheme(next);
+      setThemeState(next);
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {
+        // Ignore storage errors
+      }
     }
   };
 
   const setTheme = (newTheme, eventOrPoint) => {
     if (newTheme !== 'light' && newTheme !== 'dark' && newTheme !== 'system') return;
-    executeInkBleed(newTheme, eventOrPoint);
-  };
+    const target =
+      newTheme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : newTheme;
 
-  const toggleTheme = (eventOrPoint) => {
-    const next = resolvedTheme === 'dark' ? 'light' : 'dark';
-    executeInkBleed(next, eventOrPoint);
+    if (target === resolvedTheme && newTheme === theme) return;
+
+    if (target !== resolvedTheme && inkTransitionRef.current) {
+      const point = extractPoint(eventOrPoint);
+      inkTransitionRef.current.toggle(point);
+      setThemeState(newTheme);
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+      } catch {
+        // Ignore storage errors
+      }
+    } else {
+      setThemeState(newTheme);
+      applyDomTheme(newTheme);
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+      } catch {
+        // Ignore storage errors
+      }
+    }
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{ theme, resolvedTheme, setTheme, toggleTheme, inkTransition: inkTransitionRef.current }}
+    >
       {children}
     </ThemeContext.Provider>
   );
