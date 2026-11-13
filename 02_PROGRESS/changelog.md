@@ -64,3 +64,10 @@ This file logs every meaningful change in the project.
 - Redeployed updated production build to Vercel at `https://borrowbox-lime.vercel.app`.
 - Updated `Logo.jsx` to render the official brand logo emblem at increased scale (`h-9` up to `h-28 sm:h-32`), removing redundant text beside the logo.
 - Rebuilt and redeployed production release to Vercel at `https://borrowbox-lime.vercel.app`.
+- Integrated organic Ink Bleed theme transition inspired by `codemure-official/ink-bleed-theme-changer`:
+  - Embedded SVG fractal noise displacement filter (`#ink-bleed-filter`) for fibrous, organic droplet contours.
+  - View Transitions API integration with click-coordinate origin tracking (`(clientX, clientY)`).
+  - Animate expanding circular clip-path using `cubic-bezier(0.22, 1, 0.36, 1)` with 800ms duration.
+  - Implemented Codemure CSS cross-fade fallback (`html.theme-fade`) with `--theme-fade: 0.45s` for non-supporting browsers and reduced-motion environments.
+  - Validated production build (`npm run build`) in 5.26s.
+  - Redeployed production release to Vercel at `https://borrowbox-lime.vercel.app`.

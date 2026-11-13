@@ -8,19 +8,25 @@ export const ThemeToggle = ({ className = '', size = 'md', showLabel = false }) 
 
   const iconSize = size === 'sm' ? 16 : 18;
 
+  const handleClick = (e) => {
+    toggleTheme(e);
+  };
+
   return (
     <button
       type="button"
-      onClick={toggleTheme}
-      className={`inline-flex items-center justify-center gap-2 p-2 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${className}`}
+      onClick={handleClick}
+      className={`group inline-flex items-center justify-center gap-2 p-2 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${className}`}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {isDark ? (
-        <Sun size={iconSize} className="text-amber-400" />
-      ) : (
-        <Moon size={iconSize} className="text-slate-600" />
-      )}
+      <div className="relative w-5 h-5 flex items-center justify-center transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110">
+        {isDark ? (
+          <Sun size={iconSize} className="text-amber-400 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90" />
+        ) : (
+          <Moon size={iconSize} className="text-slate-600 dark:text-slate-300 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-12" />
+        )}
+      </div>
       {showLabel && (
         <span className="text-xs font-medium text-ink-primary">
           {isDark ? 'Light Mode' : 'Dark Mode'}
@@ -31,4 +37,3 @@ export const ThemeToggle = ({ className = '', size = 'md', showLabel = false }) 
 };
 
 export default ThemeToggle;
-

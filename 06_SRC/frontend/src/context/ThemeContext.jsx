@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 
 const ThemeContext = createContext();
 
@@ -24,30 +24,29 @@ export function ThemeProvider({ children }) {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  useEffect(() => {
+  const isTransitioningRef = useRef(false);
+
+  const applyDomTheme = (activeTheme) => {
     const root = document.documentElement;
+    let effective = activeTheme;
+    if (activeTheme === 'system') {
+      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    setResolvedTheme(effective);
+    if (effective === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  };
 
-    const applyTheme = () => {
-      let active = theme;
-      if (theme === 'system') {
-        active = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-
-      setResolvedTheme(active);
-
-      if (active === 'dark') {
-        root.classList.add('dark');
-      } else {
-        root.classList.remove('dark');
-      }
-    };
-
-    applyTheme();
+  useEffect(() => {
+    applyDomTheme(theme);
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleSystemChange = () => {
       if (theme === 'system') {
-        applyTheme();
+        applyDomTheme('system');
       }
     };
 
@@ -55,19 +54,105 @@ export function ThemeProvider({ children }) {
     return () => mediaQuery.removeEventListener('change', handleSystemChange);
   }, [theme]);
 
-  const setTheme = (newTheme) => {
-    if (newTheme !== 'light' && newTheme !== 'dark' && newTheme !== 'system') return;
-    setThemeState(newTheme);
+  /**
+   * Organic Ink Bleed theme transition
+   * Inspired by https://github.com/codemure-official/ink-bleed-theme-changer
+   */
+  const executeInkBleed = (targetTheme, eventOrPoint) => {
+    if (isTransitioningRef.current) return;
+
+    // Determine click/touch origin coordinates
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight / 2;
+
+    if (eventOrPoint) {
+      if (typeof eventOrPoint.clientX === 'number' && typeof eventOrPoint.clientY === 'number' && (eventOrPoint.clientX !== 0 || eventOrPoint.clientY !== 0)) {
+        x = eventOrPoint.clientX;
+        y = eventOrPoint.clientY;
+      } else if (typeof eventOrPoint.x === 'number' && typeof eventOrPoint.y === 'number') {
+        x = eventOrPoint.x;
+        y = eventOrPoint.y;
+      } else if (eventOrPoint.currentTarget && typeof eventOrPoint.currentTarget.getBoundingClientRect === 'function') {
+        const rect = eventOrPoint.currentTarget.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top + rect.height / 2;
+      }
+    }
+
+    // Distance to farthest viewport corner
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const prefersReducedMotion = typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Save state
+    setThemeState(targetTheme);
     try {
-      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+      localStorage.setItem(THEME_STORAGE_KEY, targetTheme);
     } catch {
       // Ignore write errors
     }
+
+    // Native View Transition with tactile SVG ink bleed filter
+    if (typeof document.startViewTransition === 'function' && !prefersReducedMotion) {
+      isTransitioningRef.current = true;
+
+      // Seed variety for procedural ink variation on every click
+      const turbulence = document.querySelector('#ink-bleed-filter feTurbulence');
+      if (turbulence) {
+        turbulence.setAttribute('seed', String(Math.floor(Math.random() * 9999)));
+      }
+
+      const transition = document.startViewTransition(() => {
+        applyDomTheme(targetTheme);
+      });
+
+      transition.ready
+        .then(() => {
+          const animation = document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${endRadius * 1.05}px at ${x}px ${y}px)`
+              ]
+            },
+            {
+              duration: 800,
+              easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              pseudoElement: '::view-transition-new(root)'
+            }
+          );
+          return animation.finished;
+        })
+        .catch(() => {
+          // Fallback if animation rejected
+        })
+        .finally(() => {
+          isTransitioningRef.current = false;
+        });
+    } else {
+      // Codemure CSS Cross-Fade Fallback
+      const root = document.documentElement;
+      root.classList.add('theme-fade');
+      root.style.setProperty('--theme-fade', '0.45s');
+      applyDomTheme(targetTheme);
+      window.setTimeout(() => {
+        root.classList.remove('theme-fade');
+      }, 500);
+    }
   };
 
-  const toggleTheme = () => {
+  const setTheme = (newTheme, eventOrPoint) => {
+    if (newTheme !== 'light' && newTheme !== 'dark' && newTheme !== 'system') return;
+    executeInkBleed(newTheme, eventOrPoint);
+  };
+
+  const toggleTheme = (eventOrPoint) => {
     const next = resolvedTheme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
+    executeInkBleed(next, eventOrPoint);
   };
 
   return (
@@ -84,4 +169,3 @@ export function useThemeContext() {
   }
   return context;
 }
-

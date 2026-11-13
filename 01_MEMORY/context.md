@@ -16,7 +16,7 @@ Architecture & Status:
 - Live Production Deployment: Deployed on Vercel at `https://borrowbox-lime.vercel.app`.
 - Live Cloud Database: Connected to Supabase project `https://nayvfsgvmwqgfphaxuzr.supabase.co`.
 - Environment Configuration: Configured in `06_SRC/frontend/.env.local` and in Vercel Production Environment with dual support for `VITE_` and `NEXT_PUBLIC_` conventions.
-- Theme System: Full Dark and Light mode support with CSS variables, ThemeProvider context, and system preference detection.
+- Theme System: Full Dark and Light mode support with CSS variables, ThemeProvider context, system preference detection, and Codemure-inspired organic Ink Bleed circular transition effect originating from click coordinates.
 - Compliance & Legal: Comprehensive Terms and Conditions (`/terms`) and Privacy Policy (`/privacy`) pages tailored to Chandigarh University student borrowing.
 - Error Handling: Custom 404 Not Found page (`/404` and wildcard catch-all).
 - Copy & Design: Zero AI slop, direct university student focus, authentic hero section, and 0 emojis repo-wide.

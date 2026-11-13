@@ -45,7 +45,7 @@ export const SettingsPage = () => {
           <div className="grid grid-cols-3 gap-3">
             <button
               type="button"
-              onClick={() => setTheme('light')}
+              onClick={(e) => setTheme('light', e)}
               className={`p-3 rounded-xl border flex flex-col items-center gap-2 text-xs font-semibold transition-all ${
                 theme === 'light'
                   ? 'border-brand-600 bg-brand-50/50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-400 ring-2 ring-brand-600/20'
@@ -58,7 +58,7 @@ export const SettingsPage = () => {
 
             <button
               type="button"
-              onClick={() => setTheme('dark')}
+              onClick={(e) => setTheme('dark', e)}
               className={`p-3 rounded-xl border flex flex-col items-center gap-2 text-xs font-semibold transition-all ${
                 theme === 'dark'
                   ? 'border-brand-600 bg-brand-50/50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-400 ring-2 ring-brand-600/20'
@@ -71,7 +71,7 @@ export const SettingsPage = () => {
 
             <button
               type="button"
-              onClick={() => setTheme('system')}
+              onClick={(e) => setTheme('system', e)}
               className={`p-3 rounded-xl border flex flex-col items-center gap-2 text-xs font-semibold transition-all ${
                 theme === 'system'
                   ? 'border-brand-600 bg-brand-50/50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-400 ring-2 ring-brand-600/20'

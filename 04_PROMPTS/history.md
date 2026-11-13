@@ -154,3 +154,15 @@ User instructed that only the official brand logo should be rendered without any
 
 **Outcome:**  
 Refactored Logo.jsx to display only the official brand emblem in its natural 3:2 aspect ratio with increased height scales (h-9 in app headers, h-12 in landing navigation, h-20/h-24 in auth forms, h-28/h-32 in splash). Removed text element completely. Verified production build and deployed update to Vercel production.
+
+---
+
+## 2026-11-13 11:50:18
+**Prompt:**  
+/gravitas use this as dark and light theme effect transition - https://github.com/codemure-official/ink-bleed-theme-changer.git
+
+**Context:**  
+User requested implementing the organic ink-bleed theme transition effect from codemure-official/ink-bleed-theme-changer for switching between light and dark modes.
+
+**Outcome:**  
+Inspected repository mechanics. Implemented click-originating tactile ink bleed transition via native View Transitions API with SVG fractal turbulence displacement filter (#ink-bleed-filter) and cubic-bezier(0.22, 1, 0.36, 1) ease curve. Added Codemure CSS cross-fade fallback (html.theme-fade) for reduced-motion and non-supporting environments. Validated production build and deployed update to Vercel production.

@@ -79,4 +79,5 @@ This file reflects the true execution state of the project.
 - [x] Implement student-centric Privacy Policy page (`/privacy`, `/privacy-policy`)
 - [x] Implement custom 404 Not Found error page (`/404` and wildcard `*`)
 - [x] Implement full Dark / Light mode theme system (ThemeProvider, ThemeToggle, CSS variables)
+- [x] Implement organic Ink Bleed transition effect inspired by Codemure with click-originating circular clip-path expansion and SVG turbulence displacement filter
 - [x] Deploy updated release to Vercel production (`https://borrowbox-lime.vercel.app`)

@@ -73,3 +73,33 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
 }
 
+/* Ink Bleed Theme Transition (adapted from https://github.com/codemure-official/ink-bleed-theme-changer) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  filter: url(#ink-bleed-filter);
+}
+
+/* CSS fallback cross-fade transition when View Transitions are not available or reduced-motion is active */
+html.theme-fade,
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+  transition:
+    background-color var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
+    border-color var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
+    color var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
+    fill var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
+    stroke var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
