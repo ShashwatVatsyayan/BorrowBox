@@ -57,18 +57,13 @@ export const AuthTunnelTransition = ({
 
       {/* Center High-Contrast Badge & Status Display */}
       <div className="relative z-10 flex flex-col items-center text-center p-6 max-w-sm mx-4 rounded-3xl bg-black/75 backdrop-blur-md border border-orange-500/40 shadow-[0_0_50px_rgba(255,107,0,0.35)] animate-in fade-in zoom-in-95 duration-300">
-        {/* Glowing Logo Disc */}
-        <div className="relative mb-4">
-          <div className="w-20 h-20 rounded-full bg-black/90 border border-orange-500/60 p-2.5 flex items-center justify-center shadow-[0_0_25px_rgba(255,107,0,0.5)]">
-            <img
-              src="/logo-dark.png"
-              alt="BorrowBox"
-              className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(255,107,0,0.6)]"
-            />
-          </div>
-          <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-orange-600 border-2 border-black flex items-center justify-center text-white shadow-xs">
-            <ShieldCheck size={14} />
-          </span>
+        {/* Visible Standalone Logo - No Box, No Circle */}
+        <div className="mb-4 flex items-center justify-center">
+          <img
+            src="/logo-dark.png"
+            alt="BorrowBox - Community Borrowing Platform"
+            className="h-20 sm:h-24 w-auto object-contain drop-shadow-[0_0_16px_rgba(13,184,166,0.4)]"
+          />
         </div>
 
         {/* Text Details */}

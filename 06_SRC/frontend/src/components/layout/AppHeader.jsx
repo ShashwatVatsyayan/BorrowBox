@@ -13,6 +13,7 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useTheme } from '../../context/ThemeContext';
+import { Logo } from '../common/Logo';
 import { PillNav } from '../common/PillNav';
 import { ThemeToggle } from '../common/ThemeToggle';
 import { ProfileCardModal } from '../profile/ProfileCardModal';
@@ -46,13 +47,15 @@ export const AppHeader = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-surface-card border-b border-surface-border">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3 sm:gap-4">
+        {/* Prominent Visible Standalone Logo - No Box, No Circle */}
+        <div className="flex items-center shrink-0 py-1">
+          <Logo size="md" to="/app" />
+        </div>
+
         {/* React Bits PillNav Interactive Navigation */}
-        <div className="flex-1 min-w-0 flex items-center">
+        <div className="flex-1 min-w-0 flex items-center justify-center sm:justify-start">
           <PillNav
-            logo="/icon_mark.png"
-            logoAlt="BorrowBox"
-            logoHref="/app"
             items={navItems}
             activeHref={location.pathname}
             theme={resolvedTheme}

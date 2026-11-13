@@ -1,31 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const Logo = ({ size = 'md', showText = false, iconOnly = false, to = '/app', className = '' }) => {
+export const Logo = ({ size = 'md', showText = false, to = '/app', className = '' }) => {
   const sizeClasses = {
-    xs: 'h-7 w-auto',
-    sm: 'h-9 sm:h-10 w-auto',
+    xs: 'h-8 w-auto',
+    sm: 'h-10 sm:h-11 w-auto',
     md: 'h-12 sm:h-14 w-auto',
     lg: 'h-20 sm:h-24 w-auto',
     xl: 'h-28 sm:h-32 w-auto'
   };
 
-  const lightSrc = iconOnly ? '/icon_mark.png' : '/logo.png';
-  const darkSrc = iconOnly ? '/icon_mark_dark.png' : '/logo-dark.png';
-
   const content = (
-    <div className={`inline-flex items-center ${className}`}>
-      {/* Light mode: crisp vibrant logo */}
+    <div className={`inline-flex items-center select-none ${className}`}>
+      {/* Light mode: user's exact logo with transparent background */}
       <img
-        src={lightSrc}
-        alt="BorrowBox"
+        src="/logo.png"
+        alt="BorrowBox - Community Borrowing Platform"
         className={`block dark:hidden ${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105`}
       />
-      {/* Dark mode: crisp white body + vibrant orange accents with luminous orange glow */}
+      {/* Dark mode: user's exact logo with crisp white text & emerald accents on transparent background */}
       <img
-        src={darkSrc}
-        alt="BorrowBox"
-        className={`hidden dark:block ${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105 drop-shadow-[0_0_14px_rgba(255,107,0,0.5)]`}
+        src="/logo-dark.png"
+        alt="BorrowBox - Community Borrowing Platform"
+        className={`hidden dark:block ${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105 drop-shadow-[0_0_12px_rgba(13,184,166,0.35)]`}
       />
       {showText && (
         <span className="sr-only">BorrowBox</span>

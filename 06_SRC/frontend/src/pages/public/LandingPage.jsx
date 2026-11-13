@@ -41,12 +41,14 @@ export const LandingPage = () => {
 
       {/* Navigation Header with React Bits PillNav */}
       <header className="w-full bg-surface-card/85 backdrop-blur-md border-b border-surface-border sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-          <div className="flex-1 min-w-0 flex items-center">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3 sm:gap-4">
+          {/* Prominent Visible Standalone Logo - No Box, No Circle */}
+          <div className="flex items-center shrink-0 py-1">
+            <Logo size="md" to="/" />
+          </div>
+
+          <div className="flex-1 min-w-0 flex items-center justify-center sm:justify-start">
             <PillNav
-              logo="/icon_mark.png"
-              logoAlt="BorrowBox"
-              logoHref="/"
               items={landingNavItems}
               activeHref={location.pathname}
               theme={resolvedTheme}
