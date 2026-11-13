@@ -252,7 +252,6 @@ export const LandingPage = () => {
                 <span>Shashwat Vatsyayan</span>
                 <ExternalLink size={10} />
               </a>
-              <span>&amp; Harshit Kulhari</span>
             </div>
           </div>
         </div>

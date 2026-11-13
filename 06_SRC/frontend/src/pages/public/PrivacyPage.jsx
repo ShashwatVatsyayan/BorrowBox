@@ -156,7 +156,7 @@ export const PrivacyPage = () => {
           <div className="mt-10 pt-6 border-t border-surface-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">
             <div className="flex flex-col items-center sm:items-start gap-0.5">
               <p className="font-medium text-ink-primary">BorrowBox Campus Lending Platform</p>
-              <p className="text-[11px] text-ink-light">© 2026 BorrowBox. Developed by Shashwat Vatsyayan &amp; Harshit Kulhari. All rights reserved.</p>
+              <p className="text-[11px] text-ink-light">© 2026 BorrowBox. Developed by Shashwat Vatsyayan. All rights reserved.</p>
             </div>
             <div className="flex items-center gap-3 flex-wrap justify-center">
               <a

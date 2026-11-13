@@ -144,7 +144,7 @@ export const TermsPage = () => {
                   <strong>Platform Zero Fault Agreement:</strong> BorrowBox provides the communication directory to connect campus students. BorrowBox is neither a merchant, insurer, bailee, nor escrow agent.
                 </p>
                 <p>
-                  After students trade, barter, exchange, lend, or hand over any physical items (including but not limited to clothing, footwear, electronic appliances, academic calculators, or textbooks), <strong>it is strictly agreed that BorrowBox, its student creators (Shashwat Vatsyayan, Harshit Kulhari), and university coordinators bear ZERO FAULT and zero liability</strong> for any physical defects, missing accessories, post-trade regrets, breach of return commitments, or damages incurred.
+                  After students trade, barter, exchange, lend, or hand over any physical items (including but not limited to clothing, footwear, electronic appliances, academic calculators, or textbooks), <strong>it is strictly agreed that BorrowBox, its student creator (Shashwat Vatsyayan), and university coordinators bear ZERO FAULT and zero liability</strong> for any physical defects, missing accessories, post-trade regrets, breach of return commitments, or damages incurred.
                 </p>
                 <p>
                   All participating students must review the mandatory 4-angle photographs (top, bottom, and side perspectives) and physically inspect items prior to concluding any exchange on campus.
@@ -166,7 +166,7 @@ export const TermsPage = () => {
           <div className="mt-10 pt-6 border-t border-surface-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">
             <div className="flex flex-col items-center sm:items-start gap-0.5">
               <p className="font-medium text-ink-primary">BorrowBox Campus Lending Platform</p>
-              <p className="text-[11px] text-ink-light">© 2026 BorrowBox. Developed by Shashwat Vatsyayan &amp; Harshit Kulhari. All rights reserved.</p>
+              <p className="text-[11px] text-ink-light">© 2026 BorrowBox. Developed by Shashwat Vatsyayan. All rights reserved.</p>
             </div>
             <div className="flex items-center gap-3 flex-wrap justify-center">
               <a
