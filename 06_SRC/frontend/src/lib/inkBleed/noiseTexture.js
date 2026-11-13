@@ -76,3 +76,4 @@ export function createNoiseTexture(gl) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, NOISE_SIZE, NOISE_SIZE, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
   return tex;
 }
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Calculator, FlaskConical, Shield, CheckCircle2, Clock, MapPin } from 'lucide-react';
+import { ArrowRight, BookOpen, Calculator, FlaskConical, Shield, CheckCircle2, Clock, MapPin, ExternalLink } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
@@ -172,6 +172,15 @@ export const LandingPage = () => {
             <Link to="/privacy" className="hover:text-brand-600 transition-colors">
               Privacy Policy
             </Link>
+            <a
+              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 hover:text-brand-600 transition-colors font-medium"
+            >
+              <span>Portfolio</span>
+              <ExternalLink size={12} />
+            </a>
             <Link to="/login" className="hover:text-brand-600 transition-colors">
               Sign In
             </Link>
@@ -180,9 +189,20 @@ export const LandingPage = () => {
             </Link>
           </div>
 
-          <p className="text-center sm:text-right">
-            Chandigarh University Student Community
-          </p>
+          <div className="flex flex-col items-center sm:items-end gap-1">
+            <p className="text-center sm:text-right">
+              Chandigarh University Student Community
+            </p>
+            <a
+              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] text-ink-light hover:text-brand-600 transition-colors inline-flex items-center gap-1"
+            >
+              <span>Created by Shashwat Vatsyayan</span>
+              <ExternalLink size={10} />
+            </a>
+          </div>
         </div>
       </footer>
     </div>

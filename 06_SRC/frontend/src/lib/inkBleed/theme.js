@@ -29,3 +29,4 @@ export function applyTheme(theme, toggleButton) {
     toggleButton.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 }
+

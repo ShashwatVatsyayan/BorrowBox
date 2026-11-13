@@ -38,3 +38,4 @@ export function createProgram(gl, vert, frag) {
     },
   };
 }
+

@@ -173,6 +173,19 @@ export const SettingsPage = () => {
               </div>
               <ExternalLink size={16} className="text-ink-muted" />
             </Link>
+
+            <a
+              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between p-3 rounded-xl border border-surface-border hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            >
+              <div>
+                <p className="font-semibold text-ink-primary">Developer Portfolio</p>
+                <p className="text-ink-muted">View creator projects, technology stack, and contact information</p>
+              </div>
+              <ExternalLink size={16} className="text-ink-muted" />
+            </a>
           </div>
         </div>
       </div>

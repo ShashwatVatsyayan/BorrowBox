@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Shield, Lock, Eye, Database, Trash2 } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, Eye, Database, Trash2, ExternalLink } from 'lucide-react';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
 
@@ -138,6 +138,16 @@ export const PrivacyPage = () => {
           <div className="mt-10 pt-6 border-t border-surface-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">
             <p>BorrowBox Campus Lending Platform</p>
             <div className="flex items-center gap-4">
+              <a
+                href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-600 hover:underline inline-flex items-center gap-1 font-medium"
+              >
+                <span>Portfolio</span>
+                <ExternalLink size={12} />
+              </a>
+              <span>•</span>
               <Link to="/terms" className="text-brand-600 hover:underline">Terms and Conditions</Link>
               <span>•</span>
               <Link to="/" className="text-brand-600 hover:underline">Home</Link>

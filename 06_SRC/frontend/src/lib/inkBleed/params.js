@@ -15,3 +15,4 @@ export const RIM_COLOR = {
   dark: [0.043, 0.059, 0.098],
   light: [0.973, 0.98, 0.988],
 };
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Package, Clock, Plus, User, Shield, Settings, FileText } from 'lucide-react';
+import { Home, Compass, Package, Clock, Plus, User, Shield, Settings, FileText, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export const DesktopSidebar = () => {
@@ -61,7 +61,17 @@ export const DesktopSidebar = () => {
           <span className="inline-block px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium text-[10px] border border-emerald-200 dark:border-emerald-800">
             Verified Student
           </span>
-          <div className="flex items-center gap-2 text-[10px] text-ink-light">
+          <div className="flex items-center gap-1.5 text-[10px] text-ink-light">
+            <a
+              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-brand-600 transition-colors inline-flex items-center gap-0.5"
+            >
+              <span>Portfolio</span>
+              <ExternalLink size={9} />
+            </a>
+            <span>•</span>
             <NavLink to="/terms" className="hover:text-brand-600">Terms</NavLink>
             <span>•</span>
             <NavLink to="/privacy" className="hover:text-brand-600">Privacy</NavLink>

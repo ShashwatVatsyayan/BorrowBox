@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Shield, FileText, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Shield, FileText, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
 
@@ -158,6 +158,16 @@ export const TermsPage = () => {
           <div className="mt-10 pt-6 border-t border-surface-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">
             <p>BorrowBox Campus Lending Platform</p>
             <div className="flex items-center gap-4">
+              <a
+                href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-600 hover:underline inline-flex items-center gap-1 font-medium"
+              >
+                <span>Portfolio</span>
+                <ExternalLink size={12} />
+              </a>
+              <span>•</span>
               <Link to="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>
               <span>•</span>
               <Link to="/" className="text-brand-600 hover:underline">Home</Link>

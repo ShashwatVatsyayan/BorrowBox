@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Compass, Home, ArrowLeft } from 'lucide-react';
+import { Compass, Home, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
@@ -74,6 +74,16 @@ export const NotFoundPage = () => {
         <div className="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>BorrowBox - Campus Peer Borrowing Platform</p>
           <div className="flex items-center gap-4">
+            <a
+              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 hover:text-brand-600 transition-colors font-medium"
+            >
+              <span>Portfolio</span>
+              <ExternalLink size={12} />
+            </a>
+            <span>•</span>
             <Link to="/terms" className="hover:text-brand-600 transition-colors">Terms</Link>
             <span>•</span>
             <Link to="/privacy" className="hover:text-brand-600 transition-colors">Privacy</Link>

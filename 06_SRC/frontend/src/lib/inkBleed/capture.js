@@ -83,3 +83,4 @@ export async function capturePage(theme, scale, maxTextureSize) {
 
   return { theme, canvas, scale: safeScale, key, ms: performance.now() - t0 };
 }
+
