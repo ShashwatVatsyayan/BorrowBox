@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Edit2, Package, Clock, Settings, LogOut, ShieldCheck, ChevronRight, Sparkles } from 'lucide-react';
+import { Edit2, Package, Clock, Settings, LogOut, ChevronRight, Sparkles } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ProfileHeader } from '../../components/profile/ProfileHeader';
 import { ProfileStats } from '../../components/profile/ProfileStats';

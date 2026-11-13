@@ -101,29 +101,9 @@
   height: 36px;
   max-height: 100%;
   object-fit: contain;
-}
-
-.pill-nav__logo-light {
-  display: block !important;
-  width: auto !important;
-  height: 36px !important;
-  object-fit: contain !important;
-}
-
-.pill-nav__logo-dark {
-  display: none !important;
-  width: auto !important;
-  height: 36px !important;
-  object-fit: contain !important;
-  filter: drop-shadow(0 0 10px rgba(13, 184, 166, 0.4));
-}
-
-html.dark .pill-nav__logo-light {
-  display: none !important;
-}
-
-html.dark .pill-nav__logo-dark {
-  display: block !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
 
 .pill-nav__bar {

@@ -750,30 +750,21 @@ export const PillNav = ({
       aria-label={ariaLabel}
     >
       {logo && (
-        <span ref={logoRef} className={[LOGO, joined ? '' : SURFACE].filter(Boolean).join(' ')}>
+        <span ref={logoRef} className={[LOGO].filter(Boolean).join(' ')}>
           <LinkComponent href={logoHref} className={LOGO_LINK} aria-label={logoAlt} onPointerEnter={spin}>
             <span ref={markRef} className={MARK}>
               {typeof logo === 'string' ? (
-                <>
-                  <img
-                    src="/icon_mark.png"
-                    alt={logoAlt}
-                    draggable={false}
-                    className="pill-nav__logo-light"
-                  />
-                  <img
-                    src="/icon_mark_dark.png"
-                    alt={logoAlt}
-                    draggable={false}
-                    className="pill-nav__logo-dark"
-                  />
-                </>
+                <img
+                  src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
+                  alt={logoAlt}
+                  draggable={false}
+                  className="h-9 w-auto object-contain"
+                />
               ) : (
                 logo
               )}
             </span>
           </LinkComponent>
-          {!joined && <span className={RIM} />}
         </span>
       )}
 

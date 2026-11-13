@@ -395,3 +395,4 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
 };
 
 export default VersoOtpCard;
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Package, Clock, Plus, User, Shield, Settings, FileText, ExternalLink } from 'lucide-react';
+import { Home, Compass, Package, Clock, Plus, User, SlidersHorizontal, Settings, FileText, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export const DesktopSidebar = () => {
@@ -16,7 +16,7 @@ export const DesktopSidebar = () => {
   ];
 
   if (user?.role === 'admin') {
-    links.push({ to: '/admin', label: 'Admin Portal', icon: Shield });
+    links.push({ to: '/admin', label: 'Admin Portal', icon: SlidersHorizontal });
   }
 
   return (
@@ -57,11 +57,13 @@ export const DesktopSidebar = () => {
       <div className="pt-4 border-t border-surface-border text-xs text-ink-muted">
         <p className="font-semibold text-ink-primary truncate">{user?.full_name}</p>
         <p className="truncate text-ink-muted">{user?.email}</p>
-        <div className="flex items-center justify-between mt-2">
-          <span className="inline-block px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium text-[10px] border border-emerald-200 dark:border-emerald-800">
-            Verified Student
-          </span>
-          <div className="flex items-center gap-1.5 text-[10px] text-ink-light">
+        <div className="mt-2.5 flex flex-col gap-2">
+          <div className="flex items-center">
+            <span className="inline-flex items-center whitespace-nowrap px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold text-[10px] border border-emerald-200 dark:border-emerald-800 tracking-wide">
+              Verified Student
+            </span>
+          </div>
+          <div className="flex items-center flex-wrap gap-1.5 text-[10px] text-ink-light">
             <a
               href="https://portfolio-v2-alpha-ten-71.vercel.app/"
               target="_blank"

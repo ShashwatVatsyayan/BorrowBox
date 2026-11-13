@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Bell,
-  Shield,
+  SlidersHorizontal,
   ChevronDown,
   Home,
   Compass,
@@ -42,7 +42,7 @@ export const AppHeader = () => {
   ];
 
   if (user?.role === 'admin') {
-    navItems.push({ label: 'Admin', href: '/admin', icon: <Shield size={13} /> });
+    navItems.push({ label: 'Admin', href: '/admin', icon: <SlidersHorizontal size={13} /> });
   }
 
   return (

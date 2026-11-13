@@ -8,20 +8,22 @@ export const SiteIntroSplash = ({ onFinish }) => {
   const [fontSize, setFontSize] = useState(104);
   const timerRef = useRef(null);
 
-  // Responsive font sizing based on viewport
+  // Responsive font sizing strictly calibrated for Android & mobile screens
   useEffect(() => {
     const computeSize = () => {
       const w = window.innerWidth;
-      if (w < 360) {
-        setFontSize(30);
+      if (w < 340) {
+        setFontSize(22);
+      } else if (w < 380) {
+        setFontSize(25);
       } else if (w < 440) {
-        setFontSize(36);
+        setFontSize(29);
       } else if (w < 640) {
-        setFontSize(48);
+        setFontSize(38);
       } else if (w < 1024) {
-        setFontSize(68);
+        setFontSize(54);
       } else {
-        setFontSize(88);
+        setFontSize(74);
       }
     };
 
@@ -105,7 +107,7 @@ export const SiteIntroSplash = ({ onFinish }) => {
       </div>
 
       {/* Main animated StrokeText wordmark */}
-      <div className="relative z-10 w-full max-w-4xl px-4 flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-[92vw] sm:max-w-4xl px-2 sm:px-4 flex flex-col items-center">
         <StrokeText
           text="BorrowBox"
           strokeColor="#ff6b00"

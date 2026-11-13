@@ -112,8 +112,8 @@ export const StrokeText = ({
       }
       if (!bbox || !bbox.width) return;
 
-      const padX = Math.max(Number(strokeWidth) * 4, fontSize * 0.25, 32);
-      const padY = Math.max(Number(strokeWidth) * 2, fontSize * 0.15, 20);
+      const padX = Math.max(Number(strokeWidth) * 6, fontSize * 0.45, 48);
+      const padY = Math.max(Number(strokeWidth) * 4, fontSize * 0.25, 28);
       const next = {
         x: bbox.x - padX,
         y: bbox.y - padY,

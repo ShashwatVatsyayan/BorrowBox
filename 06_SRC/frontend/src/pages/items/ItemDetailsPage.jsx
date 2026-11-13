@@ -11,7 +11,6 @@ import {
   Camera,
   ArrowLeftRight,
   Clock,
-  Shield,
   Search,
   Sparkles,
   Heart,
@@ -547,7 +546,7 @@ export const ItemDetailsPage = () => {
           {/* In-Person Verification & Zero-Fault Platform Disclaimer */}
           <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-surface-border text-[11px] text-ink-muted space-y-1">
             <div className="flex items-center gap-1.5 font-bold text-ink-primary">
-              <Shield size={13} className="text-brand-600" />
+              <CheckCircle2 size={13} className="text-emerald-600" />
               <span>Campus Safety & Zero-Fault Policy</span>
             </div>
             <p>

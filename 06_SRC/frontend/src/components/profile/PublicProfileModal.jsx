@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   X,
   User,
-  ShieldCheck,
   Mail,
   MapPin,
   Sparkles,
@@ -80,8 +79,8 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
         {/* Header */}
         <div className="px-5 py-4 border-b border-surface-border flex items-center justify-between bg-surface-card/95">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-brand-500/10 text-brand-600 border border-brand-500/20">
-              <ShieldCheck size={16} />
+            <span className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+              <User size={16} />
             </span>
             <div>
               <h2 id="peer-profile-title" className="text-base sm:text-lg font-bold text-ink-primary">

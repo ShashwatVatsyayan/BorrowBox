@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ShieldCheck, Check, Sparkles, ExternalLink } from 'lucide-react';
+import { Eye, EyeOff, Check, Sparkles, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { validateEmail, validatePassword, getPasswordCriteria } from '../../utils/validators';
 import { AuthTunnelTransition } from '../common/AuthTunnelTransition';
@@ -607,3 +607,4 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
 };
 
 export default VersoAuthCard;
+
