@@ -4,13 +4,29 @@
 
 :root {
   color-scheme: light;
+  --color-surface-base: #F8FAFC;
+  --color-surface-card: #FFFFFF;
+  --color-surface-border: #E2E8F0;
+  --color-ink-primary: #172033;
+  --color-ink-muted: #64748B;
+  --color-ink-light: #94A3B8;
+}
+
+html.dark {
+  color-scheme: dark;
+  --color-surface-base: #0B0F19;
+  --color-surface-card: #131B2E;
+  --color-surface-border: #1E293B;
+  --color-ink-primary: #F8FAFC;
+  --color-ink-muted: #94A3B8;
+  --color-ink-light: #64748B;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #F8FAFC;
-  color: #172033;
+  background-color: var(--color-surface-base);
+  color: var(--color-ink-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -25,13 +41,25 @@ body {
   background: #F1F5F9;
 }
 
+html.dark ::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
   border-radius: 3px;
 }
 
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 /* Accessible focus styling */

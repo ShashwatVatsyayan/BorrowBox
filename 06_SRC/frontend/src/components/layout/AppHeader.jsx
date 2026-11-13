@@ -4,6 +4,7 @@ import { Bell, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
 import { Logo } from '../common/Logo';
+import { ThemeToggle } from '../common/ThemeToggle';
 
 export const AppHeader = () => {
   const { user, switchAccount, logout } = useAuth();
@@ -24,12 +25,12 @@ export const AppHeader = () => {
         <Logo size="sm" to="/app" />
 
         {/* Header Right Actions */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           {/* Quick Demo Account Switcher Pill */}
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-ink-primary transition-colors min-h-[32px]"
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-ink-primary transition-colors min-h-[32px]"
               title="Click to toggle demo user"
             >
               <span className="w-2 h-2 rounded-full bg-brand-600"></span>
@@ -44,7 +45,7 @@ export const AppHeader = () => {
                 </div>
                 <button
                   onClick={() => handleSwitch('Student A')}
-                  className="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between"
                 >
                   <div>
                     <p className="font-semibold text-ink-primary">Student A (Aarav)</p>
@@ -56,7 +57,7 @@ export const AppHeader = () => {
                 </button>
                 <button
                   onClick={() => handleSwitch('Student B')}
-                  className="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between"
                 >
                   <div>
                     <p className="font-semibold text-ink-primary">Student B (Priya)</p>
@@ -68,7 +69,7 @@ export const AppHeader = () => {
                 </button>
                 <button
                   onClick={() => handleSwitch('Admin')}
-                  className="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-1.5">
                     <Shield size={14} className="text-amber-600" />
@@ -88,7 +89,7 @@ export const AppHeader = () => {
                     logout();
                     navigate('/login');
                   }}
-                  className="w-full text-left px-3 py-1.5 text-state-danger hover:bg-red-50 font-medium"
+                  className="w-full text-left px-3 py-1.5 text-state-danger hover:bg-red-50 dark:hover:bg-red-950/30 font-medium"
                 >
                   Sign Out
                 </button>
@@ -96,13 +97,16 @@ export const AppHeader = () => {
             )}
           </div>
 
+          {/* Theme Toggle Button */}
+          <ThemeToggle size="sm" />
+
           {/* Notifications Bell */}
           <Link
             to="/app/notifications"
-            className="relative p-2 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 transition-colors"
+            className="relative p-2 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Notifications"
           >
-            <Bell size={20} />
+            <Bell size={18} />
             {unreadCount > 0 && (
               <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center">
                 {unreadCount > 9 ? '9+' : unreadCount}

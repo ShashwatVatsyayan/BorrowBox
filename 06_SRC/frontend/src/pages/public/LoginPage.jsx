@@ -5,6 +5,7 @@ import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
+import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { useAuth } from '../../hooks/useAuth';
 
 export const LoginPage = () => {
@@ -48,8 +49,12 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-surface-base flex flex-col justify-center py-10 px-4 sm:px-6">
-      <div className="max-w-md w-full mx-auto">
+    <div className="min-h-screen bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
+      <div className="max-w-md w-full mx-auto flex items-center justify-end">
+        <ThemeToggle size="sm" />
+      </div>
+
+      <div className="max-w-md w-full mx-auto my-auto">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <Logo size="lg" to="/" />
@@ -118,7 +123,7 @@ export const LoginPage = () => {
               <button
                 type="button"
                 onClick={() => handleQuickDemo('Student A')}
-                className="p-2.5 rounded-lg border border-surface-border bg-slate-50 hover:bg-brand-50 hover:border-brand-200 text-left transition-colors"
+                className="p-2.5 rounded-lg border border-surface-border bg-slate-50 dark:bg-slate-800/60 hover:bg-brand-50 dark:hover:bg-brand-950/40 hover:border-brand-200 dark:hover:border-brand-800 text-left transition-colors"
               >
                 <p className="text-xs font-bold text-ink-primary">Student A (Owner)</p>
                 <p className="text-[10px] text-ink-muted truncate">Aarav (Calculator, Lab Coat)</p>
@@ -126,7 +131,7 @@ export const LoginPage = () => {
               <button
                 type="button"
                 onClick={() => handleQuickDemo('Student B')}
-                className="p-2.5 rounded-lg border border-surface-border bg-slate-50 hover:bg-brand-50 hover:border-brand-200 text-left transition-colors"
+                className="p-2.5 rounded-lg border border-surface-border bg-slate-50 dark:bg-slate-800/60 hover:bg-brand-50 dark:hover:bg-brand-950/40 hover:border-brand-200 dark:hover:border-brand-800 text-left transition-colors"
               >
                 <p className="text-xs font-bold text-ink-primary">Student B (Borrower)</p>
                 <p className="text-[10px] text-ink-muted truncate">Priya (Requests & Rackets)</p>
@@ -140,6 +145,16 @@ export const LoginPage = () => {
               Sign Up
             </Link>
           </div>
+        </div>
+      </div>
+
+      <div className="max-w-md w-full mx-auto pt-6 text-center text-xs text-ink-muted">
+        <div className="flex items-center justify-center gap-4">
+          <Link to="/terms" className="hover:text-brand-600">Terms</Link>
+          <span>•</span>
+          <Link to="/privacy" className="hover:text-brand-600">Privacy</Link>
+          <span>•</span>
+          <Link to="/" className="hover:text-brand-600">Home</Link>
         </div>
       </div>
     </div>

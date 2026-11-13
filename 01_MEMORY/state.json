@@ -23,7 +23,14 @@
     "Vite envPrefix and client adapter updated for NEXT_PUBLIC_ keys",
     "Vercel SPA routing rewrite configuration",
     "Vercel production environment variables synchronization",
-    "Live production deployment to https://borrowbox-lime.vercel.app"
+    "Live production deployment to https://borrowbox-lime.vercel.app",
+    "Purged all emojis repository-wide (verified 0 emojis)",
+    "Redesigned landing hero and removed AI template badge slop",
+    "Created Terms and Conditions page (/terms, /terms-and-conditions)",
+    "Created Privacy Policy page (/privacy, /privacy-policy)",
+    "Created Custom 404 Not Found page (/404 and wildcard catch-all)",
+    "Implemented complete Dark / Light mode with ThemeProvider and ThemeToggle",
+    "Redeployed production update to Vercel"
   ],
   "in_progress": [
     "Supabase Auth redirect URL whitelisting",
@@ -34,5 +41,5 @@
     "End-to-end live testing with @cuchd.in student accounts"
   ],
   "blockers": [],
-  "last_updated": "2026-11-13T11:02:00"
+  "last_updated": "2026-11-13T11:37:00"
 }

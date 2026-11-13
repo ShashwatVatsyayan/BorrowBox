@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Mail, CheckCircle2 } from 'lucide-react';
-import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
+import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { maskEmail } from '../../utils/formatters';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -42,13 +42,17 @@ export const VerifyEmailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-surface-base flex flex-col justify-center py-10 px-4 sm:px-6">
-      <div className="max-w-md w-full mx-auto">
+    <div className="min-h-screen bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
+      <div className="max-w-md w-full mx-auto flex items-center justify-end">
+        <ThemeToggle size="sm" />
+      </div>
+
+      <div className="max-w-md w-full mx-auto my-auto">
         <div className="flex justify-center mb-4">
           <Logo size="lg" to="/" />
         </div>
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 mx-auto mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-800 flex items-center justify-center text-brand-600 dark:text-brand-400 mx-auto mb-3">
             <Mail size={24} />
           </div>
           <h2 className="text-2xl font-bold text-ink-primary">Verify University Mailbox</h2>
@@ -66,7 +70,7 @@ export const VerifyEmailPage = () => {
           )}
 
           {resendStatus && (
-            <div className="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2">
+            <div className="mb-4 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-medium flex items-center gap-2">
               <CheckCircle2 size={16} className="shrink-0" />
               <span>{resendStatus}</span>
             </div>
@@ -84,7 +88,7 @@ export const VerifyEmailPage = () => {
                 value={token}
                 onChange={(e) => setToken(e.target.value.replace(/\D/g, ''))}
                 placeholder="123456"
-                className="w-full text-center tracking-[0.5em] text-2xl font-mono font-bold py-3 rounded-xl border border-surface-border bg-slate-50 focus:bg-white focus:border-brand-600 focus:ring-1 focus:ring-brand-600 outline-none transition-colors"
+                className="w-full text-center tracking-[0.5em] text-2xl font-mono font-bold py-3 rounded-xl border border-surface-border bg-surface-base focus:bg-surface-card text-ink-primary focus:border-brand-600 focus:ring-1 focus:ring-brand-600 outline-none transition-colors"
                 autoFocus
               />
               <p className="text-[11px] text-ink-muted mt-1">
@@ -111,7 +115,18 @@ export const VerifyEmailPage = () => {
           </div>
         </div>
       </div>
+
+      <div className="max-w-md w-full mx-auto pt-6 text-center text-xs text-ink-muted">
+        <div className="flex items-center justify-center gap-4">
+          <Link to="/terms" className="hover:text-brand-600">Terms</Link>
+          <span>•</span>
+          <Link to="/privacy" className="hover:text-brand-600">Privacy</Link>
+          <span>•</span>
+          <Link to="/" className="hover:text-brand-600">Home</Link>
+        </div>
+      </div>
     </div>
   );
 };
 
+export default VerifyEmailPage;

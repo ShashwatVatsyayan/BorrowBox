@@ -52,3 +52,13 @@ This file logs every meaningful change in the project.
 - Created `06_SRC/frontend/vercel.json` with client-side SPA routing rewrites.
 - Configured production environment variables on Vercel (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`).
 - Deployed production release on Vercel at `https://borrowbox-lime.vercel.app`.
+- Purged all emojis from the entire repository (verified 0 emojis in code, docs, and skill templates).
+- Redesigned landing page hero section, removing generic AI template badges and SaaS fluff.
+- Created standalone Terms and Conditions page (`/terms`, `/terms-and-conditions`).
+- Created student-centric Privacy Policy page (`/privacy`, `/privacy-policy`).
+- Created custom 404 Not Found error page (`/404` and wildcard catch-all).
+- Built comprehensive Dark / Light mode system with ThemeProvider, useTheme hook, ThemeToggle component, and CSS variable color mapping.
+- Added ThemeToggle to application header, public navigation headers, and authentication screens.
+- Added theme appearance switcher and legal document links to Settings page.
+- Validated production build (`npm run build`) in 4.57s.
+- Redeployed updated production build to Vercel at `https://borrowbox-lime.vercel.app`.

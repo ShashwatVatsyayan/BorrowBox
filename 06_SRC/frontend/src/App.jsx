@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Public pages
@@ -10,6 +11,9 @@ import { LoginPage } from './pages/public/LoginPage';
 import { VerifyEmailPage } from './pages/public/VerifyEmailPage';
 import { ForgotPasswordPage } from './pages/public/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/public/ResetPasswordPage';
+import { TermsPage } from './pages/public/TermsPage';
+import { PrivacyPage } from './pages/public/PrivacyPage';
+import { NotFoundPage } from './pages/public/NotFoundPage';
 
 // Authenticated pages
 import { DashboardPage } from './pages/dashboard/DashboardPage';
@@ -33,44 +37,50 @@ import { ReportsPage } from './pages/admin/ReportsPage';
 
 export function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/terms-and-conditions" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPage />} />
+            <Route path="/404" element={<NotFoundPage />} />
 
-          {/* Protected Student Routes */}
-          <Route path="/app" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/app/explore" element={<ProtectedRoute><ExplorePage /></ProtectedRoute>} />
-          <Route path="/app/items/new" element={<ProtectedRoute><AddItemPage /></ProtectedRoute>} />
-          <Route path="/app/items/:id" element={<ProtectedRoute><ItemDetailsPage /></ProtectedRoute>} />
-          <Route path="/app/items/:id/edit" element={<ProtectedRoute><EditItemPage /></ProtectedRoute>} />
-          <Route path="/app/listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
-          <Route path="/app/activity" element={<ProtectedRoute><ActivityPage /></ProtectedRoute>} />
-          <Route path="/app/requests" element={<ProtectedRoute><RequestsPage /></ProtectedRoute>} />
-          <Route path="/app/borrowings" element={<ProtectedRoute><BorrowingsPage /></ProtectedRoute>} />
-          <Route path="/app/lending" element={<ProtectedRoute><LendingPage /></ProtectedRoute>} />
-          <Route path="/app/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
-          <Route path="/app/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-          <Route path="/app/profile/edit" element={<ProtectedRoute><EditProfilePage /></ProtectedRoute>} />
-          <Route path="/app/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+            {/* Protected Student Routes */}
+            <Route path="/app" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="/app/explore" element={<ProtectedRoute><ExplorePage /></ProtectedRoute>} />
+            <Route path="/app/items/new" element={<ProtectedRoute><AddItemPage /></ProtectedRoute>} />
+            <Route path="/app/items/:id" element={<ProtectedRoute><ItemDetailsPage /></ProtectedRoute>} />
+            <Route path="/app/items/:id/edit" element={<ProtectedRoute><EditItemPage /></ProtectedRoute>} />
+            <Route path="/app/listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
+            <Route path="/app/activity" element={<ProtectedRoute><ActivityPage /></ProtectedRoute>} />
+            <Route path="/app/requests" element={<ProtectedRoute><RequestsPage /></ProtectedRoute>} />
+            <Route path="/app/borrowings" element={<ProtectedRoute><BorrowingsPage /></ProtectedRoute>} />
+            <Route path="/app/lending" element={<ProtectedRoute><LendingPage /></ProtectedRoute>} />
+            <Route path="/app/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+            <Route path="/app/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+            <Route path="/app/profile/edit" element={<ProtectedRoute><EditProfilePage /></ProtectedRoute>} />
+            <Route path="/app/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboardPage /></ProtectedRoute>} />
-          <Route path="/admin/reports" element={<ProtectedRoute requireAdmin><ReportsPage /></ProtectedRoute>} />
+            {/* Admin Routes */}
+            <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboardPage /></ProtectedRoute>} />
+            <Route path="/admin/reports" element={<ProtectedRoute requireAdmin><ReportsPage /></ProtectedRoute>} />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            {/* Catch-All Custom 404 Route */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
 export default App;
-

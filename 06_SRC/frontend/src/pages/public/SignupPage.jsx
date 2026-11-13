@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck } from 'lucide-react';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
+import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { validateEmail, validatePassword } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -81,8 +81,12 @@ export const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-surface-base flex flex-col justify-center py-10 px-4 sm:px-6">
-      <div className="max-w-md w-full mx-auto">
+    <div className="min-h-screen bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
+      <div className="max-w-md w-full mx-auto flex items-center justify-end">
+        <ThemeToggle size="sm" />
+      </div>
+
+      <div className="max-w-md w-full mx-auto my-auto">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <Logo size="lg" to="/" />
@@ -164,7 +168,15 @@ export const SignupPage = () => {
                 className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-600"
               />
               <label htmlFor="terms" className="text-xs text-ink-muted leading-tight">
-                I agree to the BorrowBox Campus Code of Conduct and acknowledge that I will return borrowed items on time and in good condition.
+                I agree to the{' '}
+                <Link to="/terms" target="_blank" className="text-brand-600 font-semibold underline">
+                  Terms and Conditions
+                </Link>{' '}
+                and{' '}
+                <Link to="/privacy" target="_blank" className="text-brand-600 font-semibold underline">
+                  Privacy Policy
+                </Link>
+                , and acknowledge that I will return borrowed items on time and in good condition.
               </label>
             </div>
             {errors.agreeTerms && <span className="text-xs text-state-danger font-medium">{errors.agreeTerms}</span>}
@@ -180,6 +192,16 @@ export const SignupPage = () => {
               Log In
             </Link>
           </div>
+        </div>
+      </div>
+
+      <div className="max-w-md w-full mx-auto pt-6 text-center text-xs text-ink-muted">
+        <div className="flex items-center justify-center gap-4">
+          <Link to="/terms" className="hover:text-brand-600">Terms</Link>
+          <span>•</span>
+          <Link to="/privacy" className="hover:text-brand-600">Privacy</Link>
+          <span>•</span>
+          <Link to="/" className="hover:text-brand-600">Home</Link>
         </div>
       </div>
     </div>

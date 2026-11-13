@@ -13,7 +13,7 @@ export const ItemCard = ({ item }) => {
       className="group flex flex-col bg-surface-card rounded-xl border border-surface-border overflow-hidden hover:shadow-md transition-all duration-200"
     >
       {/* Item Image with Fixed Ratio */}
-      <div className="relative aspect-[4/3] w-full bg-slate-100 overflow-hidden">
+      <div className="relative aspect-[4/3] w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
         <img
           src={imageUrl}
           alt={item.title}
@@ -21,13 +21,13 @@ export const ItemCard = ({ item }) => {
           loading="lazy"
         />
         <div className="absolute top-2.5 left-2.5">
-          <span className="inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-ink-primary border border-slate-200 shadow-xs">
+          <span className="inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold bg-surface-card/90 backdrop-blur-sm text-ink-primary border border-surface-border shadow-xs">
             {item.condition}
           </span>
         </div>
         {!item.is_active && (
           <div className="absolute inset-0 bg-ink-primary/60 flex items-center justify-center">
-            <span className="px-3 py-1 rounded bg-white text-ink-primary font-bold text-xs uppercase tracking-wider">
+            <span className="px-3 py-1 rounded bg-surface-card text-ink-primary font-bold text-xs uppercase tracking-wider">
               Inactive
             </span>
           </div>
@@ -43,7 +43,7 @@ export const ItemCard = ({ item }) => {
           {item.title}
         </h3>
 
-        <div className="mt-auto pt-2 border-t border-slate-100 flex flex-col gap-1 text-[11px] text-ink-muted">
+        <div className="mt-auto pt-2 border-t border-surface-border flex flex-col gap-1 text-[11px] text-ink-muted">
           <div className="flex items-center gap-1.5 truncate">
             <MapPin size={12} className="shrink-0 text-slate-400" />
             <span className="truncate">{item.location_label}</span>

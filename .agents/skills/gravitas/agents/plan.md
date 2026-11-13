@@ -99,8 +99,8 @@ and its recent git history before writing a single line of the plan.
 ### Alternatives Considered
 | Approach | Pros | Cons | Decision |
 |----------|------|------|----------|
-| [chosen] | [why] | [none material] | ✅ chosen |
-| [alt 1] | [pros] | [too risky / too much scope] | ❌ rejected |
+| [chosen] | [why] | [none material] | [PASS] chosen |
+| [alt 1] | [pros] | [too risky / too much scope] | [FAIL] rejected |
 
 ### Changes
 | # | File | Location | What Changes | Risk |
@@ -205,7 +205,7 @@ Proceed immediately.
 
 ### Tier 2 — High Stakes
 ```markdown
-## Plan — [task] — Tier 2 ⚠️ HIGH STAKES
+## Plan — [task] — Tier 2 [WARN] HIGH STAKES
 
 ### Scope
 [What this changes in production behavior, who is affected]
@@ -241,7 +241,7 @@ Proceed immediately.
 - Canary: [if applicable]
 - Rollback drill: [exact commands]
 
-### ⚠️ USER CHECKPOINT REQUIRED
+### [WARN] USER CHECKPOINT REQUIRED
 Present this plan. Wait for explicit approval. Do not proceed.
 ```
 

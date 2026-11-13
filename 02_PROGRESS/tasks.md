@@ -71,3 +71,12 @@ This file reflects the true execution state of the project.
 - [x] Synchronize production environment variables on Vercel
 - [ ] Whitelist production domain in Supabase Auth Redirect URLs
 - [ ] Verify live database authentication and item listing from production
+
+## Phase 8 - Design System Refinement & Compliance
+- [x] Purge all emojis repository-wide (verified 0 emojis across all files)
+- [x] Remove AI template copy and redesign landing hero section
+- [x] Implement comprehensive Terms and Conditions page (`/terms`, `/terms-and-conditions`)
+- [x] Implement student-centric Privacy Policy page (`/privacy`, `/privacy-policy`)
+- [x] Implement custom 404 Not Found error page (`/404` and wildcard `*`)
+- [x] Implement full Dark / Light mode theme system (ThemeProvider, ThemeToggle, CSS variables)
+- [x] Deploy updated release to Vercel production (`https://borrowbox-lime.vercel.app`)

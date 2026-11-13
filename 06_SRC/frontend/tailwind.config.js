@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -17,14 +18,14 @@ export default {
           900: '#134E4A',
         },
         ink: {
-          primary: '#172033',
-          muted: '#64748B',
-          light: '#94A3B8',
+          primary: 'var(--color-ink-primary, #172033)',
+          muted: 'var(--color-ink-muted, #64748B)',
+          light: 'var(--color-ink-light, #94A3B8)',
         },
         surface: {
-          base: '#F8FAFC',
-          card: '#FFFFFF',
-          border: '#E2E8F0',
+          base: 'var(--color-surface-base, #F8FAFC)',
+          card: 'var(--color-surface-card, #FFFFFF)',
+          border: 'var(--color-surface-border, #E2E8F0)',
         },
         state: {
           success: '#16A34A',

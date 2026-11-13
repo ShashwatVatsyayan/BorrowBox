@@ -117,9 +117,9 @@ swift test 2>&1
 ```
 Command: vitest run --reporter=verbose
 Output:
-  ✓ auth › session timeout (12ms)
-  ✓ auth › login flow (45ms)
-  ✓ auth › logout cleanup (8ms)
+  [PASS] auth › session timeout (12ms)
+  [PASS] auth › login flow (45ms)
+  [PASS] auth › logout cleanup (8ms)
   Tests: 47 passed, 47 total, 0 skipped
   Duration: 892ms
 ```
@@ -146,9 +146,9 @@ vitest run 2>&1 | tail -5
 
 ### Regression check
 ```
-Pass count: Y' >= Y?  → ✅ no regression
-Pass count: Y' < Y?   → ❌ REGRESSION — [Y-Y'] tests newly failing
-New warnings: M' > M? → ❌ NEW LINT ISSUES — [list them]
+Pass count: Y' >= Y?  → [PASS] no regression
+Pass count: Y' < Y?   → [FAIL] REGRESSION — [Y-Y'] tests newly failing
+New warnings: M' > M? → [FAIL] NEW LINT ISSUES — [list them]
 ```
 
 ---
@@ -225,11 +225,11 @@ Issue FAIL if ANY of the above is not met.
 VERDICT: FAIL
 
 Failing tests (2):
-  ✗ auth › session validation (14ms)
+   auth › session validation (14ms)
     AssertionError: expected 30000 to be 5000
     at src/auth/session.test.ts:47:24
 
-  ✗ middleware › auth check (8ms)
+   middleware › auth check (8ms)
     TypeError: SESSION_TIMEOUT is not defined
     at src/middleware/auth.ts:23:5
 

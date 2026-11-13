@@ -29,7 +29,7 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-md' 
           <h2 className="text-base font-semibold text-ink-primary">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-ink-muted hover:text-ink-primary hover:bg-slate-100 transition-colors"
+            className="p-1 rounded-md text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Close modal"
           >
             <X size={18} />

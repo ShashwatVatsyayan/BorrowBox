@@ -33,7 +33,7 @@ export const BottomNav = () => {
             >
               {({ isActive }) => (
                 <>
-                  <div className={item.isPrimary ? 'p-1 rounded-full bg-brand-50 text-brand-600' : ''}>
+                  <div className={item.isPrimary ? 'p-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400' : ''}>
                     <Icon size={item.isPrimary ? 24 : 20} strokeWidth={isActive ? 2.5 : 2} />
                   </div>
                   <span className="text-[10px] mt-0.5 tracking-tight">{item.label}</span>

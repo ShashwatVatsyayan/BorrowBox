@@ -133,7 +133,7 @@ Every dispatch message must include:
   - File map with key line numbers
   - Dependency graph (imports/exports)
   - Recent git changes to the auth module
-  - Any risk flags (⚠️)
+  - Any risk flags ([WARN])
 ```
 
 ### Example Dispatch: General

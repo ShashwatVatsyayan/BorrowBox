@@ -1,4 +1,4 @@
-# 🧩 ORCHESTRATION CONTRACT (NON-NEGOTIABLE)
+# ORCHESTRATION CONTRACT (NON-NEGOTIABLE)
 
 This project follows **autonomous documentation and context persistence**.
 

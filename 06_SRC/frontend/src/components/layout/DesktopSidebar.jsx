@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Package, Clock, Plus, User, Shield } from 'lucide-react';
+import { Home, Compass, Package, Clock, Plus, User, Shield, Settings, FileText } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export const DesktopSidebar = () => {
@@ -12,6 +12,7 @@ export const DesktopSidebar = () => {
     { to: '/app/listings', label: 'My Listings', icon: Package },
     { to: '/app/activity', label: 'Activity & Requests', icon: Clock },
     { to: '/app/profile', label: 'My Profile', icon: User },
+    { to: '/app/settings', label: 'Settings', icon: Settings },
   ];
 
   if (user?.role === 'admin') {
@@ -41,8 +42,8 @@ export const DesktopSidebar = () => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-brand-50 text-brand-700 font-semibold'
-                    : 'text-ink-muted hover:text-ink-primary hover:bg-slate-50'
+                    ? 'bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-400 font-semibold'
+                    : 'text-ink-muted hover:text-ink-primary hover:bg-slate-50 dark:hover:bg-slate-800/60'
                 }`
               }
             >
@@ -56,9 +57,16 @@ export const DesktopSidebar = () => {
       <div className="pt-4 border-t border-surface-border text-xs text-ink-muted">
         <p className="font-semibold text-ink-primary truncate">{user?.full_name}</p>
         <p className="truncate text-ink-muted">{user?.email}</p>
-        <span className="inline-block mt-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-medium text-[10px] border border-emerald-200">
-          Verified Student
-        </span>
+        <div className="flex items-center justify-between mt-2">
+          <span className="inline-block px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium text-[10px] border border-emerald-200 dark:border-emerald-800">
+            Verified Student
+          </span>
+          <div className="flex items-center gap-2 text-[10px] text-ink-light">
+            <NavLink to="/terms" className="hover:text-brand-600">Terms</NavLink>
+            <span>•</span>
+            <NavLink to="/privacy" className="hover:text-brand-600">Privacy</NavLink>
+          </div>
+        </div>
       </div>
     </aside>
   );

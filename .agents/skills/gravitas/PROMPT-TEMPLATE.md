@@ -206,7 +206,7 @@ When spawning a specialized agent, give them a complete Layer 2 + Layer 3:
 **Return:**
   - File map: [file] → [what it contains + key lines]
   - Dependency graph: who imports what
-  - Risk flags: ⚠️ anything unexpected
+  - Risk flags: [WARN] anything unexpected
   - Git context: last 5 changes to affected files
 Do NOT edit anything.
 ```

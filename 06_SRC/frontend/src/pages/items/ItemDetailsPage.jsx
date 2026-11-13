@@ -143,7 +143,7 @@ export const ItemDetailsPage = () => {
         <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
           <img src={primaryImage} alt={item.title} className="w-full h-full object-cover" />
           <div className="absolute top-3 left-3">
-            <span className="px-3 py-1 rounded-md text-xs font-bold bg-white/95 text-ink-primary shadow-xs border border-slate-200">
+            <span className="px-3 py-1 rounded-md text-xs font-bold bg-surface-card/95 text-ink-primary shadow-xs border border-surface-border">
               {item.condition}
             </span>
           </div>
@@ -168,13 +168,13 @@ export const ItemDetailsPage = () => {
           {/* Description */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-ink-muted mb-2">Description</h3>
-            <p className="text-sm text-ink-primary leading-relaxed whitespace-pre-line bg-slate-50/60 p-4 rounded-xl border border-slate-100">
+            <p className="text-sm text-ink-primary leading-relaxed whitespace-pre-line bg-surface-base p-4 rounded-xl border border-surface-border">
               {item.description}
             </p>
           </div>
 
           {/* Campus Location */}
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-ink-muted">
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-surface-base border border-surface-border text-xs text-ink-muted">
             <MapPin size={16} className="text-brand-600 shrink-0" />
             <div>
               <p className="font-semibold text-ink-primary">Pickup Area</p>
@@ -183,9 +183,9 @@ export const ItemDetailsPage = () => {
           </div>
 
           {/* Owner Info Preview */}
-          <div className="flex items-center justify-between p-3.5 rounded-xl border border-surface-border bg-white">
+          <div className="flex items-center justify-between p-3.5 rounded-xl border border-surface-border bg-surface-card">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm">
                 {item.owner?.full_name?.charAt(0) || 'U'}
               </div>
               <div>

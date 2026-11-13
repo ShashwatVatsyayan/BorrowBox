@@ -130,3 +130,15 @@ User requested deploying the project to their authenticated Vercel account.
 
 **Outcome:**  
 Deployed project via Vercel CLI to production. Configured production environment variables for Supabase (VITE_ and NEXT_PUBLIC_ keys). Live at https://borrowbox-lime.vercel.app. Added vercel.json for SPA routing rewrites.
+
+---
+
+## 2026-11-13 11:19:25
+**Prompt:**  
+/gravitas remove all the ai slops , ai emojis , add terms and conditions , add privacy policy , add custom 404 page , add dark light mode
+
+**Context:**  
+User invoked /gravitas requesting complete elimination of AI tropes and emojis, creation of dedicated Terms & Conditions and Privacy Policy pages, a custom 404 error page, and a full Dark / Light mode system.
+
+**Outcome:**  
+Applied Gravitas reliability runtime principles. Purged all emoji occurrences repo-wide (verified 0 emojis). Redesigned landing page hero, removing AI pill badge and boilerplate templates. Created TermsPage (/terms), PrivacyPage (/privacy), and NotFoundPage (/404 and wildcard catch-all). Built ThemeContext, useTheme hook, ThemeToggle component, and CSS variable color mapping. Added theme controls to headers, auth views, and settings page. Verified production build and tests. Redeployed production release to Vercel.

@@ -116,10 +116,10 @@ Baseline: [N] tests pass, [M] warnings
 After:    [N'] tests pass, [M'] warnings
 
 Regression check:
-- N' >= N  → ✅ (same or more tests passing)
-- M' <= M  → ✅ (same or fewer warnings)
-- N' < N   → ❌ REGRESSION: [N-N'] tests newly failing
-- M' > M   → ❌ NEW WARNINGS: [list them]
+- N' >= N  → [PASS] (same or more tests passing)
+- M' <= M  → [PASS] (same or fewer warnings)
+- N' < N   → [FAIL] REGRESSION: [N-N'] tests newly failing
+- M' > M   → [FAIL] NEW WARNINGS: [list them]
 ```
 
 ### Edge Case Matrix
@@ -128,11 +128,11 @@ For every changed function, verify:
 
 | Input | Expected | Actual | Pass? |
 |-------|----------|--------|-------|
-| Normal | [x] | [x] | ✅ |
-| Empty string | [err] | [err] | ✅ |
-| Null | [err] | [err] | ✅ |
-| Max value | [x] | [x] | ✅ |
-| Min value | [x] | [x] | ✅ |
+| Normal | [x] | [x] | [PASS] |
+| Empty string | [err] | [err] | [PASS] |
+| Null | [err] | [err] | [PASS] |
+| Max value | [x] | [x] | [PASS] |
+| Min value | [x] | [x] | [PASS] |
 
 ---
 
@@ -171,11 +171,11 @@ VERDICT: FAIL
 
 Reason: 2 tests failing after change
 Details:
-  ✗ auth › session validation (14ms)
+   auth › session validation (14ms)
     AssertionError: expected 30000 to be 5000
     at src/auth/session.test.ts:47:24
 
-  ✗ middleware › auth check (8ms)
+   middleware › auth check (8ms)
     TypeError: SESSION_TIMEOUT is not defined
     at src/middleware/auth.ts:23:5
 

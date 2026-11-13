@@ -158,8 +158,8 @@ Third+ = details if needed
 
 ```
 $ vitest run
-  ✓ auth › session timeout (12ms)
-  ✓ auth › login flow (45ms)
+  [PASS] auth › session timeout (12ms)
+  [PASS] auth › login flow (45ms)
   Tests: 47 passed, 47 total
 
 VERDICT: PASS

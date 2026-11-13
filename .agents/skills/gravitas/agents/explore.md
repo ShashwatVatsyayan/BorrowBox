@@ -131,10 +131,10 @@ Return a structured exploration report — not raw file dumps:
 [tsconfig strict mode, test runner, lint rules]
 
 ### Risk Flags
-- ⚠️ HIGH: 2 middleware files on critical auth path
-- ⚠️ HIGH: Test at line 47 asserts exact old value
-- ⚠️ MEDIUM: No integration tests, only unit tests
-- ✅ LOW: Config untouched, no migration required
+- [WARN] HIGH: 2 middleware files on critical auth path
+- [WARN] HIGH: Test at line 47 asserts exact old value
+- [WARN] MEDIUM: No integration tests, only unit tests
+- [PASS] LOW: Config untouched, no migration required
 
 ### Critical Observations
 1. [Most important insight — may reframe the whole task]

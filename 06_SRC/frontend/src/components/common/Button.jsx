@@ -15,10 +15,10 @@ export const Button = ({
 
   const variants = {
     primary: 'bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 focus-visible:ring-brand-600 shadow-sm',
-    secondary: 'bg-slate-100 text-ink-primary hover:bg-slate-200 active:bg-slate-300 focus-visible:ring-slate-400',
-    outline: 'border border-surface-border text-ink-primary hover:bg-slate-50 active:bg-slate-100 focus-visible:ring-brand-600',
+    secondary: 'bg-slate-100 dark:bg-slate-800 text-ink-primary hover:bg-slate-200 dark:hover:bg-slate-700 active:bg-slate-300 dark:active:bg-slate-600 focus-visible:ring-slate-400',
+    outline: 'border border-surface-border text-ink-primary hover:bg-slate-50 dark:hover:bg-slate-800 active:bg-slate-100 dark:active:bg-slate-700 focus-visible:ring-brand-600',
     danger: 'bg-state-danger text-white hover:bg-red-700 active:bg-red-800 focus-visible:ring-red-600 shadow-sm',
-    ghost: 'text-ink-muted hover:text-ink-primary hover:bg-slate-100 active:bg-slate-200 focus-visible:ring-slate-400'
+    ghost: 'text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 focus-visible:ring-slate-400'
   };
 
   const sizes = {
