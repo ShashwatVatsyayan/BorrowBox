@@ -63,12 +63,21 @@ export const NotificationsPage = () => {
                 </div>
                 <p className="text-xs text-ink-muted mt-1 leading-relaxed">{notif.message}</p>
                 <div className="mt-2.5 flex items-center gap-3">
-                  <Link
-                    to="/app/activity"
-                    className="text-xs font-semibold text-brand-600 hover:underline"
-                  >
-                    View in Activity →
-                  </Link>
+                  {notif.related_item_id ? (
+                    <Link
+                      to={`/app/items/${notif.related_item_id}`}
+                      className="text-xs font-semibold text-brand-600 hover:underline"
+                    >
+                      View Item -&gt;
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/app/activity"
+                      className="text-xs font-semibold text-brand-600 hover:underline"
+                    >
+                      View in Activity -&gt;
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

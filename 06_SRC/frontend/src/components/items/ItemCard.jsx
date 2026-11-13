@@ -1,14 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, User, Clock, ArrowLeftRight, HelpCircle, Camera } from 'lucide-react';
+import { MapPin, User, Clock, ArrowLeftRight, HelpCircle, Camera, Heart, Bookmark, MessageSquare } from 'lucide-react';
+import { ClickSpark } from '../common/ClickSpark';
+import { itemService } from '../../services/itemService';
 
 export const ItemCard = ({ item }) => {
+  const [isLiked, setIsLiked] = useState(Boolean(item.is_liked));
+  const [likesCount, setLikesCount] = useState(item.likes_count || 0);
+  const [isSaved, setIsSaved] = useState(Boolean(item.is_saved));
+  const [commentsCount] = useState(item.comments_count || 0);
+
   const imageUrl = item.images && item.images.length > 0
     ? item.images[0]
     : 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80';
 
   const listingType = item.listing_type || 'borrow';
   const photoCount = item.images ? item.images.length : 1;
+
+  const handleLike = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const res = await itemService.toggleLike(item.id);
+      setIsLiked(res.liked);
+      setLikesCount(res.count);
+    } catch {
+      // Ignored
+    }
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const res = await itemService.toggleSave(item.id);
+      setIsSaved(res.saved);
+    } catch {
+      // Ignored
+    }
+  };
 
   return (
     <Link
@@ -106,6 +136,61 @@ export const ItemCard = ({ item }) => {
             <User size={12} className="shrink-0 text-slate-400" />
             <span className="truncate">{item.owner?.full_name || 'Verified Student'}</span>
           </div>
+        </div>
+
+        {/* Social Bar (Like with ClickSpark, Comments Count, Save for Later) */}
+        <div className="mt-2.5 pt-2 border-t border-surface-border flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            {/* ClickSpark Like Button */}
+            <ClickSpark
+              sparkColor="#ff6b00"
+              shape="line"
+              sparkCount={8}
+              sparkSize={14}
+              sparkRadius={30}
+              duration={500}
+            >
+              <button
+                type="button"
+                onClick={handleLike}
+                className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  isLiked
+                    ? 'text-rose-600 bg-rose-50 dark:bg-rose-950/40 ring-1 ring-rose-500/20'
+                    : 'text-ink-muted hover:text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+                aria-label={isLiked ? 'Unlike listing' : 'Like listing'}
+                title={isLiked ? 'Liked' : 'Like'}
+              >
+                <Heart size={13} className={isLiked ? 'fill-rose-500 text-rose-500' : ''} />
+                <span>{likesCount}</span>
+              </button>
+            </ClickSpark>
+
+            {/* Comment Count Indicator */}
+            <div
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-ink-muted hover:text-brand-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              title="Campus questions and comments"
+            >
+              <MessageSquare size={13} />
+              <span>{commentsCount}</span>
+            </div>
+          </div>
+
+          {/* Save for Later Button */}
+          <button
+            type="button"
+            onClick={handleSave}
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+              isSaved
+                ? 'text-brand-600 bg-brand-50 dark:bg-brand-950/40 ring-1 ring-brand-500/20'
+                : 'text-ink-muted hover:text-brand-600 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
+            aria-label={isSaved ? 'Remove from saved' : 'Save for later'}
+            title={isSaved ? 'Saved for later (You will be notified on status changes)' : 'Save for later'}
+          >
+            <Bookmark size={13} className={isSaved ? 'fill-brand-600 text-brand-600' : ''} />
+            <span className="text-[11px]">{isSaved ? 'Saved' : 'Save'}</span>
+          </button>
         </div>
       </div>
     </Link>

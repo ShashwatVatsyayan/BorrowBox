@@ -158,6 +158,26 @@ export const requestService = {
       created_at: new Date().toISOString()
     });
 
+    // Notify students who saved this item for later
+    const actionTerm = req.request_type === 'trade' ? 'traded' : 'borrowed';
+    const savers = (db.saved_items || []).filter(
+      (s) => s.item_id === item.id && s.user_id !== req.borrower_id && s.user_id !== item.owner_id
+    );
+
+    savers.forEach((saver) => {
+      db.notifications.unshift({
+        id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+        user_id: saver.user_id,
+        title: 'Saved Item Status Update',
+        message: `"${item.title}" that you saved for later has just been ${actionTerm} by a peer on campus (${req.start_date} to ${req.end_date}).`,
+        type: 'saved_item_borrowed',
+        related_item_id: item.id,
+        related_request_id: req.id,
+        is_read: false,
+        created_at: new Date().toISOString()
+      });
+    });
+
     saveLocalDB(db);
     return req;
   },

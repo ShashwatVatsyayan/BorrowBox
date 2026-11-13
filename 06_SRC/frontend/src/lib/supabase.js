@@ -182,7 +182,47 @@ const INITIAL_SEED = {
       created_at: new Date(Date.now() - 3600000 * 4).toISOString()
     }
   ],
-  reports: []
+  reports: [],
+  likes: [
+    {
+      id: 'like-001',
+      item_id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      user_id: '22222222-2222-2222-2222-222222222222',
+      created_at: new Date(Date.now() - 3600000 * 20).toISOString()
+    },
+    {
+      id: 'like-002',
+      item_id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+      user_id: '22222222-2222-2222-2222-222222222222',
+      created_at: new Date(Date.now() - 3600000 * 15).toISOString()
+    }
+  ],
+  comments: [
+    {
+      id: 'cmt-001',
+      item_id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      user_id: '22222222-2222-2222-2222-222222222222',
+      user_name: 'Priya Verma',
+      text: 'Does this calculator have the solar charging panel intact? Needed for math practicals on Monday!',
+      created_at: new Date(Date.now() - 3600000 * 10).toISOString()
+    },
+    {
+      id: 'cmt-002',
+      item_id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      user_id: '11111111-1111-1111-1111-111111111111',
+      user_name: 'Aarav Sharma',
+      text: 'Yes Priya! Solar panel and battery backup are 100% operational, and protective hard slip-on case is included.',
+      created_at: new Date(Date.now() - 3600000 * 8).toISOString()
+    }
+  ],
+  saved_items: [
+    {
+      id: 'save-001',
+      item_id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      user_id: '22222222-2222-2222-2222-222222222222',
+      created_at: new Date(Date.now() - 3600000 * 25).toISOString()
+    }
+  ]
 };
 
 export const getLocalDB = () => {
@@ -192,7 +232,11 @@ export const getLocalDB = () => {
     return JSON.parse(JSON.stringify(INITIAL_SEED));
   }
   try {
-    return JSON.parse(existing);
+    const db = JSON.parse(existing);
+    if (!db.likes) db.likes = [];
+    if (!db.comments) db.comments = [];
+    if (!db.saved_items) db.saved_items = [];
+    return db;
   } catch (e) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_SEED));
     return JSON.parse(JSON.stringify(INITIAL_SEED));

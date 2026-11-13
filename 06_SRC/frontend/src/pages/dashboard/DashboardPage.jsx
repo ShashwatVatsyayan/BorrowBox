@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   Filter,
-  X
+  X,
+  Bookmark
 } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ItemGrid } from '../../components/items/ItemGrid';
@@ -38,11 +39,14 @@ export const DashboardPage = () => {
   const myListings = items.filter((i) => i.owner_id === user?.id);
   const tradeListings = items.filter((i) => i.listing_type === 'trade');
   const wantedListings = items.filter((i) => i.listing_type === 'wanted');
+  const savedListings = items.filter((i) => i.is_saved);
 
   // Filter items for the unified feed
   const filteredItems = items.filter((item) => {
-    // Type filter
-    if (selectedListingType !== 'All') {
+    // Type or Saved filter
+    if (selectedListingType === 'saved') {
+      if (!item.is_saved) return false;
+    } else if (selectedListingType !== 'All') {
       const type = item.listing_type || 'borrow';
       if (type !== selectedListingType) return false;
     }
@@ -243,6 +247,18 @@ export const DashboardPage = () => {
           >
             <HelpCircle size={12} />
             <span>Wanted Requests ({wantedListings.length})</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedListingType('saved')}
+            className={`px-3 py-1.5 rounded-full font-bold transition-all border flex items-center gap-1.5 ${
+              selectedListingType === 'saved'
+                ? 'bg-rose-500 text-white border-rose-500 shadow-xs'
+                : 'bg-surface-card text-ink-muted border-surface-border hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <Bookmark size={12} />
+            <span>Saved for Later ({savedListings.length})</span>
           </button>
         </div>
 

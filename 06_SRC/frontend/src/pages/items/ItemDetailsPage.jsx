@@ -13,7 +13,12 @@ import {
   Clock,
   Shield,
   Search,
-  Sparkles
+  Sparkles,
+  Heart,
+  Bookmark,
+  MessageSquare,
+  Send,
+  Bell
 } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { Button } from '../../components/common/Button';
@@ -21,12 +26,14 @@ import { Modal } from '../../components/common/Modal';
 import { Input } from '../../components/common/Input';
 import { Loader } from '../../components/common/Loader';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
+import { ClickSpark } from '../../components/common/ClickSpark';
 import { itemService } from '../../services/itemService';
 import { requestService } from '../../services/requestService';
 import { reportService } from '../../services/notificationService';
 import { validateBorrowDates } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 import { REPORT_REASONS } from '../../utils/constants';
+import { formatRelativeTime } from '../../utils/dateUtils';
 
 const ANGLE_SLOTS = [
   { label: 'Front / Top View', hint: 'Top and front surface inspection' },
@@ -44,6 +51,15 @@ export const ItemDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  // Social interactions state
+  const [isLiked, setIsLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
+  const [saveNotice, setSaveNotice] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
+  const [submittingComment, setSubmittingComment] = useState(false);
 
   // Request modal state
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
@@ -69,6 +85,11 @@ export const ItemDetailsPage = () => {
       try {
         const data = await itemService.getItemById(id);
         setItem(data);
+        setIsLiked(Boolean(data.is_liked));
+        setLikesCount(data.likes_count || 0);
+        setIsSaved(Boolean(data.is_saved));
+        const cmts = await itemService.getComments(id);
+        setComments(cmts);
       } catch (err) {
         setError(err.message || 'Could not load item details.');
       } finally {
@@ -80,6 +101,60 @@ export const ItemDetailsPage = () => {
 
   const isOwner = user && item && user.id === item.owner_id;
   const listingType = item?.listing_type || 'borrow';
+
+  const handleToggleLike = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    try {
+      const res = await itemService.toggleLike(item.id);
+      setIsLiked(res.liked);
+      setLikesCount(res.count);
+    } catch (err) {
+      alert(err.message || 'Failed to update like.');
+    }
+  };
+
+  const handleToggleSave = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    try {
+      const res = await itemService.toggleSave(item.id);
+      setIsSaved(res.saved);
+      if (res.saved) {
+        setSaveNotice('Saved to your dashboard. You will receive an alert if someone borrows or trades this item.');
+        setTimeout(() => setSaveNotice(null), 4000);
+      } else {
+        setSaveNotice('Item removed from your saved list.');
+        setTimeout(() => setSaveNotice(null), 2500);
+      }
+    } catch (err) {
+      alert(err.message || 'Failed to update saved item.');
+    }
+  };
+
+  const handleAddComment = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    if (!commentText.trim()) return;
+
+    setSubmittingComment(true);
+    try {
+      const newComment = await itemService.addComment(item.id, commentText);
+      setComments((prev) => [...prev, newComment]);
+      setCommentText('');
+    } catch (err) {
+      alert(err.message || 'Failed to post comment.');
+    } finally {
+      setSubmittingComment(false);
+    }
+  };
 
   const handleRequestSubmit = async (e) => {
     e.preventDefault();
@@ -283,14 +358,72 @@ export const ItemDetailsPage = () => {
 
         {/* Content Details */}
         <div className="p-5 sm:p-6 flex flex-col gap-5">
-          <div>
-            <span className="text-xs font-semibold text-brand-600 tracking-wider uppercase">
-              {item.category}
-            </span>
-            <h1 className="text-xl sm:text-2xl font-bold text-ink-primary mt-1">
-              {item.title}
-            </h1>
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+            <div>
+              <span className="text-xs font-semibold text-brand-600 tracking-wider uppercase">
+                {item.category}
+              </span>
+              <h1 className="text-xl sm:text-2xl font-bold text-ink-primary mt-1">
+                {item.title}
+              </h1>
+            </div>
+
+            {/* Social Interaction Buttons: Like, Save, Comments */}
+            <div className="flex items-center gap-2 self-start shrink-0">
+              <ClickSpark
+                sparkColor="#ff6b00"
+                shape="line"
+                sparkCount={8}
+                sparkSize={14}
+                sparkRadius={30}
+                duration={500}
+              >
+                <button
+                  type="button"
+                  onClick={handleToggleLike}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                    isLiked
+                      ? 'bg-rose-50 text-rose-600 border-rose-300 dark:bg-rose-950/40 dark:border-rose-800'
+                      : 'bg-surface-card text-ink-muted border-surface-border hover:text-ink-primary hover:border-slate-400'
+                  }`}
+                  aria-label={isLiked ? 'Unlike item' : 'Like item'}
+                >
+                  <Heart size={15} className={isLiked ? 'fill-rose-500 text-rose-500' : ''} />
+                  <span>{likesCount}</span>
+                </button>
+              </ClickSpark>
+
+              <button
+                type="button"
+                onClick={handleToggleSave}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                  isSaved
+                    ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/40 dark:border-amber-800'
+                    : 'bg-surface-card text-ink-muted border-surface-border hover:text-ink-primary hover:border-slate-400'
+                }`}
+                aria-label={isSaved ? 'Remove from saved' : 'Save for later'}
+              >
+                <Bookmark size={15} className={isSaved ? 'fill-amber-500 text-amber-500' : ''} />
+                <span>{isSaved ? 'Saved' : 'Save for Later'}</span>
+              </button>
+
+              <a
+                href="#campus-comments"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border bg-surface-card text-ink-muted border-surface-border hover:text-ink-primary hover:border-slate-400 transition-all"
+                aria-label="View comments"
+              >
+                <MessageSquare size={15} />
+                <span>{comments.length}</span>
+              </a>
+            </div>
           </div>
+
+          {saveNotice && (
+            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs flex items-center gap-2">
+              <Bell size={15} className="shrink-0 text-amber-600" />
+              <span>{saveNotice}</span>
+            </div>
+          )}
 
           {/* Listing Intent Highlight Box */}
           {listingType === 'trade' && (
@@ -417,6 +550,86 @@ export const ItemDetailsPage = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Campus Questions & Comments Section */}
+      <div id="campus-comments" className="mt-6 bg-surface-card rounded-2xl border border-surface-border overflow-hidden shadow-xs p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-surface-border">
+          <div className="flex items-center gap-2">
+            <MessageSquare size={18} className="text-brand-600" />
+            <h2 className="text-base sm:text-lg font-bold text-ink-primary">
+              Campus Questions & Comments ({comments.length})
+            </h2>
+          </div>
+          <span className="text-xs text-ink-muted">Public peer thread</span>
+        </div>
+
+        <p className="text-xs text-ink-muted mb-4">
+          Have questions about sizing, battery life, condition, or campus pickup spot? Ask here before requesting.
+        </p>
+
+        {/* Existing Comments Thread */}
+        <div className="space-y-3 mb-6">
+          {comments.length === 0 ? (
+            <div className="text-center py-6 px-4 rounded-xl bg-surface-base border border-surface-border">
+              <p className="text-xs text-ink-muted">No questions asked yet. Be the first to ask the owner a question.</p>
+            </div>
+          ) : (
+            comments.map((comment) => (
+              <div
+                key={comment.id}
+                className="p-3.5 rounded-xl bg-surface-base border border-surface-border flex items-start gap-3"
+              >
+                <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-950/60 border border-brand-300 dark:border-brand-800 text-brand-700 dark:text-brand-300 font-bold text-xs flex items-center justify-center shrink-0">
+                  {comment.user_name?.charAt(0) || 'S'}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-bold text-ink-primary">{comment.user_name || 'Student'}</span>
+                    <span className="text-[10px] text-ink-muted flex items-center gap-1">
+                      <Clock size={11} />
+                      {formatRelativeTime(comment.created_at)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-ink-secondary mt-1 whitespace-pre-wrap leading-relaxed">
+                    {comment.text}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Post Comment Form */}
+        <form onSubmit={handleAddComment} className="flex flex-col gap-2.5">
+          <label htmlFor="commentInput" className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            Ask a Question or Leave a Comment
+          </label>
+          <div className="relative">
+            <textarea
+              id="commentInput"
+              rows={3}
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder="e.g. Is this still available for Monday? What size is the blazer? Does the charger come with it?"
+              required
+              className="w-full px-3.5 py-2.5 rounded-xl border border-surface-border bg-surface-card text-ink-primary text-xs outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600 placeholder:text-ink-light"
+            />
+          </div>
+          <div className="flex items-center justify-end">
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              loading={submittingComment}
+              disabled={!commentText.trim()}
+              className="gap-1.5"
+            >
+              <Send size={14} />
+              <span>Post Comment</span>
+            </Button>
+          </div>
+        </form>
       </div>
 
       {/* Dynamic Request / Trade / Offer Modal */}

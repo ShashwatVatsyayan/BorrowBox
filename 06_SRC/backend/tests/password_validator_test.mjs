@@ -77,3 +77,4 @@ assert(crit.hasNumber === true, 'Criteria reports hasNumber true');
 assert(crit.hasSpecial === true, 'Criteria reports hasSpecial true');
 
 console.log(`\nALL ${passedCount}/${totalCount} PASSWORD VALIDATOR TESTS PASSED.`);
+
