@@ -64,3 +64,9 @@ This file reflects the true execution state of the project.
 - [x] Verify test user flow: Student A (owner) and Student B (borrower)
 - [x] Verify atomic double-booking prevention logic
 - [x] Final documentation and README
+
+## Phase 6 - Remote Push
+- [x] Configure root `.gitignore`
+- [x] Initialize Git repository and add origin `https://github.com/ShashwatVatsyayan/BorrowBox.git`
+- [x] Commit all project files
+- [x] Push to remote branch `main`

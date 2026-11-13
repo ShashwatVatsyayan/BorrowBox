@@ -45,3 +45,39 @@ User requested initializing git repository, configuring gitignore, staging proje
 
 **Outcome:**  
 Added root .gitignore, initialized git repository, created initial commit, and pushed to remote origin main.
+
+---
+
+## 2026-11-12 23:35:51
+**Prompt:**  
+how to make supabase auth for outlook otp for cuchd.in mail ids
+
+**Context:**  
+Technical architecture inquiry regarding configuring Supabase Auth, Custom SMTP, Outlook deliverability, and domain validation for Chandigarh University student mailboxes.
+
+**Outcome:**  
+Provided step-by-step architectural guide covering Supabase email settings, custom SMTP configuration for Microsoft 365 / Outlook spam bypass, OTP template setup, PostgreSQL domain restriction triggers, and React SDK integration.
+
+---
+
+## 2026-11-12 23:38:22
+**Prompt:**  
+any other free and unlimited way for otp signin mail from outlook for @cuchd mail
+
+**Context:**  
+Inquiry regarding zero-cost, high-volume alternatives for authenticating @cuchd.in Outlook users without paid SMTP services or strict rate limits.
+
+**Outcome:**  
+Provided actionable alternatives: (1) Free Gmail SMTP with App Passwords (500 free emails/day, zero domain required, high Microsoft deliverability), (2) Microsoft Azure AD SSO (truly unlimited, zero email delivery friction, authenticates natively with university Microsoft 365 credentials), and (3) Brevo free tier (300 emails/day).
+
+---
+
+## 2026-11-13 10:27:18
+**Prompt:**  
+use the logo for the Borrowbox stored in @[c:\HITMAN\TECHNICAL\PROJECTS\Personal Projects\BorrowBox\Images]
+
+**Context:**  
+User provided official brand asset 'BorrowBox Community Lending Logo.png' in the Images folder.
+
+**Outcome:**  
+Copied logo asset to public/logo.png and src/assets/images/logo.png. Created reusable Logo component. Updated AppHeader, LandingPage, LoginPage, SignupPage, ForgotPasswordPage, VerifyEmailPage, and index.html favicon/app icons.

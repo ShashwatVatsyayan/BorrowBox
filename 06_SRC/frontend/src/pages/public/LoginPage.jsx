@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, Eye, EyeOff, Shield } from 'lucide-react';
+import { Eye, EyeOff, Shield } from 'lucide-react';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
+import { Logo } from '../../components/common/Logo';
 import { useAuth } from '../../hooks/useAuth';
 
 export const LoginPage = () => {
@@ -50,12 +51,9 @@ export const LoginPage = () => {
     <div className="min-h-screen bg-surface-base flex flex-col justify-center py-10 px-4 sm:px-6">
       <div className="max-w-md w-full mx-auto">
         <div className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-2 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600">
-              <Package size={24} />
-            </div>
-            <span className="text-xl font-extrabold text-ink-primary">BorrowBox</span>
-          </Link>
+          <div className="flex justify-center mb-4">
+            <Logo size="lg" to="/" />
+          </div>
           <h2 className="text-2xl font-bold text-ink-primary">Sign In to BorrowBox</h2>
           <p className="text-xs text-ink-muted mt-1">
             Access your campus listings, borrowings, and requests

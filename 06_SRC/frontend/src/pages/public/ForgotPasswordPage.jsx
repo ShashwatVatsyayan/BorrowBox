@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mail, CheckCircle2 } from 'lucide-react';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
+import { Logo } from '../../components/common/Logo';
 import { authService } from '../../services/authService';
 
 export const ForgotPasswordPage = () => {
@@ -25,6 +26,9 @@ export const ForgotPasswordPage = () => {
   return (
     <div className="min-h-screen bg-surface-base flex flex-col justify-center py-10 px-4 sm:px-6">
       <div className="max-w-md w-full mx-auto">
+        <div className="flex justify-center mb-5">
+          <Logo size="lg" to="/" />
+        </div>
         <div className="bg-surface-card p-6 rounded-2xl border border-surface-border shadow-xs">
           <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 mb-4">
             <Mail size={20} />

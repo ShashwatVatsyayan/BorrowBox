@@ -30,4 +30,17 @@ This file logs every meaningful change in the project.
 - Passed 100% of automated tests across backend and ML modules.
 - Executed production build (`npm run build`) with optimized chunk distribution.
 - Started Vite development server in daemon mode on port 3000 (`http://localhost:3000`).
-- Configured root `.gitignore` and prepared git repository for push to GitHub.
+- Configured root `.gitignore` excluding `node_modules`, `dist`, local environment files, and system artifacts.
+- Initialized Git repository, staged all 103 project files, committed, integrated remote main, and pushed cleanly to `https://github.com/ShashwatVatsyayan/BorrowBox.git`.
+- Documented Supabase Auth setup for Microsoft 365 / Outlook OTP deliverability on `@cuchd.in` student domains.
+- Analyzed zero-cost high-volume alternatives (Gmail SMTP relay and native Microsoft SSO).
+
+---
+
+## 2026-11-13
+- Incorporated official brand asset from `Images/BorrowBox Community Lending Logo.png`.
+- Distributed logo to `06_SRC/frontend/public/logo.png` and `06_SRC/frontend/src/assets/images/logo.png`.
+- Created standardized reusable `Logo` component in `06_SRC/frontend/src/components/common/Logo.jsx`.
+- Updated navigation headers, login, signup, forgot password, and email verification pages with official branding.
+- Updated HTML favicon and touch icons.
+- Verified production build (`npm run build`) with zero errors.

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Package, ShieldCheck, ArrowRight, BookOpen, Cpu, Wrench, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, ArrowRight, BookOpen, Cpu, Wrench, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
+import { Logo } from '../../components/common/Logo';
 
 export const LandingPage = () => {
   return (
@@ -9,12 +10,7 @@ export const LandingPage = () => {
       {/* Navigation Header */}
       <header className="w-full bg-surface-card border-b border-surface-border sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600">
-              <Package size={22} />
-            </div>
-            <span className="text-lg font-extrabold tracking-tight text-ink-primary">BorrowBox</span>
-          </div>
+          <Logo size="md" to="/" />
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm font-semibold text-ink-primary hover:text-brand-600 px-3 py-2 transition-colors">
               Log In

@@ -4,6 +4,7 @@ import { Mail, CheckCircle2 } from 'lucide-react';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
+import { Logo } from '../../components/common/Logo';
 import { maskEmail } from '../../utils/formatters';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -43,6 +44,9 @@ export const VerifyEmailPage = () => {
   return (
     <div className="min-h-screen bg-surface-base flex flex-col justify-center py-10 px-4 sm:px-6">
       <div className="max-w-md w-full mx-auto">
+        <div className="flex justify-center mb-4">
+          <Logo size="lg" to="/" />
+        </div>
         <div className="text-center mb-6">
           <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 mx-auto mb-3">
             <Mail size={24} />

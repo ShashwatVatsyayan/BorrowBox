@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, Bell, Shield, ChevronDown } from 'lucide-react';
+import { Bell, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
+import { Logo } from '../common/Logo';
 
 export const AppHeader = () => {
   const { user, switchAccount, logout } = useAuth();
@@ -20,12 +21,7 @@ export const AppHeader = () => {
     <header className="sticky top-0 z-40 w-full bg-surface-card border-b border-surface-border">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link to="/app" className="flex items-center gap-2 font-bold text-ink-primary hover:text-brand-600 transition-colors">
-          <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600 border border-brand-100">
-            <Package size={20} />
-          </div>
-          <span className="text-base tracking-tight font-extrabold">BorrowBox</span>
-        </Link>
+        <Logo size="sm" to="/app" />
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2.5">
