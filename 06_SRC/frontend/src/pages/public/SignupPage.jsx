@@ -5,6 +5,7 @@ import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
+import { AuthTunnelTransition } from '../../components/common/AuthTunnelTransition';
 import { validateEmail, validatePassword } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -24,6 +25,12 @@ export const SignupPage = () => {
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+  const [transitionMeta, setTransitionMeta] = useState({
+    title: 'Registering Student Account...',
+    subtitle: 'Preparing Chandigarh University peer access...',
+    target: '/app'
+  });
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -72,16 +79,29 @@ export const SignupPage = () => {
         full_name: formData.fullName,
         university_uid: formData.uid
       });
-      navigate(`/verify-email?email=${encodeURIComponent(formData.email)}`);
+      setTransitionMeta({
+        title: 'Welcome to BorrowBox!',
+        subtitle: `Registered ${formData.fullName}. Preparing your campus verification...`,
+        target: `/verify-email?email=${encodeURIComponent(formData.email)}`
+      });
+      setTransitioning(true);
     } catch (err) {
       setGeneralError(err.message || 'Signup failed. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
+      {/* LightTunnel Hyperspace Warp Transition */}
+      <AuthTunnelTransition
+        isActive={transitioning}
+        title={transitionMeta.title}
+        subtitle={transitionMeta.subtitle}
+        duration={1500}
+        onComplete={() => navigate(transitionMeta.target)}
+      />
+
       <div className="max-w-md w-full mx-auto flex items-center justify-end">
         <ThemeToggle size="sm" />
       </div>
@@ -181,7 +201,7 @@ export const SignupPage = () => {
             </div>
             {errors.agreeTerms && <span className="text-xs text-state-danger font-medium">{errors.agreeTerms}</span>}
 
-            <Button type="submit" variant="primary" loading={loading} className="w-full mt-2">
+            <Button type="submit" variant="primary" loading={loading && !transitioning} className="w-full mt-2">
               Create Account
             </Button>
           </form>
@@ -208,3 +228,4 @@ export const SignupPage = () => {
   );
 };
 
+export default SignupPage;

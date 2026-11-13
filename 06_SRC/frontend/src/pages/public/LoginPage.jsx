@@ -6,6 +6,7 @@ import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
+import { AuthTunnelTransition } from '../../components/common/AuthTunnelTransition';
 import { useAuth } from '../../hooks/useAuth';
 
 export const LoginPage = () => {
@@ -17,6 +18,12 @@ export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+  const [transitionMeta, setTransitionMeta] = useState({
+    title: 'Entering Campus Network...',
+    subtitle: 'Connecting to Chandigarh University Student Hub',
+    target: '/app'
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +35,14 @@ export const LoginPage = () => {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/app');
+      setTransitionMeta({
+        title: 'Entering Campus Network...',
+        subtitle: `Authenticated as ${email}. Welcome back to BorrowBox.`,
+        target: '/app'
+      });
+      setTransitioning(true);
     } catch (err) {
       setError(err.message || 'Invalid email or password.');
-    } finally {
       setLoading(false);
     }
   };
@@ -40,16 +51,29 @@ export const LoginPage = () => {
     setLoading(true);
     try {
       await switchAccount(roleName);
-      navigate('/app');
+      setTransitionMeta({
+        title: `Welcome, ${roleName}!`,
+        subtitle: 'Launching campus dashboard & inventory feed...',
+        target: '/app'
+      });
+      setTransitioning(true);
     } catch (err) {
       setError(err.message || 'Quick login failed.');
-    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
+      {/* LightTunnel Hyperspace Warp Transition */}
+      <AuthTunnelTransition
+        isActive={transitioning}
+        title={transitionMeta.title}
+        subtitle={transitionMeta.subtitle}
+        duration={1500}
+        onComplete={() => navigate(transitionMeta.target)}
+      />
+
       <div className="max-w-md w-full mx-auto flex items-center justify-end">
         <ThemeToggle size="sm" />
       </div>
@@ -109,7 +133,7 @@ export const LoginPage = () => {
               </Link>
             </div>
 
-            <Button type="submit" variant="primary" loading={loading} className="w-full">
+            <Button type="submit" variant="primary" loading={loading && !transitioning} className="w-full">
               Log In
             </Button>
           </form>
@@ -161,3 +185,4 @@ export const LoginPage = () => {
   );
 };
 
+export default LoginPage;
