@@ -62,3 +62,5 @@ This file logs every meaningful change in the project.
 - Added theme appearance switcher and legal document links to Settings page.
 - Validated production build (`npm run build`) in 4.57s.
 - Redeployed updated production build to Vercel at `https://borrowbox-lime.vercel.app`.
+- Updated `Logo.jsx` to render the official brand logo emblem at increased scale (`h-9` up to `h-28 sm:h-32`), removing redundant text beside the logo.
+- Rebuilt and redeployed production release to Vercel at `https://borrowbox-lime.vercel.app`.

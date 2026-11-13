@@ -142,3 +142,15 @@ User invoked /gravitas requesting complete elimination of AI tropes and emojis, 
 
 **Outcome:**  
 Applied Gravitas reliability runtime principles. Purged all emoji occurrences repo-wide (verified 0 emojis). Redesigned landing page hero, removing AI pill badge and boilerplate templates. Created TermsPage (/terms), PrivacyPage (/privacy), and NotFoundPage (/404 and wildcard catch-all). Built ThemeContext, useTheme hook, ThemeToggle component, and CSS variable color mapping. Added theme controls to headers, auth views, and settings page. Verified production build and tests. Redeployed production release to Vercel.
+
+---
+
+## 2026-11-13 11:47:49
+**Prompt:**  
+only use the logo with larger size not text
+
+**Context:**  
+User instructed that only the official brand logo should be rendered without any adjacent text, and that the logo should be displayed at a larger size.
+
+**Outcome:**  
+Refactored Logo.jsx to display only the official brand emblem in its natural 3:2 aspect ratio with increased height scales (h-9 in app headers, h-12 in landing navigation, h-20/h-24 in auth forms, h-28/h-32 in splash). Removed text element completely. Verified production build and deployed update to Vercel production.
