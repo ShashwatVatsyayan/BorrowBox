@@ -33,7 +33,7 @@ export const AdminDashboardPage = () => {
   return (
     <PageContainer>
       <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold mb-2">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-semibold mb-2">
           <Shield size={14} />
           <span>Campus Moderation Portal</span>
         </div>
@@ -58,7 +58,7 @@ export const AdminDashboardPage = () => {
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 uppercase tracking-wider">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#D4A853]/15 text-[#916C16] dark:text-[#E8CA7A] border border-[#D4A853]/30 uppercase tracking-wider">
                     {report.reason}
                   </span>
                   <h3 className="text-sm font-bold text-ink-primary mt-1.5">

@@ -85,7 +85,7 @@ export const RequestActions = ({
           size="sm"
           variant="primary"
           onClick={() => setActiveAction('complete_trade')}
-          className="gap-1.5 bg-amber-600 hover:bg-amber-700 text-white"
+          className="gap-1.5 bg-[#D4A853] hover:bg-[#b88b38] text-[#080C0A] font-bold shadow-xs"
         >
           <ArrowLeftRight size={16} />
           <span>Confirm Permanent Trade Completed</span>

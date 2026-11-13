@@ -22,7 +22,7 @@ export const ThemeToggle = ({ className = '', size = 'md', showLabel = false }) 
     >
       <div className="relative w-5 h-5 flex items-center justify-center transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110">
         {isDark ? (
-          <Sun size={iconSize} className="text-amber-400 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90" />
+          <Sun size={iconSize} className="text-[#D4A853] transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90" />
         ) : (
           <Moon size={iconSize} className="text-slate-600 dark:text-slate-300 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-12" />
         )}

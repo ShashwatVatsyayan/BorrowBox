@@ -116,7 +116,7 @@ export const AuthTunnelTransition = ({
 
         {/* Animated Warp Energy Bar in Emerald & Gold */}
         <div className="w-48 h-1.5 bg-zinc-900 rounded-full overflow-hidden mt-5 border border-zinc-800">
-          <div className="h-full bg-gradient-to-r from-emerald-600 via-amber-400 to-emerald-500 rounded-full w-full animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
+          <div className="h-full bg-gradient-to-r from-emerald-600 via-[#D4A853] to-emerald-500 rounded-full w-full animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
         </div>
       </div>
     </div>

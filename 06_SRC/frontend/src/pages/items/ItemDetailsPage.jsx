@@ -162,15 +162,18 @@ export const ItemDetailsPage = () => {
     e.preventDefault();
     setRequestError(null);
 
-    if (listingType === 'borrow') {
+    const isTradeAction = listingType === 'trade' || requestDates.isTradeProposal;
+    if (isTradeAction) {
+      if (!requestDates.offerItem.trim()) {
+        setRequestError('Please specify the item you are proposing to trade or exchange.');
+        return;
+      }
+    } else if (listingType === 'borrow') {
       const dateCheck = validateBorrowDates(requestDates.startDate, requestDates.endDate);
       if (!dateCheck.valid) {
         setRequestError(dateCheck.error);
         return;
       }
-    } else if (listingType === 'trade' && !requestDates.offerItem.trim()) {
-      setRequestError('Please specify the item you are proposing to trade or exchange.');
-      return;
     } else if (listingType === 'wanted' && !requestDates.offerItem.trim()) {
       setRequestError('Please specify the item you can provide to this student.');
       return;
@@ -178,8 +181,8 @@ export const ItemDetailsPage = () => {
 
     setSubmittingRequest(true);
     try {
-      const fullMessage = listingType === 'trade'
-        ? `[Trade Offer: ${requestDates.offerItem.trim()}] ${requestDates.message.trim()}`
+      const fullMessage = isTradeAction
+        ? `[Permanent Trade Offer: ${requestDates.offerItem.trim()}] ${requestDates.message.trim()}`
         : listingType === 'wanted'
         ? `[Item Offered: ${requestDates.offerItem.trim()}] ${requestDates.message.trim()}`
         : requestDates.message;
@@ -189,7 +192,7 @@ export const ItemDetailsPage = () => {
         startDate: requestDates.startDate,
         endDate: requestDates.endDate,
         message: fullMessage,
-        requestType: listingType,
+        requestType: isTradeAction ? 'trade' : listingType,
         offerItem: requestDates.offerItem.trim()
       });
 
@@ -283,13 +286,13 @@ export const ItemDetailsPage = () => {
             {/* Listing Type Indicator Badge */}
             <div className="absolute top-3 right-3 flex items-center gap-2">
               {listingType === 'trade' && (
-                <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-purple-600 text-white shadow-xs flex items-center gap-1">
+                <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-[#D4A853] text-[#080C0A] shadow-xs flex items-center gap-1">
                   <ArrowLeftRight size={13} />
-                  <span>Open for Trade</span>
+                  <span>{item.is_permanent_trade ? 'Permanent Trade' : 'Open for Trade'}</span>
                 </span>
               )}
               {listingType === 'wanted' && (
-                <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-600 text-white shadow-xs flex items-center gap-1">
+                <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-indigo-600 text-white shadow-xs flex items-center gap-1">
                   <Search size={13} />
                   <span>Wanted Request</span>
                 </span>
@@ -400,12 +403,12 @@ export const ItemDetailsPage = () => {
                 onClick={handleToggleSave}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                   isSaved
-                    ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/40 dark:border-amber-800'
+                    ? 'bg-[#D4A853]/15 text-[#916C16] dark:text-[#E8CA7A] border-[#D4A853]/40'
                     : 'bg-surface-card text-ink-muted border-surface-border hover:text-ink-primary hover:border-slate-400'
                 }`}
                 aria-label={isSaved ? 'Remove from saved' : 'Save for later'}
               >
-                <Bookmark size={15} className={isSaved ? 'fill-amber-500 text-amber-500' : ''} />
+                <Bookmark size={15} className={isSaved ? 'fill-[#D4A853] text-[#D4A853]' : ''} />
                 <span>{isSaved ? 'Saved' : 'Save for Later'}</span>
               </button>
 
@@ -421,24 +424,24 @@ export const ItemDetailsPage = () => {
           </div>
 
           {saveNotice && (
-            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs flex items-center gap-2">
-              <Bell size={15} className="shrink-0 text-amber-600" />
+            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs flex items-center gap-2">
+              <Bell size={15} className="shrink-0 text-emerald-600" />
               <span>{saveNotice}</span>
             </div>
           )}
 
           {/* Listing Intent Highlight Box */}
           {listingType === 'trade' && (
-            <div className="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/50">
+            <div className="p-4 rounded-xl bg-emerald-950/5 dark:bg-emerald-950/30 border border-[#D4A853]/30">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide">
-                  <ArrowLeftRight size={14} />
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#916C16] dark:text-[#E8CA7A] uppercase tracking-wide">
+                  <ArrowLeftRight size={14} className="text-[#D4A853]" />
                   <span>
                     {item.is_permanent_trade ? 'Permanent Trade: I Will Trade This For That' : 'Trade / Barter Preference'}
                   </span>
                 </div>
                 {item.is_permanent_trade && (
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white tracking-wide uppercase">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4A853] text-[#080C0A] tracking-wide uppercase">
                     Permanent Swap (No Return)
                   </span>
                 )}
@@ -465,13 +468,13 @@ export const ItemDetailsPage = () => {
           )}
 
           {listingType === 'wanted' && (
-            <div className="p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wide mb-1">
+            <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/50">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wide mb-1">
                 <Search size={14} />
                 <span>Student Wanted Notice</span>
               </div>
               <p className="text-sm font-semibold text-ink-primary">
-                Needed by: <span className="text-amber-900 dark:text-amber-200">{item.needed_by || 'Urgent / Exam or Class need'}</span>
+                Needed by: <span className="text-indigo-900 dark:text-indigo-200 font-bold">{item.needed_by || 'Urgent / Exam or Class need'}</span>
               </p>
               <p className="text-[11px] text-ink-muted mt-1.5">
                 If you have this item in your hostel room or backpack, click "Offer Item to Student" to coordinate with them.
@@ -565,18 +568,37 @@ export const ItemDetailsPage = () => {
                 </Link>
               </div>
             ) : (
-              <>
+              <div className="flex flex-wrap items-center gap-2.5">
                 <Button
                   variant="primary"
                   size="lg"
-                  className="w-full sm:w-auto sm:min-w-[220px]"
+                  className="w-full sm:w-auto sm:min-w-[200px]"
                   disabled={!item.is_active}
-                  onClick={() => setIsRequestModalOpen(true)}
+                  onClick={() => {
+                    setRequestDates((prev) => ({ ...prev, isTradeProposal: false }));
+                    setIsRequestModalOpen(true);
+                  }}
                 >
-                  {listingType === 'trade' && 'Propose Trade / Barter'}
+                  {listingType === 'trade' && 'Propose Permanent Trade'}
                   {listingType === 'wanted' && 'Offer Item to Student'}
                   {listingType === 'borrow' && 'Request to Borrow'}
                 </Button>
+
+                {listingType === 'borrow' && item.is_active && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRequestDates((prev) => ({ ...prev, isTradeProposal: true, offerItem: '' }));
+                      setIsRequestModalOpen(true);
+                    }}
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border border-[#D4A853] bg-[#D4A853]/15 hover:bg-[#D4A853]/25 text-[#0F382A] dark:text-[#D4A853] font-semibold text-xs sm:text-sm transition-all shadow-xs"
+                    title="Offer to permanently exchange an item with this student"
+                  >
+                    <ArrowLeftRight size={14} />
+                    <span>Offer Permanent Trade</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => setIsReportModalOpen(true)}
                   className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-state-danger transition-colors p-2"
@@ -584,7 +606,7 @@ export const ItemDetailsPage = () => {
                   <Flag size={14} />
                   <span>Report Listing</span>
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -675,8 +697,8 @@ export const ItemDetailsPage = () => {
         isOpen={isRequestModalOpen}
         onClose={() => setIsRequestModalOpen(false)}
         title={
-          listingType === 'trade'
-            ? `Propose Trade for "${item.title}"`
+          (listingType === 'trade' || requestDates.isTradeProposal)
+            ? `Propose Permanent Trade for "${item.title}"`
             : listingType === 'wanted'
             ? `Offer Item for "${item.title}"`
             : `Request to Borrow "${item.title}"`
@@ -686,7 +708,7 @@ export const ItemDetailsPage = () => {
           <div className="p-4 rounded-xl bg-emerald-50 text-emerald-800 text-center flex flex-col items-center gap-2">
             <CheckCircle2 size={32} className="text-emerald-600" />
             <p className="font-bold text-sm">
-              {listingType === 'trade' ? 'Trade Proposal Submitted!' : listingType === 'wanted' ? 'Offer Submitted to Student!' : 'Borrow Request Submitted!'}
+              {(listingType === 'trade' || requestDates.isTradeProposal) ? 'Trade Proposal Submitted!' : listingType === 'wanted' ? 'Offer Submitted to Student!' : 'Borrow Request Submitted!'}
             </p>
             <p className="text-xs">The owner has been notified and can review your submission in their dashboard.</p>
           </div>
@@ -695,18 +717,16 @@ export const ItemDetailsPage = () => {
             {requestError && <ErrorMessage message={requestError} />}
 
             {/* Trade specifics */}
-            {listingType === 'trade' && (
+            {(listingType === 'trade' || requestDates.isTradeProposal) && (
               <div className="flex flex-col gap-3">
-                <div className="p-3 rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 text-xs">
-                  <p className="font-semibold text-purple-900 dark:text-purple-200">
-                    Owner is looking for:{' '}
-                    <span className="font-bold">{item.trade_item_desired || item.trade_preference || 'Equal value exchange'}</span>
+                <div className="p-3 rounded-xl bg-emerald-950/10 dark:bg-emerald-950/40 border border-[#D4A853]/35 text-xs">
+                  <p className="font-semibold text-[#916C16] dark:text-[#E8CA7A]">
+                    {listingType === 'trade' ? 'Owner Trade Preference:' : 'Proposing Permanent Trade:'}
+                    <span className="font-bold ml-1 text-ink-primary">{item.trade_item_desired || item.trade_preference || 'Equal value exchange'}</span>
                   </p>
-                  {item.is_permanent_trade && (
-                    <p className="text-[11px] text-purple-700 dark:text-purple-300 mt-1">
-                      Permanent ownership trade: once agreed, both students keep the exchanged items permanently.
-                    </p>
-                  )}
+                  <p className="text-[11px] text-emerald-800 dark:text-emerald-300 mt-1">
+                    Permanent ownership trade: once accepted, both students permanently keep what they trade, with zero return required.
+                  </p>
                 </div>
 
                 <Input
@@ -720,7 +740,7 @@ export const ItemDetailsPage = () => {
                 />
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="tradeNotes" className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                    Condition & Barter Notes
+                    Condition &amp; Meetup Notes
                   </label>
                   <textarea
                     id="tradeNotes"
@@ -800,8 +820,8 @@ export const ItemDetailsPage = () => {
               </>
             )}
 
-            <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-[11px] leading-relaxed">
-              <strong>Zero-Fault Campus Agreement:</strong> By submitting, you agree to meet in safe public campus areas, inspect items across all 4 angles, and acknowledge BorrowBox holds zero liability for peer exchanges.
+            <div className="p-3 rounded-xl bg-emerald-950/5 dark:bg-emerald-950/30 border border-emerald-900/15 dark:border-emerald-800/40 text-emerald-900 dark:text-emerald-200 text-[11px] leading-relaxed">
+              <strong>Campus Safety Agreement:</strong> By submitting, you agree to meet in safe public campus areas, inspect items across all 4 angles, and acknowledge BorrowBox facilitates peer community exchanges.
             </div>
 
             <div className="flex items-center justify-end gap-2 pt-2 border-t border-surface-border">

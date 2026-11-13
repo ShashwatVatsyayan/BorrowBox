@@ -1,19 +1,19 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, PlusCircle, Clock, User } from 'lucide-react';
+import { Home, Compass, Plus, Clock, User } from 'lucide-react';
 
 export const BottomNav = () => {
   const navItems = [
     { to: '/app', label: 'Home', icon: Home, end: true },
     { to: '/app/explore', label: 'Explore', icon: Compass },
-    { to: '/app/items/new', label: 'List Item', icon: PlusCircle, isPrimary: true },
+    { to: '/app/items/new', label: 'List', icon: Plus, isPrimary: true },
     { to: '/app/activity', label: 'Activity', icon: Clock },
     { to: '/app/profile', label: 'Profile', icon: User }
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface-card border-t border-surface-border pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
-      <div className="grid grid-cols-5 h-16 max-w-lg mx-auto px-1">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface-card/95 backdrop-blur-md border-t border-surface-border pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+      <div className="grid grid-cols-5 h-14 max-w-lg mx-auto px-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
@@ -22,21 +22,32 @@ export const BottomNav = () => {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center min-h-[44px] py-1 transition-colors ${
+                `flex flex-col items-center justify-center min-h-[44px] py-0.5 transition-all select-none ${
                   item.isPrimary
-                    ? 'text-brand-600 font-semibold'
+                    ? 'text-white'
                     : isActive
-                    ? 'text-brand-600 font-semibold'
+                    ? 'text-[#0F382A] dark:text-[#10B981] font-bold'
                     : 'text-ink-muted hover:text-ink-primary'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <div className={item.isPrimary ? 'p-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400' : ''}>
-                    <Icon size={item.isPrimary ? 24 : 20} strokeWidth={isActive ? 2.5 : 2} />
-                  </div>
-                  <span className="text-[10px] mt-0.5 tracking-tight">{item.label}</span>
+                  {item.isPrimary ? (
+                    <div className="w-9 h-9 rounded-full bg-[#0F382A] text-[#F5F2EB] border border-[#D4A853] shadow-xs flex items-center justify-center -mt-2">
+                      <Icon size={18} strokeWidth={2.5} />
+                    </div>
+                  ) : (
+                    <div className="relative flex flex-col items-center">
+                      <Icon size={18} strokeWidth={isActive ? 2.4 : 1.8} />
+                      {isActive && (
+                        <span className="w-1 h-1 rounded-full bg-[#D4A853] mt-0.5" />
+                      )}
+                    </div>
+                  )}
+                  <span className={`text-[10px] mt-0.5 tracking-tight ${item.isPrimary ? 'font-semibold text-ink-primary' : ''}`}>
+                    {item.label}
+                  </span>
                 </>
               )}
             </NavLink>

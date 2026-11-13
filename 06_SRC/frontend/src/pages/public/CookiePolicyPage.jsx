@@ -105,7 +105,7 @@ export const CookiePolicyPage = () => {
                     </tr>
                     <tr>
                       <td className="p-3 font-mono text-ink-primary font-semibold">borrowbox_telemetry_events</td>
-                      <td className="p-3"><span className="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-semibold">Analytics</span></td>
+                      <td className="p-3"><span className="px-2 py-0.5 rounded-full bg-[#D4A853]/15 text-[#916C16] dark:text-[#E8CA7A] font-semibold">Analytics</span></td>
                       <td className="p-3">First-party campus performance telemetry (page transitions, search queries). Cleared on browser close.</td>
                       <td className="p-3">Session Only</td>
                     </tr>

@@ -156,15 +156,14 @@ export const EditProfilePage = () => {
             required
           />
 
-          {/* Immutable Student UID (Derived from university email username) */}
+          {/* Permanent Student UID */}
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="immutableUid" className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1">
-                <Lock size={12} className="text-amber-600" />
-                <span>Student UID (University Roll Number)</span>
+              <label htmlFor="immutableUid" className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                Student UID (University Roll Number)
               </label>
-              <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
-                Immutable
+              <span className="text-[11px] text-ink-muted font-medium">
+                Permanent
               </span>
             </div>
             <input
@@ -176,16 +175,20 @@ export const EditProfilePage = () => {
               className="w-full px-3.5 py-2.5 rounded-xl border border-surface-border bg-slate-100 dark:bg-slate-900 text-ink-muted font-mono font-bold text-xs cursor-not-allowed select-all"
             />
             <p className="text-[11px] text-ink-muted">
-              UID cannot be changed. It is permanently derived from your university email username (<code className="text-ink-primary font-mono">{studentEmail}</code>).
+              Permanently bound to your university email address (<code className="text-ink-primary font-mono">{studentEmail}</code>).
             </p>
           </div>
 
-          {/* University Email */}
+          {/* Verified University Mailbox */}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="immutableEmail" className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1">
-              <Mail size={12} className="text-brand-600" />
-              <span>University Email</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="immutableEmail" className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                Verified University Mailbox
+              </label>
+              <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
+                Campus Verified
+              </span>
+            </div>
             <input
               id="immutableEmail"
               type="email"

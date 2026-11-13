@@ -24,9 +24,9 @@ export const DesktopSidebar = () => {
       <div className="mb-4">
         <NavLink
           to="/app/items/new"
-          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-xs hover:-translate-y-0.5"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#0F382A] to-[#061F17] hover:from-[#164e3b] hover:to-[#0B2C21] text-[#F5F2EB] font-semibold text-sm transition-all shadow-[0_4px_16px_rgba(15,56,42,0.35)] hover:-translate-y-0.5 border border-emerald-600/30"
         >
-          <Plus size={18} />
+          <Plus size={18} className="text-[#D4A853]" />
           <span>List an Item</span>
         </NavLink>
       </div>
@@ -40,9 +40,9 @@ export const DesktopSidebar = () => {
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-400 font-semibold'
+                    ? 'bg-emerald-950/10 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 font-semibold border-l-2 border-[#D4A853]'
                     : 'text-ink-muted hover:text-ink-primary hover:bg-slate-50 dark:hover:bg-slate-800/60'
                 }`
               }
@@ -54,31 +54,27 @@ export const DesktopSidebar = () => {
         })}
       </nav>
 
-      <div className="pt-4 border-t border-surface-border text-xs text-ink-muted">
-        <p className="font-semibold text-ink-primary truncate">{user?.full_name}</p>
-        <p className="truncate text-ink-muted">{user?.email}</p>
-        <div className="mt-2.5 flex flex-col gap-2">
-          <div className="flex items-center">
-            <span className="inline-flex items-center whitespace-nowrap px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold text-[10px] border border-emerald-200 dark:border-emerald-800 tracking-wide">
-              Verified Student
-            </span>
-          </div>
-          <div className="flex items-center flex-wrap gap-1.5 text-[10px] text-ink-light">
+      <div className="pt-3 border-t border-surface-border text-xs text-ink-muted">
+        <p className="font-bold text-ink-primary truncate">{user?.full_name}</p>
+        <p className="truncate text-[11px] text-ink-muted">{user?.email}</p>
+        <div className="mt-2.5 pt-2 border-t border-surface-border/50 flex items-center justify-between gap-1.5 text-[10px] text-ink-light whitespace-nowrap">
+          <span className="inline-flex items-center shrink-0 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-800">
+            Verified Student
+          </span>
+          <div className="flex items-center gap-1 shrink-0">
             <a
               href="https://portfolio-v2-alpha-ten-71.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-brand-600 transition-colors inline-flex items-center gap-0.5"
+              className="hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors inline-flex items-center gap-0.5 font-medium"
             >
-              <span>Portfolio</span>
+              Portfolio
               <ExternalLink size={9} />
             </a>
             <span>•</span>
-            <NavLink to="/terms" className="hover:text-brand-600">Terms</NavLink>
+            <NavLink to="/terms" className="hover:text-emerald-700 dark:hover:text-emerald-400">Terms</NavLink>
             <span>•</span>
-            <NavLink to="/privacy" className="hover:text-brand-600">Privacy</NavLink>
-            <span>•</span>
-            <NavLink to="/cookies" className="hover:text-brand-600">Cookies</NavLink>
+            <NavLink to="/privacy" className="hover:text-emerald-700 dark:hover:text-emerald-400">Privacy</NavLink>
           </div>
         </div>
       </div>

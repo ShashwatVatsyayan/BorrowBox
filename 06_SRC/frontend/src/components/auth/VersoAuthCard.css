@@ -96,10 +96,15 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 767.98px) {
   .verso-card {
-    max-width: 420px;
-    min-height: 660px;
+    max-width: 440px;
+    min-height: 560px;
+    height: auto;
     display: flex;
     flex-direction: column;
+    border-radius: 20px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
   }
 }
 
@@ -133,12 +138,18 @@
   .verso-pane {
     height: 100%;
     overflow-y: auto;
+    padding: 2.75rem 2.5rem 2.25rem;
   }
   .verso-pane--signin {
     grid-column: 1 / 2;
+    padding-right: 3.75rem;
+    padding-left: 2.75rem;
   }
   .verso-pane--signup {
     grid-column: 2 / 3;
+    padding-left: 3.75rem;
+    padding-right: 2.75rem;
+    padding-top: 2.75rem;
   }
   .verso-card.is-signin .verso-pane--signup {
     opacity: 0;
@@ -150,15 +161,19 @@
 
 @media (max-width: 767.98px) {
   .verso-pane {
-    padding: 1.75rem 1.5rem calc(2rem + env(safe-area-inset-bottom, 0px));
+    padding: 165px 1.25rem calc(1.75rem + env(safe-area-inset-bottom, 0px)) !important;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: visible;
   }
   .verso-card.is-signin .verso-pane--signup {
     display: none;
   }
   .verso-card.is-signup .verso-pane--signin {
     display: none;
+  }
+  .verso-input {
+    font-size: 16px;
+    min-height: 44px;
   }
 }
 
@@ -380,13 +395,15 @@
 
   /* Resting in Sign-In Mode (Blade on the right) */
   .verso-card.is-signin .auth_band {
-    left: 48%;
+    left: 50%;
+    width: 52%;
     box-shadow: -6px 0 28px var(--verso-accent-gold-glow), inset 2px 0 0 var(--verso-accent-gold);
   }
 
   /* Resting in Sign-Up Mode (Blade on the left) */
   .verso-card.is-signup .auth_band {
-    left: -2%;
+    left: -4%;
+    width: 52%;
     box-shadow: 6px 0 28px var(--verso-accent-gold-glow), inset -2px 0 0 var(--verso-accent-gold);
   }
 
@@ -401,40 +418,40 @@
 @media (max-width: 767.98px) {
   .auth_band {
     top: 0;
-    left: -8%;
-    width: 116%;
-    height: 33%;
+    left: -6%;
+    width: 112%;
+    height: 150px;
     transform: skewY(-4deg);
     transform-origin: top left;
-    box-shadow: 0 6px 24px var(--verso-accent-gold-glow), inset 0 -2px 0 var(--verso-accent-gold);
+    box-shadow: 0 4px 20px var(--verso-accent-gold-glow), inset 0 -2px 0 var(--verso-accent-gold);
     transition: height var(--verso-duration) var(--verso-easing);
   }
 
   .band_inner {
     transform: skewY(4deg); /* Perfect Inverse Skew */
-    padding: 1.5rem 1.25rem 1rem;
+    padding: 1.25rem 1rem 0.5rem;
   }
 
   .band_title {
-    font-size: 1.625rem;
-    margin-bottom: 0.35rem;
+    font-size: 1.45rem;
+    margin-bottom: 0.25rem;
   }
 
   .band_desc {
     font-size: 0.75rem;
-    margin-bottom: 0.75rem;
-    max-width: 260px;
+    margin-bottom: 0.5rem;
+    max-width: 270px;
   }
 
   .band_btn {
-    height: 36px;
-    padding: 0 1.25rem;
-    font-size: 0.75rem;
+    height: 32px;
+    padding: 0 1rem;
+    font-size: 0.725rem;
   }
 
   /* Mid-Transition Sweep State: stretches down across 100% of vertical card */
   .verso-card.is-sweeping .auth_band {
-    height: 116% !important;
+    height: 115% !important;
   }
 }
 

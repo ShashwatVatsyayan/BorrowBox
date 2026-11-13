@@ -115,13 +115,13 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
       )}
 
       {formData.listing_type === 'trade' && (
-        <div className="flex flex-col gap-3 p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/25 border border-amber-300 dark:border-amber-800">
-          <div className="flex items-center justify-between border-b border-amber-200 dark:border-amber-800/60 pb-2">
-            <span className="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
-              <ArrowLeftRight size={14} className="text-amber-600" />
+        <div className="flex flex-col gap-3 p-4 rounded-xl bg-emerald-950/5 dark:bg-emerald-950/30 border border-[#D4A853]/40">
+          <div className="flex items-center justify-between border-b border-[#D4A853]/25 pb-2">
+            <span className="text-xs font-bold text-[#916C16] dark:text-[#E8CA7A] flex items-center gap-1.5">
+              <ArrowLeftRight size={14} className="text-[#D4A853]" />
               <span>Permanent Trade: I Will Trade This For That</span>
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#080C0A] bg-[#D4A853] px-2 py-0.5 rounded">
               Permanent Swap
             </span>
           </div>
@@ -141,7 +141,7 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
                   handleChange('trade_preference', e.target.value);
                 }
               }}
-              className="w-full min-h-[42px] px-3.5 py-2 rounded-lg border border-amber-300 dark:border-amber-700 bg-surface-card text-ink-primary text-sm outline-none focus:border-amber-600"
+              className="w-full min-h-[42px] px-3.5 py-2 rounded-lg border border-[#D4A853]/40 bg-surface-card text-ink-primary text-sm outline-none focus:border-[#D4A853] focus:ring-1 focus:ring-[#D4A853]"
               required
             />
             <p className="text-[11px] text-ink-muted">
@@ -171,7 +171,7 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
               type="checkbox"
               checked={formData.is_permanent_trade}
               onChange={(e) => handleChange('is_permanent_trade', e.target.checked)}
-              className="rounded border-amber-400 text-amber-600 focus:ring-amber-500"
+              className="rounded border-[#D4A853] text-[#0F382A] focus:ring-[#D4A853]"
             />
             <span className="text-xs text-ink-primary font-medium">
               Permanent Ownership Trade (Permanent exchange - no return needed)

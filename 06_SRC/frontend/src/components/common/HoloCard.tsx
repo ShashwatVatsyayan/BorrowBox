@@ -610,7 +610,9 @@ export default function HoloCard({
       setReady(false);
       if (!src) return;
       const img = new Image();
-      img.crossOrigin = 'anonymous';
+      if (!src.startsWith('data:')) {
+        img.crossOrigin = 'anonymous';
+      }
       img.decoding = 'async';
       img.onload = () => {
         if (!alive) return;
@@ -629,6 +631,9 @@ export default function HoloCard({
         } catch {
           textureReady = false;
         }
+      };
+      img.onerror = () => {
+        textureReady = false;
       };
       img.src = src;
     };
@@ -712,7 +717,18 @@ export default function HoloCard({
       {shadow ? <span ref={shadowRef} className="holo-card__shadow" aria-hidden="true" /> : null}
       <div ref={rotorRef} className="holo-card__rotor">
         <div className="holo-card__face holo-card__face--front">
-          {image ? <img src={image} alt="" draggable={false} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} /> : null}
+          {image ? (
+            <img
+              src={image}
+              alt={alt || 'Campus ID Pass'}
+              draggable={false}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = '/default_avatar_male.svg';
+              }}
+            />
+          ) : (
+            <img src="/default_avatar_male.svg" alt="Default Student Avatar" draggable={false} />
+          )}
           {children}
           <canvas ref={canvasRef} />
         </div>

@@ -116,7 +116,7 @@ export const UserProfilePage = () => {
                 <CheckCheck size={12} />
                 <span>Verified Peer</span>
               </span>
-              <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+              <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#D4A853]/15 text-[#916C16] dark:text-[#E8CA7A] border border-[#D4A853]/30">
                 UID: {studentUid}
               </span>
             </div>
@@ -154,8 +154,8 @@ export const UserProfilePage = () => {
               <p className="text-[10px] text-ink-muted mt-0.5">Completed Lendings</p>
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-base border border-surface-border text-center ring-1 ring-amber-500/20">
-              <div className="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center mx-auto mb-1">
+            <div className="p-3 rounded-xl bg-surface-base border border-surface-border text-center ring-1 ring-[#D4A853]/30">
+              <div className="w-7 h-7 rounded-lg bg-[#D4A853]/15 text-[#D4A853] flex items-center justify-center mx-auto mb-1">
                 <ArrowLeftRight size={15} />
               </div>
               <span className="text-lg font-black text-ink-primary">{stats?.trades || 0}</span>

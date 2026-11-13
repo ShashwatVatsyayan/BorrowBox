@@ -139,7 +139,7 @@ export const TermsPage = () => {
               <h2 className="text-lg font-bold text-ink-primary flex items-center gap-2">
                 <span className="text-brand-600">7.</span> Peer Trades, Barters & Platform Non-Liability (Zero Fault)
               </h2>
-              <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-xs text-amber-900 dark:text-amber-200 space-y-2">
+              <div className="p-4 rounded-xl bg-emerald-950/5 dark:bg-emerald-950/25 border border-emerald-900/15 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 space-y-2">
                 <p>
                   <strong>Platform Zero Fault Agreement:</strong> BorrowBox provides the communication directory to connect campus students. BorrowBox is neither a merchant, insurer, bailee, nor escrow agent.
                 </p>

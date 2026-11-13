@@ -142,13 +142,13 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
   };
 
   // One-Click Evaluator Demo Profile
-  const handleQuickDemo = async (roleName) => {
+  const handleQuickDemo = async (roleName, displayName = 'Student') => {
     setSignInLoading(true);
     setSignInError(null);
     try {
       await switchAccount(roleName);
       setTransitionMeta({
-        title: `Welcome, ${roleName}!`,
+        title: `Welcome, ${displayName}!`,
         subtitle: 'Launching campus dashboard & inventory feed...',
         target: '/app'
       });
@@ -324,23 +324,25 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
 
               {/* One-Click Demo Profiles for Evaluators */}
               <div className="verso-demo-presets">
-                <p className="verso-demo-title">One-Click Demo Evaluator Profiles</p>
+                <p className="verso-demo-title">One-Click Demo Student Profiles</p>
                 <div className="verso-demo-grid">
                   <button
                     type="button"
-                    onClick={() => handleQuickDemo('Student A')}
+                    onClick={() => handleQuickDemo('Student A', 'Aarav Sharma')}
                     className="verso-demo-btn"
+                    title="Unified Student Account: can borrow, lend, and trade"
                   >
-                    <p className="verso-demo-name">Student A (Owner)</p>
-                    <p className="verso-demo-sub">Aarav (Calculator, Lab Coat)</p>
+                    <p className="verso-demo-name">Aarav Sharma</p>
+                    <p className="verso-demo-sub">23BCS12850 (Lend, Borrow, Trade)</p>
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleQuickDemo('Student B')}
+                    onClick={() => handleQuickDemo('Student B', 'Priya Verma')}
                     className="verso-demo-btn"
+                    title="Unified Student Account: can borrow, lend, and trade"
                   >
-                    <p className="verso-demo-name">Student B (Borrower)</p>
-                    <p className="verso-demo-sub">Priya (Requests & Rackets)</p>
+                    <p className="verso-demo-name">Priya Verma</p>
+                    <p className="verso-demo-sub">24BCS11024 (Lend, Borrow, Trade)</p>
                   </button>
                 </div>
               </div>

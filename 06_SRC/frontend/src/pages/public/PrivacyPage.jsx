@@ -139,7 +139,7 @@ export const PrivacyPage = () => {
               <h2 className="text-lg font-bold text-ink-primary flex items-center gap-2">
                 <span className="text-brand-600">7.</span> Peer Trades, Barters & Platform Non-Liability (Zero Fault)
               </h2>
-              <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-xs text-amber-900 dark:text-amber-200 space-y-2">
+              <div className="p-4 rounded-xl bg-emerald-950/5 dark:bg-emerald-950/25 border border-emerald-900/15 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 space-y-2">
                 <p>
                   <strong>Complete Platform Non-Liability:</strong> BorrowBox operates purely as an online campus bulletin and communication tool to help university students connect with each other. After two or more users agree to trade, barter, swap, lend, or borrow physical items (such as clothes, shoes, electronics, books, appliances, or tools), the physical meetup, inspection, and transaction are executed strictly between those independent students.
                 </p>

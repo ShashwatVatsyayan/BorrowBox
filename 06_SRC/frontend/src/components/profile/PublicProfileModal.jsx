@@ -185,8 +185,8 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
                     <p className="text-[10px] text-ink-muted leading-tight mt-0.5">Lendings Done</p>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-surface-card border border-surface-border text-center shadow-xs ring-1 ring-amber-500/20">
-                    <div className="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center mx-auto mb-1">
+                  <div className="p-3 rounded-xl bg-surface-card border border-surface-border text-center shadow-xs ring-1 ring-[#D4A853]/30">
+                    <div className="w-7 h-7 rounded-lg bg-[#D4A853]/15 text-[#D4A853] flex items-center justify-center mx-auto mb-1">
                       <ArrowLeftRight size={15} />
                     </div>
                     <span className="text-base font-extrabold text-ink-primary">{stats?.trades || 0}</span>
@@ -246,8 +246,8 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
                           </p>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             {item.listing_type === 'trade' ? (
-                              <span className="text-[10px] font-bold text-amber-600 flex items-center gap-0.5">
-                                <ArrowLeftRight size={10} /> Trade
+                              <span className="text-[10px] font-bold text-[#916C16] dark:text-[#E8CA7A] flex items-center gap-0.5">
+                                <ArrowLeftRight size={10} className="text-[#D4A853]" /> Trade
                               </span>
                             ) : item.listing_type === 'wanted' ? (
                               <span className="text-[10px] font-bold text-indigo-600">Wanted</span>

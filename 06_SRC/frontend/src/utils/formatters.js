@@ -1,7 +1,7 @@
 export const formatStatus = (status) => {
   switch (status) {
     case 'pending':
-      return { label: 'Pending Review', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' };
+      return { label: 'Pending Review', bg: 'bg-[#D4A853]/15', text: 'text-[#916C16] dark:text-[#E8CA7A]', border: 'border-[#D4A853]/30' };
     case 'approved':
       return { label: 'Approved & Active', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' };
     case 'rejected':

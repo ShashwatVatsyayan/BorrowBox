@@ -9,17 +9,24 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: 'var(--color-brand-50, #FFF7ED)',
-          100: 'var(--color-brand-100, #FFEDD5)',
-          200: 'var(--color-brand-200, #FED7AA)',
-          300: 'var(--color-brand-300, #FDBA74)',
-          400: 'var(--color-brand-400, #FB923C)',
-          500: 'var(--color-brand-500, #F97316)',
-          600: 'var(--color-brand-600, #EA580C)', // Vibrant Orange Highlight
-          700: 'var(--color-brand-700, #C2410C)',
-          800: 'var(--color-brand-800, #9A3412)',
-          900: 'var(--color-brand-900, #7C2D12)',
-          950: 'var(--color-brand-950, #431407)',
+          50: 'var(--color-brand-50, #F2F8F5)',
+          100: 'var(--color-brand-100, #E1EFEA)',
+          200: 'var(--color-brand-200, #C2DFD4)',
+          300: 'var(--color-brand-300, #93C4B2)',
+          400: 'var(--color-brand-400, #4B9B80)',
+          500: 'var(--color-brand-500, #1B5E46)',
+          600: 'var(--color-brand-600, #0F382A)', // Signature Deep Emerald
+          700: 'var(--color-brand-700, #0B2C21)',
+          800: 'var(--color-brand-800, #082119)',
+          900: 'var(--color-brand-900, #051711)',
+          950: 'var(--color-brand-950, #020C09)',
+        },
+        gold: {
+          300: '#F3DC99',
+          400: '#E5C378',
+          500: '#D4A853', // Signature Champagne Gold
+          600: '#B88B38',
+          700: '#946D25',
         },
         ink: {
           primary: 'var(--color-ink-primary, #172033)',

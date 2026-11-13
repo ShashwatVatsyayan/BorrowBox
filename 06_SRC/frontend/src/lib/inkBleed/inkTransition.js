@@ -159,13 +159,24 @@ export class InkTransition {
 
     const duration = inkParams.duration;
 
+    // Safety timeout: Guarantee canvas is never left frozen on screen
+    window.clearTimeout(this.failsafeTimer);
+    this.failsafeTimer = window.setTimeout(() => {
+      this.cancel();
+    }, (duration + 0.6) * 1000);
+
     this.tween = gsap.to(this.state, {
       progress: 1,
       duration,
       ease: EASE,
       onUpdate: () => {
-        this.state.time = this.tween?.time() ?? 0;
-        this.draw();
+        try {
+          this.state.time = this.tween?.time() ?? 0;
+          this.draw();
+        } catch (err) {
+          console.warn('Ink transition draw interrupted:', err);
+          this.cancel();
+        }
       },
       onComplete: () => this.finish(),
     });
@@ -223,16 +234,20 @@ export class InkTransition {
   }
 
   hide() {
+    window.clearTimeout(this.failsafeTimer);
     this.fade = null;
     this.frame = null;
-    this.renderer?.canvas.classList.remove('is-active');
+    if (this.renderer?.canvas) {
+      this.renderer.canvas.classList.remove('is-active');
+      this.renderer.canvas.style.opacity = '0';
+    }
     if (this.captureQueued) {
       this.scheduleCapture(0);
     }
   }
 
   cancel() {
-    if (!this.frame) return;
+    window.clearTimeout(this.failsafeTimer);
     this.tween?.kill();
     this.fade?.kill();
     this.tween = null;

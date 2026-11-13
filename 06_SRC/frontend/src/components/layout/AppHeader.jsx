@@ -76,8 +76,8 @@ export const AppHeader = () => {
             <button
               onClick={() => setProfileModalOpen(true)}
               className="flex items-center gap-2 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-ink-primary transition-all min-h-[34px] shadow-xs group"
-              title="Click to view & edit your Holographic Campus ID Card"
-              aria-label="Student Profile & ID Card"
+              title="Click to view your Holographic Campus ID Pass"
+              aria-label="Student Holographic ID Pass"
             >
               <img
                 src={user?.avatar_url || '/default_avatar_male.svg'}

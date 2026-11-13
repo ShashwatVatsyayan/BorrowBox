@@ -75,7 +75,9 @@ export const ItemFilters = ({ filters, onChange, onClear }) => {
               onClick={() => handleListingTypeClick(tab.id)}
               className={`flex-1 py-1.5 px-2 rounded-lg font-semibold transition-all text-center ${
                 isActive
-                  ? 'bg-brand-600 text-white shadow-xs'
+                  ? tab.id === 'trade'
+                    ? 'bg-[#D4A853] text-[#080C0A] font-bold shadow-xs'
+                    : 'bg-brand-600 text-white shadow-xs'
                   : 'text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
