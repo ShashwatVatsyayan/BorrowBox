@@ -133,6 +133,24 @@ export const PrivacyPage = () => {
                 Students retain the right to review, update, or permanently delete their account and associated listings. To request complete removal of your records, submit a request via <a href="mailto:privacy@cuchd.in" className="text-brand-600 font-semibold underline">privacy@cuchd.in</a> or through the account settings portal.
               </p>
             </section>
+
+            {/* Section 7 - Explicit Non-Liability / Zero Fault for Trades & Physical Exchanges */}
+            <section className="space-y-3">
+              <h2 className="text-lg font-bold text-ink-primary flex items-center gap-2">
+                <span className="text-brand-600">7.</span> Peer Trades, Barters & Platform Non-Liability (Zero Fault)
+              </h2>
+              <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-xs text-amber-900 dark:text-amber-200 space-y-2">
+                <p>
+                  <strong>Complete Platform Non-Liability:</strong> BorrowBox operates purely as an online campus bulletin and communication tool to help university students connect with each other. After two or more users agree to trade, barter, swap, lend, or borrow physical items (such as clothes, shoes, electronics, books, appliances, or tools), the physical meetup, inspection, and transaction are executed strictly between those independent students.
+                </p>
+                <p>
+                  <strong>It is explicitly understood and agreed that after users trade, exchange, or hand over any item, it is NOT the fault, responsibility, or liability of BorrowBox, its founders, student administrators, or Chandigarh University.</strong>
+                </p>
+                <p>
+                  BorrowBox bears zero fault for post-trade dissatisfaction, defective goods, unreturned items, cosmetic discrepancies, damages, or disputes. All users are required to inspect items across all 4 mandatory photograph angles (top, bottom, and side views) in person before concluding any exchange.
+                </p>
+              </div>
+            </section>
           </div>
 
           <div className="mt-10 pt-6 border-t border-surface-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">

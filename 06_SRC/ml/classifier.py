@@ -17,8 +17,12 @@ from collections import Counter
 from typing import Dict, List, Tuple
 
 TAXONOMY = [
-    "Textbooks & Notes",
+    "Clothes & Formals",
+    "Shoes & Footwear",
     "Electronics & Calculators",
+    "Electronics & Gadgets",
+    "Hostel & Room Essentials",
+    "Textbooks & Notes",
     "Lab & Safety Equipment",
     "Sports & Fitness",
     "Tools & Hardware",
@@ -27,6 +31,19 @@ TAXONOMY = [
 ]
 
 CATEGORY_KEYWORDS = {
+    "Clothes & Formals": [
+        "blazer", "suit", "formal", "coat", "tie", "shirt", "pant", "trousers", "jacket",
+        "ethnic", "kurta", "dress", "outfit", "fest", "interview", "clothing", "wear", "hoodie"
+    ],
+    "Shoes & Footwear": [
+        "shoes", "sneakers", "boots", "formal", "oxford", "leather", "cleats", "running",
+        "loafers", "sandals", "slippers", "heels", "footwear", "spikes"
+    ],
+    "Hostel & Room Essentials": [
+        "kettle", "electric", "iron", "heater", "lamp", "hanger", "bucket", "laundry",
+        "basket", "mirror", "mattress", "bedsheet", "pillow", "curtains", "induction",
+        "cooker", "cooler", "fan", "extension", "board"
+    ],
     "Textbooks & Notes": [
         "book", "textbook", "notes", "edition", "author", "syllabus", "exam",
         "engineering", "mathematics", "physics", "chemistry", "biology", "computer",
@@ -37,6 +54,10 @@ CATEGORY_KEYWORDS = {
         "charger", "cable", "adapter", "multimeter", "oscilloscope", "power", "bank",
         "usb", "headphones", "keyboard", "mouse", "electronic", "sensor", "arduino"
     ],
+    "Electronics & Gadgets": [
+        "laptop", "charger", "adapter", "powerbank", "earphones", "headphones", "trimmer",
+        "monitor", "gadget", "tablet", "kindle", "speaker", "harddrive", "pendrive"
+    ],
     "Lab & Safety Equipment": [
         "lab", "coat", "goggles", "safety", "gloves", "apron", "microscope",
         "beaker", "flask", "pipette", "cylinder", "thermometer", "test", "tube",
@@ -44,7 +65,7 @@ CATEGORY_KEYWORDS = {
     ],
     "Sports & Fitness": [
         "badminton", "racket", "football", "basketball", "cricket", "bat", "ball",
-        "shuttlecock", "gym", "dumbbell", "mat", "yoga", "shoes", "jersey",
+        "shuttlecock", "gym", "dumbbell", "mat", "yoga", "jersey",
         "gloves", "fitness", "grip", "table", "tennis", "volleyball"
     ],
     "Tools & Hardware": [

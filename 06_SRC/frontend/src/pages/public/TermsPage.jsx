@@ -137,11 +137,19 @@ export const TermsPage = () => {
             {/* Section 7 */}
             <section className="space-y-3">
               <h2 className="text-lg font-bold text-ink-primary flex items-center gap-2">
-                <span className="text-brand-600">7.</span> Limitation of Platform Liability
+                <span className="text-brand-600">7.</span> Peer Trades, Barters & Platform Non-Liability (Zero Fault)
               </h2>
-              <p className="text-ink-muted">
-                BorrowBox functions exclusively as a communication and transaction-scheduling software platform. BorrowBox does not inspect, guarantee, warrant, or insure items listed by peers, and shall not be held liable for personal injury, property damage, academic loss, or exam disqualifications resulting from equipment borrowed through the platform.
-              </p>
+              <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-xs text-amber-900 dark:text-amber-200 space-y-2">
+                <p>
+                  <strong>Platform Zero Fault Agreement:</strong> BorrowBox provides the communication directory to connect campus students. BorrowBox is neither a merchant, insurer, bailee, nor escrow agent.
+                </p>
+                <p>
+                  After students trade, barter, exchange, lend, or hand over any physical items (including but not limited to clothing, footwear, electronic appliances, academic calculators, or textbooks), <strong>it is strictly agreed that BorrowBox, its student creators (Shashwat Vatsyayan, Harshit Kulhari), and university coordinators bear ZERO FAULT and zero liability</strong> for any physical defects, missing accessories, post-trade regrets, breach of return commitments, or damages incurred.
+                </p>
+                <p>
+                  All participating students must review the mandatory 4-angle photographs (top, bottom, and side perspectives) and physically inspect items prior to concluding any exchange on campus.
+                </p>
+              </div>
             </section>
 
             {/* Section 8 */}

@@ -3,7 +3,7 @@ import { authService } from './authService';
 import { checkDateOverlap } from '../utils/dateUtils';
 
 export const requestService = {
-  async createRequest({ itemId, startDate, endDate, message }) {
+  async createRequest({ itemId, startDate, endDate, message, requestType = 'borrow', offerItem = '' }) {
     const user = await authService.getUser();
     if (!user) throw new Error('Authentication required.');
 
@@ -30,16 +30,18 @@ export const requestService = {
     if (!item) throw new Error('Item not found');
 
     if (item.owner_id === user.id) {
-      throw new Error('You cannot borrow your own item.');
+      throw new Error('You cannot request or trade with your own item.');
     }
 
     const newReq = {
       id: `req-${Date.now()}`,
       item_id: itemId,
       borrower_id: user.id,
-      start_date: startDate,
-      end_date: endDate,
+      start_date: startDate || new Date().toISOString().split('T')[0],
+      end_date: endDate || new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0],
       message: message ? message.trim() : '',
+      request_type: requestType,
+      offer_item: offerItem,
       status: 'pending',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -48,11 +50,23 @@ export const requestService = {
     db.borrow_requests.unshift(newReq);
 
     // Notify item owner
+    const notifTitle = requestType === 'trade'
+      ? 'New Trade Proposal'
+      : requestType === 'wanted'
+      ? 'New Offer on Wanted Request'
+      : 'New Borrow Request';
+
+    const notifMessage = requestType === 'trade'
+      ? `${user.full_name || 'A student'} proposed a barter/trade for "${item.title}".`
+      : requestType === 'wanted'
+      ? `${user.full_name || 'A student'} offered an item for your wanted request "${item.title}".`
+      : `${user.full_name || 'A student'} requested to borrow "${item.title}".`;
+
     db.notifications.unshift({
       id: `notif-${Date.now()}`,
       user_id: item.owner_id,
-      title: 'New Borrow Request',
-      message: `${user.full_name || 'A student'} requested to borrow "${item.title}".`,
+      title: notifTitle,
+      message: notifMessage,
       type: 'request_received',
       related_request_id: newReq.id,
       is_read: false,

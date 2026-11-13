@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ItemFilters } from '../../components/items/ItemFilters';
@@ -10,11 +10,13 @@ export const ExplorePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || 'All';
   const initialSearch = searchParams.get('search') || '';
+  const initialType = searchParams.get('type') || 'all';
 
   const { items, loading, filters, setFilters, refresh } = useItems({
     category: initialCategory,
     search: initialSearch,
     condition: 'All',
+    listingType: initialType,
     includeInactive: false
   });
 
@@ -23,11 +25,12 @@ export const ExplorePage = () => {
     const params = {};
     if (newFilters.category && newFilters.category !== 'All') params.category = newFilters.category;
     if (newFilters.search) params.search = newFilters.search;
+    if (newFilters.listingType && newFilters.listingType !== 'all') params.type = newFilters.listingType;
     setSearchParams(params);
   };
 
   const handleClear = () => {
-    setFilters({ category: 'All', search: '', condition: 'All', includeInactive: false });
+    setFilters({ category: 'All', search: '', condition: 'All', listingType: 'all', includeInactive: false });
     setSearchParams({});
   };
 
@@ -36,7 +39,7 @@ export const ExplorePage = () => {
       <div className="mb-4">
         <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Explore Campus Items</h1>
         <p className="text-xs text-ink-muted mt-0.5">
-          Browse items listed by verified students across campus
+          Browse clothes, shoes, electronics, books, and hostel gear listed for borrowing or trade
         </p>
       </div>
 
@@ -54,4 +57,3 @@ export const ExplorePage = () => {
     </PageContainer>
   );
 };
-

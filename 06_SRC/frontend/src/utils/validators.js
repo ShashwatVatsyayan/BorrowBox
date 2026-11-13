@@ -56,6 +56,14 @@ export const validateItemForm = (values) => {
     errors.location_label = 'Please specify a general campus pickup area.';
   }
 
+  if (!values.images || values.images.length < 4) {
+    errors.images = 'Please provide at least 4 photos showing the top, bottom, left side, and right side views of the item.';
+  }
+
+  if (values.listing_type === 'trade' && (!values.trade_preference || values.trade_preference.trim().length < 3)) {
+    errors.trade_preference = 'Please specify what items or gear you are looking to trade or swap for.';
+  }
+
   return {
     valid: Object.keys(errors).length === 0,
     errors

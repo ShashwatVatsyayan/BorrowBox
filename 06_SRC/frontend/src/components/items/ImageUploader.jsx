@@ -1,51 +1,171 @@
-import React from 'react';
-import { Image as ImageIcon, X } from 'lucide-react';
+import React, { useRef } from 'react';
+import { Camera, Upload, Link as LinkIcon, X, CheckCircle2, AlertCircle } from 'lucide-react';
 
-export const ImageUploader = ({ images = [], onChange }) => {
-  const handleUrlAdd = () => {
-    const url = window.prompt('Enter image URL (Unsplash or direct image link):');
-    if (url && url.startsWith('http')) {
-      onChange([...images, url]);
+const REQUIRED_ANGLES = [
+  { id: 0, label: 'Top / Front View', hint: 'Clear overall angle showing item front or top' },
+  { id: 1, label: 'Bottom / Base View', hint: 'Underside, soles, base plate, or model serial' },
+  { id: 2, label: 'Left Side View', hint: 'Left profile, seams, buttons, or ports' },
+  { id: 3, label: 'Right Side / Detail View', hint: 'Right profile, accessories, or condition close-up' }
+];
+
+export const ImageUploader = ({ images = [], onChange, error = null }) => {
+  const fileInputRefs = useRef([]);
+
+  const handleFileSelect = (index, e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file (PNG, JPG, WEBP).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const newImages = [...images];
+      newImages[index] = reader.result;
+      onChange(newImages);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleUrlAdd = (index) => {
+    const url = window.prompt(`Enter direct image URL for ${REQUIRED_ANGLES[index].label}:`);
+    if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image'))) {
+      const newImages = [...images];
+      newImages[index] = url.trim();
+      onChange(newImages);
     }
   };
 
   const handleRemove = (index) => {
-    const filtered = images.filter((_, i) => i !== index);
-    onChange(filtered);
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    onChange(newImages);
   };
 
+  const handleFillDemoAngles = () => {
+    onChange([
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80'
+    ]);
+  };
+
+  const count = images.filter(Boolean).length;
+  const isComplete = count >= 4;
+
   return (
-    <div className="flex flex-col gap-2">
-      <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-        Item Photos
-      </label>
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-        {images.map((img, idx) => (
-          <div key={idx} className="relative aspect-square rounded-lg border border-surface-border overflow-hidden group bg-slate-100">
-            <img src={img} alt={`Upload ${idx + 1}`} className="w-full h-full object-cover" />
-            <button
-              type="button"
-              onClick={() => handleRemove(idx)}
-              className="absolute top-1 right-1 p-1 rounded-full bg-ink-primary/70 text-white hover:bg-state-danger transition-colors"
-              aria-label="Remove image"
-            >
-              <X size={14} />
-            </button>
-          </div>
-        ))}
-        {images.length < 4 && (
-          <button
-            type="button"
-            onClick={handleUrlAdd}
-            className="flex flex-col items-center justify-center aspect-square rounded-lg border border-dashed border-slate-300 hover:border-brand-600 bg-slate-50 hover:bg-brand-50/30 text-ink-muted hover:text-brand-600 transition-colors p-2 text-center"
-          >
-            <ImageIcon size={20} className="mb-1" />
-            <span className="text-[11px] font-medium">+ Add Photo</span>
-          </button>
-        )}
+    <div className="flex flex-col gap-2.5">
+      <div className="flex items-center justify-between">
+        <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+          Required Item Photos ({count} / 4 Angles) <span className="text-state-danger">*</span>
+        </label>
+        <button
+          type="button"
+          onClick={handleFillDemoAngles}
+          className="text-[11px] font-semibold text-brand-600 hover:text-brand-700 underline"
+        >
+          Insert 4 Sample Campus Photos
+        </button>
       </div>
-      <p className="text-[11px] text-ink-muted">Add up to 4 photos. Provide clear images of the actual item.</p>
+
+      <p className="text-xs text-ink-muted">
+        To protect both listers and borrowers, upload at least 4 clear photos showing the <b>top, bottom, and both side angles</b> of the physical item.
+      </p>
+
+      {/* 4 Angle Slots Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {REQUIRED_ANGLES.map((angle, idx) => {
+          const imgUrl = images[idx];
+          return (
+            <div
+              key={angle.id}
+              className={`relative flex flex-col rounded-xl border overflow-hidden bg-surface-card transition-all ${
+                imgUrl
+                  ? 'border-emerald-300 dark:border-emerald-800'
+                  : 'border-dashed border-slate-300 dark:border-slate-700'
+              }`}
+            >
+              <div className="relative aspect-square w-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                {imgUrl ? (
+                  <>
+                    <img src={imgUrl} alt={angle.label} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(idx)}
+                      className="absolute top-1.5 right-1.5 p-1 rounded-full bg-ink-primary/70 text-white hover:bg-state-danger transition-colors shadow-xs"
+                      title="Remove angle"
+                    >
+                      <X size={14} />
+                    </button>
+                    <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-600 text-white flex items-center gap-1 shadow-xs">
+                      <CheckCircle2 size={10} />
+                      <span>Saved</span>
+                    </span>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-3 text-center">
+                    <Camera size={24} className="text-slate-400 mb-1" />
+                    <span className="text-[11px] font-bold text-ink-primary">{angle.label}</span>
+                    <span className="text-[9px] text-ink-muted mt-0.5 leading-tight">{angle.hint}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Buttons for slot */}
+              {!imgUrl && (
+                <div className="p-1.5 flex items-center gap-1 bg-slate-50 dark:bg-slate-900 border-t border-surface-border">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={(el) => (fileInputRefs.current[idx] = el)}
+                    onChange={(e) => handleFileSelect(idx, e)}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRefs.current[idx]?.click()}
+                    className="flex-1 py-1 px-1.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center gap-1"
+                  >
+                    <Upload size={10} />
+                    <span>File</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUrlAdd(idx)}
+                    className="py-1 px-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center gap-1"
+                  >
+                    <LinkIcon size={10} />
+                    <span>URL</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {error && (
+        <div className="flex items-center gap-1.5 text-xs text-state-danger font-medium mt-1">
+          <AlertCircle size={14} className="shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {isComplete ? (
+        <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-0.5">
+          <CheckCircle2 size={14} />
+          <span>All 4 physical angles (top, bottom, left, right) verified.</span>
+        </div>
+      ) : (
+        <span className="text-[11px] text-ink-muted">
+          Missing {4 - count} required angle photo{4 - count !== 1 ? 's' : ''}.
+        </span>
+      )}
     </div>
   );
 };
 
+export default ImageUploader;

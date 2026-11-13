@@ -3,7 +3,7 @@ import { authService } from './authService';
 
 export const itemService = {
   async getItems(filters = {}) {
-    const { search, category, condition, ownerId, includeInactive } = filters;
+    const { search, category, condition, ownerId, listingType, includeInactive } = filters;
 
     if (isConfigured && supabase) {
       let query = supabase.from('items').select('*, profiles:owner_id(full_name, university_email)');
@@ -41,6 +41,9 @@ export const itemService = {
     }
     if (category && category !== 'All') {
       result = result.filter((i) => i.category === category);
+    }
+    if (listingType && listingType !== 'All') {
+      result = result.filter((i) => (i.listing_type || 'borrow') === listingType);
     }
     if (condition && condition !== 'All') {
       result = result.filter((i) => i.condition === condition);
@@ -95,12 +98,14 @@ export const itemService = {
       category: itemData.category,
       condition: itemData.condition,
       location_label: itemData.location_label.trim(),
+      listing_type: itemData.listing_type || 'borrow',
+      lending_duration: itemData.lending_duration || '1 - 3 Days',
+      trade_preference: itemData.trade_preference ? itemData.trade_preference.trim() : '',
+      needed_by: itemData.needed_by ? itemData.needed_by.trim() : '',
       is_active: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      images: itemData.images && itemData.images.length > 0 ? itemData.images : [
-        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80'
-      ]
+      images: itemData.images && itemData.images.length > 0 ? itemData.images : []
     };
 
     if (isConfigured && supabase) {
