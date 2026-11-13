@@ -26,22 +26,30 @@ const INITIAL_SEED = {
   users: [
     {
       id: '11111111-1111-1111-1111-111111111111',
-      email: 'aarav.sharma@cuchd.in',
+      email: '23bcs12850@cuchd.in',
       full_name: 'Aarav Sharma',
-      university_uid: '21BCS1001',
+      university_uid: '23BCS12850',
       role: 'student',
       is_verified: true,
+      avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
       bio: 'Computer Science student, 3rd year. Happy to lend lab kits, interview clothes and calculators.',
+      department: 'Computer Science & Engineering',
+      hostel_room: 'Boys Hostel 3 (BH-3), Room 412',
+      phone: '+91 98765 43210',
       created_at: new Date(Date.now() - 86400000 * 30).toISOString()
     },
     {
       id: '22222222-2222-2222-2222-222222222222',
-      email: 'priya.verma@cuchd.in',
+      email: '24bcs12850@cuchd.in',
       full_name: 'Priya Verma',
-      university_uid: '21BCS1002',
+      university_uid: '24BCS12850',
       role: 'student',
       is_verified: true,
+      avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80',
       bio: 'Mechanical Engineering student. Avid reader and badminton player.',
+      department: 'Mechanical Engineering',
+      hostel_room: 'Girls Hostel 2 (GH-2), Room 208',
+      phone: '+91 98765 87654',
       created_at: new Date(Date.now() - 86400000 * 20).toISOString()
     },
     {
@@ -51,7 +59,11 @@ const INITIAL_SEED = {
       university_uid: 'ADMIN01',
       role: 'admin',
       is_verified: true,
+      avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
       bio: 'BorrowBox Campus Moderation Team',
+      department: 'Dean of Student Welfare',
+      hostel_room: 'Administrative Block A-1',
+      phone: '+91 98765 00000',
       created_at: new Date(Date.now() - 86400000 * 60).toISOString()
     }
   ],
@@ -236,6 +248,33 @@ export const getLocalDB = () => {
     if (!db.likes) db.likes = [];
     if (!db.comments) db.comments = [];
     if (!db.saved_items) db.saved_items = [];
+
+    // Auto-migrate user records to ensure immutable UID matches university email username
+    if (db.users) {
+      db.users.forEach((u) => {
+        if (!u.avatar_url) {
+          if (u.id === '11111111-1111-1111-1111-111111111111') {
+            u.avatar_url = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80';
+          } else if (u.id === '22222222-2222-2222-2222-222222222222') {
+            u.avatar_url = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80';
+          } else if (u.id === '33333333-3333-3333-3333-333333333333') {
+            u.avatar_url = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80';
+          }
+        }
+        if (u.id === '11111111-1111-1111-1111-111111111111' && (u.email === 'aarav.sharma@cuchd.in' || u.university_uid === '21BCS1001')) {
+          u.email = '23bcs12850@cuchd.in';
+          u.university_uid = '23BCS12850';
+        }
+        if (u.id === '22222222-2222-2222-2222-222222222222' && (u.email === 'priya.verma@cuchd.in' || u.university_uid === '21BCS1002')) {
+          u.email = '24bcs12850@cuchd.in';
+          u.university_uid = '24BCS12850';
+        }
+        if (!u.university_uid && u.email) {
+          u.university_uid = u.email.split('@')[0].toUpperCase();
+        }
+      });
+    }
+
     return db;
   } catch (e) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_SEED));

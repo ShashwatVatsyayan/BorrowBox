@@ -1,11 +1,20 @@
 import React from 'react';
-import { User, CheckCircle, Mail } from 'lucide-react';
+import { User, CheckCircle, Mail, Lock } from 'lucide-react';
 
 export const ProfileHeader = ({ profile }) => {
+  const studentEmail = profile?.email || profile?.university_email || '';
+  const studentUid = profile?.university_uid || (studentEmail ? studentEmail.split('@')[0].toUpperCase() : 'STUDENT');
+
   return (
     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-5 bg-surface-card rounded-2xl border border-surface-border">
-      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-brand-50 border-2 border-brand-200 flex items-center justify-center text-brand-700 shrink-0 font-bold text-xl sm:text-2xl shadow-xs">
-        {profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : <User size={32} />}
+      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-brand-50 border-2 border-brand-500 flex items-center justify-center text-brand-700 shrink-0 font-bold text-xl sm:text-2xl shadow-xs">
+        {profile?.avatar_url ? (
+          <img src={profile.avatar_url} alt={profile.full_name || 'Profile'} className="w-full h-full object-cover" />
+        ) : profile?.full_name ? (
+          profile.full_name.charAt(0).toUpperCase()
+        ) : (
+          <User size={32} />
+        )}
       </div>
       <div className="flex-1 text-center sm:text-left">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
@@ -14,10 +23,14 @@ export const ProfileHeader = ({ profile }) => {
             <CheckCircle size={12} />
             Verified University Mailbox
           </span>
+          <span className="inline-flex items-center gap-1 self-center sm:self-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            <Lock size={11} />
+            UID: {studentUid}
+          </span>
         </div>
         <p className="text-xs text-ink-muted flex items-center justify-center sm:justify-start gap-1 mb-2">
           <Mail size={12} />
-          {profile?.email || profile?.university_email}
+          {studentEmail}
         </p>
         {profile?.bio ? (
           <p className="text-xs text-ink-primary leading-relaxed max-w-xl">{profile.bio}</p>

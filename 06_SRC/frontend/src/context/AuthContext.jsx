@@ -68,6 +68,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUserData = (updatedFields) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...updatedFields };
+      const sessionStr = localStorage.getItem('borrowbox_auth_session');
+      if (sessionStr) {
+        try {
+          const sess = JSON.parse(sessionStr);
+          sess.user = { ...sess.user, ...updatedFields };
+          localStorage.setItem('borrowbox_auth_session', JSON.stringify(sess));
+        } catch {
+          // Ignored
+        }
+      }
+      return next;
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -78,7 +96,8 @@ export const AuthProvider = ({ children }) => {
         signup,
         verifyOtp,
         logout,
-        switchAccount
+        switchAccount,
+        updateUserData
       }}
     >
       {children}

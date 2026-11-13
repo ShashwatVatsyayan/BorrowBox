@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Edit2, Package, Clock, Settings, LogOut, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Edit2, Package, Clock, Settings, LogOut, ShieldCheck, ChevronRight, Sparkles } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ProfileHeader } from '../../components/profile/ProfileHeader';
 import { ProfileStats } from '../../components/profile/ProfileStats';
 import { Button } from '../../components/common/Button';
 import { Loader } from '../../components/common/Loader';
+import { ProfileCardModal } from '../../components/profile/ProfileCardModal';
 import { useAuth } from '../../hooks/useAuth';
 import { profileService } from '../../services/profileService';
 
@@ -15,6 +16,7 @@ export const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cardModalOpen, setCardModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,15 +52,32 @@ export const ProfilePage = () => {
 
   return (
     <PageContainer>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Student Profile</h1>
-        <Link to="/app/profile/edit">
-          <Button size="sm" variant="outline" className="gap-1.5">
-            <Edit2 size={14} />
-            <span>Edit Profile</span>
+        <div className="flex items-center gap-2">
+          <Button size="sm" variant="primary" onClick={() => setCardModalOpen(true)} className="gap-1.5 shadow-xs">
+            <Sparkles size={14} />
+            <span>Holographic ID Pass</span>
           </Button>
-        </Link>
+          <Link to="/app/profile/edit">
+            <Button size="sm" variant="outline" className="gap-1.5">
+              <Edit2 size={14} />
+              <span>Edit Profile</span>
+            </Button>
+          </Link>
+        </div>
       </div>
+
+      <ProfileCardModal
+        isOpen={cardModalOpen}
+        onClose={() => {
+          setCardModalOpen(false);
+          // Refresh profile data if updated in modal
+          if (user?.id) {
+            profileService.getProfile(user.id).then(setProfile).catch(() => {});
+          }
+        }}
+      />
 
       <ProfileHeader profile={profile} />
       <ProfileStats stats={stats} />

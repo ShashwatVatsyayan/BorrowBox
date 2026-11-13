@@ -20,7 +20,8 @@ export const profileService = {
 
   async updateProfile(userId, updates) {
     // Only allow updating permitted fields as mandated by PRD
-    const allowed = ['full_name', 'bio'];
+    // Student UID and Email are strictly immutable and bound to university identity
+    const allowed = ['full_name', 'bio', 'avatar_url', 'phone', 'hostel_room', 'department'];
     const filteredUpdates = {};
     for (const key of allowed) {
       if (updates[key] !== undefined) {

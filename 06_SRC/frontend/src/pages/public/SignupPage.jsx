@@ -74,11 +74,12 @@ export const SignupPage = () => {
 
     setLoading(true);
     try {
+      const derivedUid = formData.email.split('@')[0].toUpperCase();
       await signup({
         email: formData.email,
         password: formData.password,
         full_name: formData.fullName,
-        university_uid: formData.uid
+        university_uid: derivedUid
       });
       setTransitionMeta({
         title: 'Welcome to BorrowBox!',
@@ -140,22 +141,36 @@ export const SignupPage = () => {
               label="University Email"
               id="email"
               type="email"
-              placeholder="e.g. yourname@cuchd.in"
+              placeholder="e.g. 23bcs12850@cuchd.in"
               value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
+              onChange={(e) => {
+                const mail = e.target.value;
+                const autoUid = mail.includes('@') ? mail.split('@')[0].toUpperCase() : mail.toUpperCase();
+                setFormData((prev) => ({ ...prev, email: mail, uid: autoUid }));
+                if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+              }}
               error={errors.email}
               required
               helperText="Only verified university mailboxes can participate"
             />
 
-            <Input
-              label="University UID / Student ID (Optional)"
-              id="uid"
-              placeholder="e.g. 21BCS1001"
-              value={formData.uid}
-              onChange={(e) => handleChange('uid', e.target.value)}
-              helperText="Private identifier, never displayed publicly"
-            />
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="uid" className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                Student UID (Auto-derived from email username)
+              </label>
+              <input
+                id="uid"
+                type="text"
+                value={formData.email ? (formData.email.split('@')[0] || '').toUpperCase() : ''}
+                readOnly
+                disabled
+                placeholder="e.g. 23BCS12850 (matches your email)"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-surface-border bg-slate-100 dark:bg-slate-900 text-ink-muted font-mono font-bold text-xs cursor-not-allowed select-all"
+              />
+              <p className="text-[11px] text-ink-muted">
+                Student UID is immutable and automatically assigned to match your email prefix (e.g. 23bcs12850 for 23bcs12850@cuchd.in).
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Input

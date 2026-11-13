@@ -236,3 +236,4 @@ assert.strictEqual(nehaSavedAlert, undefined, 'Borrower should not receive saved
 pass('Borrower did not receive duplicate saver alert');
 
 console.log('\n--- ALL SOCIAL INTERACTIONS & NOTIFICATION TESTS PASSED SUCCESSFULLY ---');
+

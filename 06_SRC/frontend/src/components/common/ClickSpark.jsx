@@ -176,3 +176,4 @@ export const ClickSpark = ({
 };
 
 export default ClickSpark;
+

@@ -46,13 +46,15 @@ export const authService = {
       throw new Error('An account with this email address already exists.');
     }
 
+    const derivedUid = (email ? email.split('@')[0].toUpperCase() : university_uid) || 'STUDENT';
     const newUser = {
       id: crypto.randomUUID ? crypto.randomUUID() : `usr-${Date.now()}`,
       email,
       full_name,
-      university_uid: university_uid || null,
+      university_uid: derivedUid,
       role: 'student',
       is_verified: false,
+      avatar_url: '',
       bio: '',
       created_at: new Date().toISOString()
     };
@@ -121,7 +123,15 @@ export const authService = {
 
     // Local deterministic mode
     const db = getLocalDB();
-    const user = db.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    let user = db.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    if (!user) {
+      // Support demo aliases and UID matches
+      if (email.toLowerCase() === 'aarav.sharma@cuchd.in' || email.toLowerCase() === '23bcs12850@cuchd.in' || email.toLowerCase() === '23bcs12850') {
+        user = db.users.find((u) => u.id === '11111111-1111-1111-1111-111111111111');
+      } else if (email.toLowerCase() === 'priya.verma@cuchd.in' || email.toLowerCase() === '24bcs12850@cuchd.in' || email.toLowerCase() === '24bcs12850') {
+        user = db.users.find((u) => u.id === '22222222-2222-2222-2222-222222222222');
+      }
+    }
     if (!user) {
       throw new Error('Invalid email or password. Please check your credentials.');
     }
