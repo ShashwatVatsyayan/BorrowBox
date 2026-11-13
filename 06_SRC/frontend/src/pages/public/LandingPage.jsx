@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowRight, BookOpen, Calculator, FlaskConical, Shield, CheckCircle2, Clock, MapPin, ExternalLink } from 'lucide-react';
+import { ArrowRight, BookOpen, Calculator, FlaskConical, Shield, CheckCircle2, Clock, MapPin, ExternalLink, Play } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { PillNav } from '../../components/common/PillNav';
+import { SiteIntroSplash } from '../../components/common/SiteIntroSplash';
 import { useTheme } from '../../context/ThemeContext';
+
+let hasShownIntroOnOpen = false;
 
 export const LandingPage = () => {
   const { resolvedTheme } = useTheme();
   const location = useLocation();
+
+  const [showIntro, setShowIntro] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.search.includes('intro')) {
+      return true;
+    }
+    if (!hasShownIntroOnOpen) {
+      hasShownIntroOnOpen = true;
+      return true;
+    }
+    return false;
+  });
 
   const landingNavItems = [
     { label: 'Home', href: '/' },
@@ -22,6 +36,9 @@ export const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-surface-base flex flex-col">
+      {/* Intro Splash with React Bits StrokeText & Cinematic Zoom Blend */}
+      {showIntro && <SiteIntroSplash onFinish={() => setShowIntro(false)} />}
+
       {/* Navigation Header with React Bits PillNav */}
       <header className="w-full bg-surface-card/85 backdrop-blur-md border-b border-surface-border sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
@@ -204,6 +221,15 @@ export const LandingPage = () => {
             <Link to="/signup" className="hover:text-brand-600 transition-colors">
               Register
             </Link>
+            <button
+              type="button"
+              onClick={() => setShowIntro(true)}
+              className="inline-flex items-center gap-1 hover:text-brand-600 transition-colors font-medium cursor-pointer"
+              title="Replay opening intro animation"
+            >
+              <Play size={11} className="text-brand-600" />
+              <span>Replay Intro</span>
+            </button>
           </div>
 
           <div className="flex flex-col items-center sm:items-end gap-1">
