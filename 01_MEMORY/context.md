@@ -13,15 +13,16 @@ It evolves as decisions are made or understanding deepens.
 BorrowBox is a mobile-first, responsive campus peer-to-peer borrowing platform designed for university students (initially Chandigarh University). The application facilitates listing items (calculators, lab coats, textbooks, electronics, tools), requesting them for defined date ranges, atomic approval by owners with double-booking prevention, borrower return initiation, owner return confirmation, in-app notifications, and basic moderation.
 
 Architecture & Status:
+- Live Production Deployment: Deployed on Vercel at `https://borrowbox-lime.vercel.app`.
 - Live Cloud Database: Connected to Supabase project `https://nayvfsgvmwqgfphaxuzr.supabase.co`.
-- Environment Configuration: Configured in `06_SRC/frontend/.env.local` with dual support for `VITE_` and `NEXT_PUBLIC_` conventions.
+- Environment Configuration: Configured in `06_SRC/frontend/.env.local` and in Vercel Production Environment with dual support for `VITE_` and `NEXT_PUBLIC_` conventions.
 - Brand Asset: Official 'BorrowBox Community Lending Logo.png' integrated across public pages, application header, and favicon.
 - Remote Repository: Pushed to `https://github.com/ShashwatVatsyayan/BorrowBox.git` on branch `main`.
 - Frontend: Fully built with React 18 / Vite / Tailwind CSS / React Router / Lucide React in `06_SRC/frontend`. Local development server active at `http://localhost:3000`.
-- Dual-Mode Persistence: Supabase client now operating against live cloud PostgreSQL instance.
+- Dual-Mode Persistence: Operating against live cloud PostgreSQL instance.
 
 ## Current Phase
-Live Supabase Integration Active
+Production Deployed & Active
 
 ## Key Principles
 - Mobile-first responsive UI (320px to desktop) with accessible touch targets (44x44px).
@@ -31,4 +32,4 @@ Live Supabase Integration Active
 - Production-grade code quality with complete test coverage.
 
 ## Last Updated
-2026-11-13 10:49:30
+2026-11-13 11:00:30

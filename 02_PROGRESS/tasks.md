@@ -62,3 +62,12 @@ This file reflects the true execution state of the project.
 - [x] Push to remote branch `main`
 - [x] Integrate brand logo and update application components
 - [x] Install `gravitas` skill for Antigravity
+
+## Phase 7 - Cloud Infrastructure & Live Deployment
+- [x] Configure live Supabase cloud project credentials
+- [x] Enable dual prefix resolution in `vite.config.js` and `supabase.js`
+- [x] Add SPA routing configuration (`06_SRC/frontend/vercel.json`)
+- [x] Deploy project to Vercel production (`https://borrowbox-lime.vercel.app`)
+- [x] Synchronize production environment variables on Vercel
+- [ ] Whitelist production domain in Supabase Auth Redirect URLs
+- [ ] Verify live database authentication and item listing from production

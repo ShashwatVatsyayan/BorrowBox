@@ -118,3 +118,15 @@ User completed Supabase database setup and storage bucket creation, supplying li
 
 **Outcome:**  
 Created .env.local with live Supabase credentials. Updated vite.config.js with envPrefix for both VITE_ and NEXT_PUBLIC_ prefixes. Updated supabase.js to accept both key variants. Verified production build and hot-reloaded dev server.
+
+---
+
+## 2026-11-13 10:54:07
+**Prompt:**  
+deploy this git repo to my vercel - https://github.com/ShashwatVatsyayan/BorrowBox.git
+
+**Context:**  
+User requested deploying the project to their authenticated Vercel account.
+
+**Outcome:**  
+Deployed project via Vercel CLI to production. Configured production environment variables for Supabase (VITE_ and NEXT_PUBLIC_ keys). Live at https://borrowbox-lime.vercel.app. Added vercel.json for SPA routing rewrites.

@@ -49,3 +49,6 @@ This file logs every meaningful change in the project.
 - Enhanced `06_SRC/frontend/vite.config.js` with `envPrefix: ['VITE_', 'NEXT_PUBLIC_']` to support both Next.js and Vite environment variable naming.
 - Updated `06_SRC/frontend/src/lib/supabase.js` to dynamically bind to either prefix.
 - Hot-reloaded Vite dev server on port 3000.
+- Created `06_SRC/frontend/vercel.json` with client-side SPA routing rewrites.
+- Configured production environment variables on Vercel (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`).
+- Deployed production release on Vercel at `https://borrowbox-lime.vercel.app`.

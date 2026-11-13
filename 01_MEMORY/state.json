@@ -1,6 +1,6 @@
 {
   "_description": "Authoritative machine-readable state of the project. Auto-updated.",
-  "phase": "Live Supabase Connected",
+  "phase": "Production Live on Vercel",
   "completed": [
     "PRD analysis",
     "Orchestration contract alignment",
@@ -20,15 +20,19 @@
     "BorrowBox official logo asset integration",
     "Gravitas agent reliability skill installation",
     "Live Supabase project credentials applied (.env.local)",
-    "Vite envPrefix and client adapter updated for NEXT_PUBLIC_ keys"
+    "Vite envPrefix and client adapter updated for NEXT_PUBLIC_ keys",
+    "Vercel SPA routing rewrite configuration",
+    "Vercel production environment variables synchronization",
+    "Live production deployment to https://borrowbox-lime.vercel.app"
   ],
   "in_progress": [
-    "Live user verification and testing"
+    "Supabase Auth redirect URL whitelisting",
+    "Live end-to-end student verification on Vercel"
   ],
   "next": [
-    "End-to-end live testing with student accounts",
-    "Production hosting deployment (Vercel)"
+    "Configure Supabase Redirect URLs with production domain",
+    "End-to-end live testing with @cuchd.in student accounts"
   ],
   "blockers": [],
-  "last_updated": "2026-11-13T10:49:30"
+  "last_updated": "2026-11-13T11:02:00"
 }
