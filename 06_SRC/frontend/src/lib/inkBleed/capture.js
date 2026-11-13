@@ -1,16 +1,14 @@
 /**
- * Full-document snapshots of the page in a given theme.
+ * Viewport-aligned snapshots of the page in a given theme.
  * Ported from https://github.com/codemure-official/ink-bleed-theme-changer
  *
- * We capture the whole document (not just the viewport) so a snapshot stays valid
- * while the user scrolls; the shader picks the visible window using the live scroll
- * offset. The theme is applied to html2canvas' cloned document via `onclone`, so the
- * live page never flickers during pre-capture.
+ * Aligns the captured canvas 1:1 with the active viewport and scroll position
+ * to completely eliminate horizontal and vertical layout jumps during transition.
  */
 
 const BACKGROUND = {
   light: '#F8FAFC',
-  dark: '#0B0F19',
+  dark: '#000000',
 };
 
 const isCoarsePointer = () =>
@@ -26,16 +24,18 @@ export function renderScale() {
 export function documentSize() {
   if (typeof document === 'undefined') return { width: 1024, height: 768 };
   const el = document.documentElement;
-  return { width: el.clientWidth, height: Math.max(el.scrollHeight, el.clientHeight) };
+  return { width: el.clientWidth, height: el.clientHeight };
 }
 
 /**
- * Identifies the layout a snapshot depends on. Viewport height is deliberately
- * excluded (mobile URL-bar show/hide changes it without reflowing the document).
+ * Identifies the exact layout a snapshot depends on:
+ * Viewport width x height, device scale, route path, and scroll position.
  */
 export function layoutKey(scale) {
   const { width, height } = documentSize();
-  return `${width}x${height}@${scale}`;
+  const path = typeof window !== 'undefined' ? window.location.pathname : '';
+  const scroll = typeof window !== 'undefined' ? Math.round((window.scrollY || 0) / 40) * 40 : 0;
+  return `${width}x${height}@${scale}:${path}:${scroll}`;
 }
 
 export async function capturePage(theme, scale, maxTextureSize) {
@@ -43,24 +43,25 @@ export async function capturePage(theme, scale, maxTextureSize) {
   const key = layoutKey(scale);
   const { width, height } = documentSize();
 
+  const scrollX = typeof window !== 'undefined' ? window.scrollX || window.pageXOffset || 0 : 0;
+  const scrollY = typeof window !== 'undefined' ? window.scrollY || window.pageYOffset || 0 : 0;
+
   // Never exceed what the GPU can hold; the shader handles scale != canvas DPR.
   const safeScale = Math.min(scale, maxTextureSize / width, maxTextureSize / height);
 
   // Lazy-loaded: html2canvas is ~200 KB and only needed after first paint.
   const { default: html2canvas } = await import('html2canvas');
-  const canvas = await html2canvas(document.body, {
+  const canvas = await html2canvas(document.documentElement, {
     scale: safeScale,
-    backgroundColor: BACKGROUND[theme] || (theme === 'dark' ? '#0B0F19' : '#F8FAFC'),
-    x: 0,
-    y: 0,
+    backgroundColor: BACKGROUND[theme] || (theme === 'dark' ? '#000000' : '#F8FAFC'),
+    x: scrollX,
+    y: scrollY,
     width,
     height,
     scrollX: 0,
     scrollY: 0,
-    // The clone iframe renders without a scrollbar, so give it the live page's
-    // scrollbar-less width; otherwise centred content shifts by half a scrollbar.
     windowWidth: width,
-    windowHeight: document.documentElement.clientHeight,
+    windowHeight: height,
     logging: false,
     useCORS: true,
     onclone: (doc) => {
@@ -70,6 +71,8 @@ export async function capturePage(theme, scale, maxTextureSize) {
       } else {
         doc.documentElement.classList.remove('dark');
       }
+      doc.documentElement.style.overflow = 'hidden';
+      doc.body.style.overflow = 'hidden';
       // The live toggle is drawn above the overlay, so leave a hole for it if tagged
       doc.querySelectorAll('[data-ink-live]').forEach((el) => {
         el.style.visibility = 'hidden';
@@ -81,6 +84,5 @@ export async function capturePage(theme, scale, maxTextureSize) {
     },
   });
 
-  return { theme, canvas, scale: safeScale, key, ms: performance.now() - t0 };
+  return { theme, canvas, scale: safeScale, key, scrollX, scrollY, ms: performance.now() - t0 };
 }
-

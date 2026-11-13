@@ -311,6 +311,13 @@ export class InkTransition {
     }
   }
 
+  clearSnapshots() {
+    this.renderer?.clear();
+    this.last = null;
+    this.capturing = false;
+    this.captureQueued = false;
+  }
+
   destroy() {
     this.cancel();
     if (typeof window !== 'undefined') {

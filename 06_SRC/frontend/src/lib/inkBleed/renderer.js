@@ -70,12 +70,20 @@ export class InkRenderer {
   }
 
   resize(scale) {
-    const rect = this.canvas.getBoundingClientRect();
-    const w = Math.max(1, Math.round(rect.width * scale));
-    const h = Math.max(1, Math.round(rect.height * scale));
+    const el = typeof document !== 'undefined' ? document.documentElement : null;
+    const clientW = el ? el.clientWidth : (typeof window !== 'undefined' ? window.innerWidth : 1024);
+    const clientH = el ? el.clientHeight : (typeof window !== 'undefined' ? window.innerHeight : 768);
+    const w = Math.max(1, Math.round(clientW * scale));
+    const h = Math.max(1, Math.round(clientH * scale));
     if (this.canvas.width !== w) this.canvas.width = w;
     if (this.canvas.height !== h) this.canvas.height = h;
-    this.canvasScale = rect.width > 0 ? w / rect.width : scale;
+    this.canvasScale = scale;
+  }
+
+  clear() {
+    this.textures.clear();
+    this.composites = [];
+    this.activeComposite = -1;
   }
 
   upload(snapshot) {
@@ -161,8 +169,8 @@ export class InkRenderer {
         width: c.width,
         height: c.height,
         ratio: 1,
-        offsetX: Math.round((window.scrollX - c.scrollX) * this.canvasScale),
-        offsetY: Math.round((window.scrollY - c.scrollY) * this.canvasScale),
+        offsetX: 0,
+        offsetY: 0,
         flipY: true,
       };
     }
@@ -173,8 +181,8 @@ export class InkRenderer {
       width: t.width,
       height: t.height,
       ratio: t.scale / this.canvasScale,
-      offsetX: Math.floor(window.scrollX * t.scale + 0.5),
-      offsetY: Math.floor(window.scrollY * t.scale + 0.5),
+      offsetX: 0,
+      offsetY: 0,
       flipY: false,
     };
   }
