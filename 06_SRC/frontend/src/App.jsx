@@ -15,7 +15,9 @@ const ForgotPasswordPage = lazy(() => import('./pages/public/ForgotPasswordPage'
 const ResetPasswordPage = lazy(() => import('./pages/public/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 const TermsPage = lazy(() => import('./pages/public/TermsPage').then(m => ({ default: m.TermsPage })));
 const PrivacyPage = lazy(() => import('./pages/public/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
+const CookiePolicyPage = lazy(() => import('./pages/public/CookiePolicyPage').then(m => ({ default: m.CookiePolicyPage })));
 const NotFoundPage = lazy(() => import('./pages/public/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+import { CookieConsentBanner } from './components/common/CookieConsentBanner';
 
 // Authenticated pages loaded on demand
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage').then(m => ({ default: m.DashboardPage })));
@@ -62,6 +64,8 @@ export function App() {
               <Route path="/terms-and-conditions" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/privacy-policy" element={<PrivacyPage />} />
+              <Route path="/cookies" element={<CookiePolicyPage />} />
+              <Route path="/cookie-policy" element={<CookiePolicyPage />} />
               <Route path="/404" element={<NotFoundPage />} />
 
               {/* Protected Student Routes */}
@@ -88,6 +92,7 @@ export function App() {
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
+          <CookieConsentBanner />
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>

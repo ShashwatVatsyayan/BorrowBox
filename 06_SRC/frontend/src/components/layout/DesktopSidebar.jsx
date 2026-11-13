@@ -75,6 +75,8 @@ export const DesktopSidebar = () => {
             <NavLink to="/terms" className="hover:text-brand-600">Terms</NavLink>
             <span>•</span>
             <NavLink to="/privacy" className="hover:text-brand-600">Privacy</NavLink>
+            <span>•</span>
+            <NavLink to="/cookies" className="hover:text-brand-600">Cookies</NavLink>
           </div>
         </div>
       </div>

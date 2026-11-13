@@ -40,19 +40,25 @@ export const ItemFilters = ({ filters, onChange, onClear }) => {
     <div className="flex flex-col gap-3.5 mb-6">
       {/* Search Bar */}
       <div className="relative flex items-center">
+        <label htmlFor="item-search" className="sr-only">
+          Search campus items
+        </label>
         <Search size={18} className="absolute left-3.5 text-ink-muted pointer-events-none" />
         <input
+          id="item-search"
           type="text"
           value={filters.search || ''}
           onChange={handleSearchChange}
           placeholder="Search items, clothes, shoes, electronics, kettle, books..."
+          aria-label="Search campus items"
           className="w-full min-h-[44px] pl-10 pr-10 py-2.5 rounded-xl border border-surface-border bg-surface-card text-ink-primary placeholder:text-ink-light text-sm outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600 shadow-xs"
         />
         {filters.search && (
           <button
+            type="button"
             onClick={() => onChange({ ...filters, search: '' })}
-            className="absolute right-3 p-1 rounded-md text-ink-muted hover:text-ink-primary"
-            aria-label="Clear search"
+            className="absolute right-3 p-1 rounded-md text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-brand-500 transition-colors"
+            aria-label="Clear search input"
           >
             <X size={16} />
           </button>

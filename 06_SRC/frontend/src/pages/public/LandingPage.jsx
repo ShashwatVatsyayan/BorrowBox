@@ -44,7 +44,7 @@ export const LandingPage = () => {
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
           <div className="flex-1 min-w-0 flex items-center">
             <PillNav
-              logo="/logo.png"
+              logo="/icon_mark.png"
               logoAlt="BorrowBox"
               logoHref="/"
               items={landingNavItems}
@@ -102,7 +102,7 @@ export const LandingPage = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-5 rounded-2xl bg-surface-card border border-surface-border">
+          <div className="p-5 rounded-2xl glass-block">
             <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-brand-600 flex items-center justify-center mb-3">
               <Calculator size={20} />
             </div>
@@ -112,7 +112,7 @@ export const LandingPage = () => {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-surface-card border border-surface-border">
+          <div className="p-5 rounded-2xl glass-block">
             <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-brand-600 flex items-center justify-center mb-3">
               <FlaskConical size={20} />
             </div>
@@ -122,7 +122,7 @@ export const LandingPage = () => {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-surface-card border border-surface-border">
+          <div className="p-5 rounded-2xl glass-block">
             <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-brand-600 flex items-center justify-center mb-3">
               <BookOpen size={20} />
             </div>
@@ -173,17 +173,17 @@ export const LandingPage = () => {
           <h2 className="text-2xl font-bold text-ink-primary">Built for Campus Security</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          <div className="p-4 rounded-xl bg-surface-card border border-surface-border">
+          <div className="p-4 rounded-xl glass-block">
             <Shield size={20} className="text-brand-600 mb-2" />
             <h4 className="text-sm font-semibold text-ink-primary mb-1">Verified Mailboxes</h4>
             <p className="text-xs text-ink-muted">Only active students with verified @cuchd.in accounts can access and transact.</p>
           </div>
-          <div className="p-4 rounded-xl bg-surface-card border border-surface-border">
+          <div className="p-4 rounded-xl glass-block">
             <MapPin size={20} className="text-brand-600 mb-2" />
             <h4 className="text-sm font-semibold text-ink-primary mb-1">Public Campus Zones</h4>
             <p className="text-xs text-ink-muted">Handoffs take place at campus landmarks (Academic Block, Central Library, Student Center).</p>
           </div>
-          <div className="p-4 rounded-xl bg-surface-card border border-surface-border">
+          <div className="p-4 rounded-xl glass-block">
             <Clock size={20} className="text-brand-600 mb-2" />
             <h4 className="text-sm font-semibold text-ink-primary mb-1">Clear Accountability</h4>
             <p className="text-xs text-ink-muted">Every transaction has an audit trail. Delinquent returns are escalated to campus admin.</p>
@@ -199,18 +199,21 @@ export const LandingPage = () => {
             <p className="mt-1 text-ink-muted">Campus Peer Lending Platform</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-5">
             <Link to="/terms" className="hover:text-brand-600 transition-colors">
-              Terms & Conditions
+              Terms &amp; Conditions
             </Link>
             <Link to="/privacy" className="hover:text-brand-600 transition-colors">
               Privacy Policy
+            </Link>
+            <Link to="/cookies" className="hover:text-brand-600 transition-colors">
+              Cookie Policy
             </Link>
             <a
               href="https://portfolio-v2-alpha-ten-71.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 hover:text-brand-600 transition-colors font-medium"
+              className="inline-flex items-center gap-1 hover:text-brand-600 transition-colors font-medium text-ink-primary"
             >
               <span>Portfolio</span>
               <ExternalLink size={12} />
@@ -233,18 +236,22 @@ export const LandingPage = () => {
           </div>
 
           <div className="flex flex-col items-center sm:items-end gap-1">
-            <p className="text-center sm:text-right">
-              Chandigarh University Student Community
+            <p className="text-center sm:text-right font-medium text-ink-primary">
+              © 2026 BorrowBox. All rights reserved.
             </p>
-            <a
-              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[11px] text-ink-light hover:text-brand-600 transition-colors inline-flex items-center gap-1"
-            >
-              <span>Created by Shashwat Vatsyayan</span>
-              <ExternalLink size={10} />
-            </a>
+            <div className="flex items-center gap-1 text-[11px] text-ink-light">
+              <span>Developed by</span>
+              <a
+                href="https://portfolio-v2-alpha-ten-71.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-600 hover:underline font-medium inline-flex items-center gap-0.5"
+              >
+                <span>Shashwat Vatsyayan</span>
+                <ExternalLink size={10} />
+              </a>
+              <span>&amp; Harshit Kulhari</span>
+            </div>
           </div>
         </div>
       </footer>

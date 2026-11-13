@@ -112,12 +112,13 @@ export const StrokeText = ({
       }
       if (!bbox || !bbox.width) return;
 
-      const pad = Math.max(Number(strokeWidth) || 1, fontSize * 0.1);
+      const padX = Math.max(Number(strokeWidth) * 4, fontSize * 0.25, 32);
+      const padY = Math.max(Number(strokeWidth) * 2, fontSize * 0.15, 20);
       const next = {
-        x: bbox.x - pad,
-        y: bbox.y - pad,
-        width: bbox.width + pad * 2,
-        height: bbox.height + pad * 2
+        x: bbox.x - padX,
+        y: bbox.y - padY,
+        width: bbox.width + padX * 2,
+        height: bbox.height + padY * 2
       };
 
       setBox(prev =>
@@ -132,6 +133,11 @@ export const StrokeText = ({
     };
 
     measure();
+    const rafId = requestAnimationFrame(measure);
+    const t1 = setTimeout(measure, 60);
+    const t2 = setTimeout(measure, 180);
+    const t3 = setTimeout(measure, 400);
+
     document.fonts?.ready?.then(measure).catch(() => {});
 
     const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
@@ -139,6 +145,10 @@ export const StrokeText = ({
 
     return () => {
       cancelled = true;
+      cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
       observer?.disconnect();
     };
   }, [characters, fontFamily, fontSize, fontWeight, letterSpacing, strokeWidth]);
@@ -308,7 +318,9 @@ export const StrokeText = ({
     onAnimationComplete
   ]);
 
-  const viewBox = box ? `${box.x} ${box.y} ${box.width} ${box.height}` : `0 ${-fontSize} 600 ${fontSize * 1.3}`;
+  const estWidth = Math.max(800, characters.length * fontSize * 0.8 + 140);
+  const fallbackViewBox = `0 ${-fontSize * 1.2} ${estWidth} ${fontSize * 1.6}`;
+  const viewBox = box ? `${box.x} ${box.y} ${box.width} ${box.height}` : fallbackViewBox;
   const wipeStart = box ? getWipeFrames(box, wipeFrom).start : null;
   const region = box
     ? { x: box.x - fontSize, y: box.y - fontSize, width: box.width + fontSize * 2, height: box.height + fontSize * 2 }
@@ -342,7 +354,7 @@ export const StrokeText = ({
     <span
       ref={rootRef}
       className={`stroke-text ${trigger === 'hover' ? 'stroke-text--hover' : ''} ${className}`.trim()}
-      style={{ ...style, '--stroke-text-width': `${box ? box.width : 600}px` }}
+      style={{ ...style, '--stroke-text-width': `${box ? box.width : estWidth}px` }}
       role="img"
       aria-label={String(text ?? '')}
     >
@@ -351,7 +363,10 @@ export const StrokeText = ({
         viewBox={viewBox}
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
-        style={box ? undefined : { visibility: 'hidden' }}
+        style={{
+          overflow: 'visible',
+          ...(box ? undefined : { opacity: 0 })
+        }}
       >
         <defs>
           {fillMode === 'wipe' && wipeStart && (

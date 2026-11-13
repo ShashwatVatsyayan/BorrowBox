@@ -12,7 +12,8 @@ import {
   Sparkles,
   ShieldCheck,
   CheckCircle2,
-  Filter
+  Filter,
+  X
 } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ItemGrid } from '../../components/items/ItemGrid';
@@ -63,7 +64,7 @@ export const DashboardPage = () => {
   return (
     <PageContainer>
       {/* Unified Greeting & Command Header */}
-      <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-surface-card border border-surface-border shadow-xs">
+      <div className="mb-6 p-5 sm:p-6 rounded-2xl glass-block shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -85,21 +86,21 @@ export const DashboardPage = () => {
           <div className="flex flex-wrap items-center gap-2">
             <Link
               to="/app/items/new"
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-brand-500"
             >
               <PlusCircle size={16} />
               <span>List to Lend</span>
             </Link>
             <Link
               to="/app/items/new"
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs sm:text-sm transition-colors shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs sm:text-sm transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-brand-500"
             >
               <ArrowLeftRight size={16} />
               <span>Offer for Trade</span>
             </Link>
             <Link
               to="/app/items/new"
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-brand-500"
             >
               <HelpCircle size={16} />
               <span>Post Wanted</span>
@@ -112,7 +113,7 @@ export const DashboardPage = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <Link
           to="/app/listings"
-          className="p-3.5 rounded-xl bg-surface-card border border-surface-border hover:border-brand-400 transition-all shadow-xs group"
+          className="p-3.5 rounded-xl glass-block hover:border-brand-400 transition-all shadow-xs group"
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-ink-muted group-hover:text-brand-600">My Listings</span>
@@ -124,7 +125,7 @@ export const DashboardPage = () => {
 
         <Link
           to="/app/borrowings"
-          className="p-3.5 rounded-xl bg-surface-card border border-surface-border hover:border-indigo-400 transition-all shadow-xs group"
+          className="p-3.5 rounded-xl glass-block hover:border-indigo-400 transition-all shadow-xs group"
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-ink-muted group-hover:text-indigo-600">Active Borrows</span>
@@ -142,7 +143,7 @@ export const DashboardPage = () => {
           className={`p-3.5 rounded-xl border text-left transition-all shadow-xs group ${
             selectedListingType === 'trade'
               ? 'bg-amber-50/50 dark:bg-amber-950/30 border-amber-500 ring-1 ring-amber-500'
-              : 'bg-surface-card border-surface-border hover:border-amber-400'
+              : 'glass-block hover:border-amber-400'
           }`}
         >
           <div className="flex items-center justify-between mb-1">
@@ -155,7 +156,7 @@ export const DashboardPage = () => {
 
         <Link
           to="/app/requests"
-          className="p-3.5 rounded-xl bg-surface-card border border-surface-border hover:border-rose-400 transition-all shadow-xs group"
+          className="p-3.5 rounded-xl glass-block hover:border-rose-400 transition-all shadow-xs group"
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-ink-muted group-hover:text-rose-600">Pending Requests</span>
@@ -169,14 +170,29 @@ export const DashboardPage = () => {
       {/* Unified Search & Mode Switcher Bar */}
       <div className="flex flex-col gap-3 mb-6">
         <div className="relative flex items-center">
+          <label htmlFor="dashboard-search" className="sr-only">
+            Search campus items
+          </label>
           <Search size={18} className="absolute left-3.5 text-slate-400 pointer-events-none" />
           <input
+            id="dashboard-search"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search clothes, formal shoes, calculators, kettles, notes, sports gear..."
-            className="w-full min-h-[46px] pl-10 pr-4 py-2.5 rounded-xl bg-surface-card border border-surface-border text-sm text-ink-primary placeholder:text-ink-light outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600 shadow-xs"
+            aria-label="Search campus items"
+            className="w-full min-h-[46px] pl-10 pr-10 py-2.5 rounded-xl bg-surface-card border border-surface-border text-sm text-ink-primary placeholder:text-ink-light outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600 shadow-xs"
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 p-1 rounded-full text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-brand-500 transition-colors"
+              aria-label="Clear search query"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
 
         {/* Unified Mode Switcher Tabs */}

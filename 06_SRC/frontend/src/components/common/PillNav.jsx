@@ -60,31 +60,31 @@ const THEMES = {
 
 const SIZES = {
   sm: {
-    '--pn-h': '36px',
+    '--pn-h': '38px',
     '--pn-pad': '3px',
-    '--pn-inner': '30px',
+    '--pn-inner': '32px',
     '--pn-x': '12px',
     '--pn-font': '13px',
     '--pn-gap': '6px',
-    '--pn-mark': '18px'
+    '--pn-mark': '26px'
   },
   md: {
-    '--pn-h': '44px',
+    '--pn-h': '46px',
     '--pn-pad': '4px',
-    '--pn-inner': '36px',
+    '--pn-inner': '38px',
     '--pn-x': '16px',
     '--pn-font': '14px',
     '--pn-gap': '8px',
-    '--pn-mark': '22px'
+    '--pn-mark': '32px'
   },
   lg: {
-    '--pn-h': '52px',
+    '--pn-h': '54px',
     '--pn-pad': '5px',
-    '--pn-inner': '42px',
+    '--pn-inner': '44px',
     '--pn-x': '20px',
     '--pn-font': '15px',
     '--pn-gap': '10px',
-    '--pn-mark': '26px'
+    '--pn-mark': '38px'
   }
 };
 
@@ -755,12 +755,17 @@ export const PillNav = ({
             <span ref={markRef} className={MARK}>
               {typeof logo === 'string' ? (
                 <>
-                  <img src={logo} alt="" draggable={false} className="block dark:hidden w-full h-full object-contain" />
                   <img
-                    src="/logo-dark.png"
-                    alt=""
+                    src="/icon_mark.png"
+                    alt={logoAlt}
                     draggable={false}
-                    className="hidden dark:block w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,107,0,0.55)]"
+                    className="pill-nav__logo-light"
+                  />
+                  <img
+                    src="/icon_mark_dark.png"
+                    alt={logoAlt}
+                    draggable={false}
+                    className="pill-nav__logo-dark"
                   />
                 </>
               ) : (

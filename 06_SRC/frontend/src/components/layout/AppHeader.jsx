@@ -48,7 +48,7 @@ export const AppHeader = () => {
         {/* React Bits PillNav Interactive Navigation */}
         <div className="flex-1 min-w-0 flex items-center">
           <PillNav
-            logo="/logo.png"
+            logo="/icon_mark.png"
             logoAlt="BorrowBox"
             logoHref="/app"
             items={navItems}

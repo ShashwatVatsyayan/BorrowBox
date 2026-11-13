@@ -13,13 +13,13 @@ export const SiteIntroSplash = ({ onFinish }) => {
     const computeSize = () => {
       const w = window.innerWidth;
       if (w < 480) {
-        setFontSize(48);
+        setFontSize(40);
       } else if (w < 640) {
-        setFontSize(62);
+        setFontSize(52);
       } else if (w < 1024) {
-        setFontSize(88);
+        setFontSize(72);
       } else {
-        setFontSize(112);
+        setFontSize(88);
       }
     };
 
@@ -28,12 +28,14 @@ export const SiteIntroSplash = ({ onFinish }) => {
     return () => window.removeEventListener('resize', computeSize);
   }, []);
 
-  // Prevent page scroll while splash is active
+  // Prevent page scroll and ink bleed interference while splash is active
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    document.documentElement.classList.add('has-intro-splash');
     return () => {
       document.body.style.overflow = originalOverflow;
+      document.documentElement.classList.remove('has-intro-splash');
     };
   }, []);
 
@@ -79,7 +81,7 @@ export const SiteIntroSplash = ({ onFinish }) => {
   return (
     <div
       onClick={triggerZoomBlend}
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black select-none cursor-pointer transition-all duration-[850ms] ${
+      className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-black select-none cursor-pointer transition-all duration-[850ms] ${
         isZooming
           ? 'opacity-0 scale-[2.2] pointer-events-none blur-[14px]'
           : 'opacity-100 scale-100 pointer-events-auto blur-0'
@@ -115,7 +117,7 @@ export const SiteIntroSplash = ({ onFinish }) => {
           wipeFrom="left"
           fontSize={fontSize}
           fontWeight={900}
-          letterSpacing={-2}
+          letterSpacing={-1}
           shadow={true}
           shadowColor="rgba(255, 107, 0, 0.4)"
           onAnimationComplete={handleDrawComplete}

@@ -164,8 +164,11 @@ export const TermsPage = () => {
           </div>
 
           <div className="mt-10 pt-6 border-t border-surface-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">
-            <p>BorrowBox Campus Lending Platform</p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center sm:items-start gap-0.5">
+              <p className="font-medium text-ink-primary">BorrowBox Campus Lending Platform</p>
+              <p className="text-[11px] text-ink-light">© 2026 BorrowBox. Developed by Shashwat Vatsyayan &amp; Harshit Kulhari. All rights reserved.</p>
+            </div>
+            <div className="flex items-center gap-3 flex-wrap justify-center">
               <a
                 href="https://portfolio-v2-alpha-ten-71.vercel.app/"
                 target="_blank"
@@ -177,6 +180,8 @@ export const TermsPage = () => {
               </a>
               <span>•</span>
               <Link to="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>
+              <span>•</span>
+              <Link to="/cookies" className="text-brand-600 hover:underline">Cookie Policy</Link>
               <span>•</span>
               <Link to="/" className="text-brand-600 hover:underline">Home</Link>
             </div>
