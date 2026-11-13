@@ -93,3 +93,28 @@ User requested installation of the Gravitas engineering reliability runtime skil
 
 **Outcome:**  
 Executed package installer and successfully installed 'gravitas' to .agents/skills/gravitas.
+
+---
+
+## 2026-11-13 10:40:31
+**Prompt:**  
+/gravitas what i have to do now for backend?
+
+**Context:**  
+User invoked /gravitas requesting actionable, evidence-based direction on remaining backend steps for connecting live Supabase PostgreSQL.
+
+**Outcome:**  
+Generated single-file migration bundle (combined_migration.sql). Formulated rigorous Gravitas-compliant execution checklist covering project creation, SQL schema execution, storage bucket policies, frontend environment configuration, and live verification.
+
+---
+
+## 2026-11-13 10:47:45
+**Prompt:**  
+/gravitas done till step 3 , created avatars also , now step 4 - NEXT_PUBLIC_SUPABASE_URL=https://nayvfsgvmwqgfphaxuzr.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_tW6Q0L3kFPruJWcHK2r90A_MZiUEdSn
+
+**Context:**  
+User completed Supabase database setup and storage bucket creation, supplying live project URL and publishable key.
+
+**Outcome:**  
+Created .env.local with live Supabase credentials. Updated vite.config.js with envPrefix for both VITE_ and NEXT_PUBLIC_ prefixes. Updated supabase.js to accept both key variants. Verified production build and hot-reloaded dev server.

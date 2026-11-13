@@ -45,3 +45,7 @@ This file logs every meaningful change in the project.
 - Updated HTML favicon and touch icons.
 - Verified production build (`npm run build`) with zero errors.
 - Installed `gravitas` reliability runtime skill to `.agents/skills/gravitas` for Antigravity agent execution.
+- Configured `06_SRC/frontend/.env.local` with live Supabase project credentials (`https://nayvfsgvmwqgfphaxuzr.supabase.co`).
+- Enhanced `06_SRC/frontend/vite.config.js` with `envPrefix: ['VITE_', 'NEXT_PUBLIC_']` to support both Next.js and Vite environment variable naming.
+- Updated `06_SRC/frontend/src/lib/supabase.js` to dynamically bind to either prefix.
+- Hot-reloaded Vite dev server on port 3000.
