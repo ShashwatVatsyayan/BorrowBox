@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Verso 6-Digit OTP Verification - Kinetic Hexagon Orbit & Merge</title>
+  
+  <!-- Typography: Editorial Serif (Playfair Display) + Clean Sans (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. Custom Properties & Global Reset
+       ========================================================================== */
+    :root {
+      --bg-page: #080C0A;
+      --surface-card: #F5F2EB;
+      --card-border: rgba(15, 56, 42, 0.12);
+      --text-main: #1A1A1A;
+      --text-muted: #666666;
+      --text-light: #8A8A8A;
+      
+      --blade-start: #0F382A;
+      --blade-end: #061F17;
+      --blade-gradient: linear-gradient(135deg, var(--blade-start) 0%, var(--blade-end) 100%);
+      --blade-text: #F5F2EB;
+      
+      --accent-gold: #D4A853;
+      --accent-gold-glow: rgba(212, 168, 83, 0.35);
+      
+      --accent-verified: #10B981;
+      --accent-verified-glow: rgba(16, 185, 129, 0.45);
+      
+      --btn-primary: #0F382A;
+      --btn-primary-hover: #164e3b;
+      
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      
+      --easing-verso: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--bg-page);
+      font-family: var(--font-sans);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+
+    .verso-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Ambient Subtle Green Glow */
+    .ambient-glow {
+      position: absolute;
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, rgba(15, 56, 42, 0.38) 0%, rgba(8, 12, 10, 0) 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(48px);
+    }
+
+    /* ==========================================================================
+       2. Responsive Card Structure (Mobile-First, Desktop-Ready)
+       ========================================================================== */
+    .otp-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    /* Desktop View (>= 768px): 900px x 540px Split Card */
+    @media (min-width: 768px) {
+      .otp-card {
+        height: 540px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Mobile View (< 768px): Single-Column Card */
+    @media (max-width: 767.98px) {
+      .otp-card {
+        max-width: 420px;
+        min-height: 580px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    /* ==========================================================================
+       3. Skewed Emerald Blade (Left on Desktop, Top on Mobile)
+       ========================================================================== */
+    .auth_band {
+      position: relative;
+      background: var(--blade-gradient);
+      color: var(--blade-text);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    /* Inverse Transform Wrapper cancels shear so copy and badges remain upright */
+    .band_inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .auth_band {
+        height: 124%;
+        margin-top: -12%;
+        margin-bottom: -12%;
+        transform: skewX(-8deg);
+        transform-origin: center center;
+        box-shadow: 6px 0 28px rgba(212, 168, 83, 0.35), inset -2px 0 0 var(--accent-gold);
+      }
+
+      .band_inner {
+        transform: skewX(8deg); /* Inverse transform */
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      .auth_band {
+        width: 116%;
+        margin-left: -8%;
+        height: 190px;
+        transform: skewY(-4deg);
+        transform-origin: top left;
+        box-shadow: 0 6px 24px rgba(212, 168, 83, 0.35), inset 0 -2px 0 var(--accent-gold);
+      }
+
+      .band_inner {
+        transform: skewY(4deg); /* Inverse transform */
+        padding: 1.5rem 1.25rem 1rem;
+      }
+    }
+
+    /* Blade Badges and Typography */
+    .band-icon-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(212, 168, 83, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.85rem;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 16px var(--accent-gold-glow);
+    }
+
+    .band-icon-badge.verified {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--accent-verified);
+      color: var(--accent-verified);
+      box-shadow: 0 0 20px var(--accent-verified-glow);
+    }
+
+    .band-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #F5F2EB;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 767.98px) {
+      .band-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    .band-desc {
+      font-size: 0.8125rem;
+      line-height: 1.45;
+      color: rgba(245, 242, 235, 0.8);
+      max-width: 300px;
+    }
+
+    @media (max-width: 767.98px) {
+      .band-desc {
+        font-size: 0.75rem;
+        max-width: 280px;
+      }
+    }
+
+    /* ==========================================================================
+       4. Right Pane: Kinetic OTP Verification Stage
+       ========================================================================== */
+    .otp-pane {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2.5rem 2rem;
+      background: var(--surface-card);
+      position: relative;
+    }
+
+    @media (max-width: 767.98px) {
+      .otp-pane {
+        padding: 2rem 1.25rem calc(2rem + env(safe-area-inset-bottom, 0px));
+        flex: 1;
+      }
+    }
+
+    .otp-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .otp-eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blade-start);
+      margin-bottom: 0.25rem;
+      display: inline-block;
+    }
+
+    .otp-title {
+      font-family: var(--font-serif);
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .otp-subtitle {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
+    .otp-target-email {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* ==========================================================================
+       5. The Kinetic Stage: Hexagon Orbit & Merge Container
+       ========================================================================== */
+    .otp-stage-container {
+      position: relative;
+      width: 100%;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Orbiting parent stage */
+    .otp-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform;
+    }
+
+    /* Active 360deg Orbit Spin Animation */
+    .otp-stage.is-orbiting {
+      animation: stage-orbit 1.35s linear infinite;
+    }
+
+    @keyframes stage-orbit {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* 6 OTP Input Boxes */
+    .otp-box {
+      position: absolute;
+      width: 48px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--blade-start);
+      color: #F5F2EB;
+      font-family: var(--font-sans);
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid rgba(212, 168, 83, 0.25);
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      caret-color: var(--accent-gold);
+      user-select: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.45s var(--easing-verso);
+      will-change: transform, opacity;
+      z-index: 2;
+    }
+
+    @media (max-width: 767.98px) {
+      .otp-box {
+        width: 44px;
+        height: 52px;
+        font-size: 1.25rem;
+      }
+    }
+
+    /* Active / Focused Box */
+    .otp-box:focus,
+    .otp-box.is-active {
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 16px var(--accent-gold-glow);
+    }
+
+    /* Counter-rotate each box during orbit so numbers stay upright */
+    .otp-stage.is-orbiting .otp-box {
+      animation: box-counter-orbit 1.35s linear infinite;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 14px var(--accent-gold-glow);
+    }
+
+    @keyframes box-counter-orbit {
+      from { transform: translate(var(--hex-x), var(--hex-y)) rotate(0deg); }
+      to   { transform: translate(var(--hex-x), var(--hex-y)) rotate(-360deg); }
+    }
+
+    /* Stage 3: Magnetic Collapse to Center */
+    .otp-stage.is-collapsing .otp-box {
+      transform: translate(0, 0) scale(0.65) !important;
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease;
+    }
+
+    /* Stage 3: Expanding Jade Emerald Shockwave Wave */
+    .pulse-shockwave {
+      position: absolute;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 2.5px solid var(--accent-verified);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .pulse-shockwave.is-trigger {
+      animation: shockwave-expand 0.65s cubic-bezier(0.1, 0.85, 0.25, 1) forwards;
+    }
+
+    @keyframes shockwave-expand {
+      0% {
+        transform: scale(0.5);
+        opacity: 1;
+        box-shadow: 0 0 0 0 var(--accent-verified-glow);
+      }
+      100% {
+        transform: scale(2.8);
+        opacity: 0;
+        box-shadow: 0 0 35px 8px rgba(16, 185, 129, 0);
+      }
+    }
+
+    /* Stage 4: Central Verified Badge Morph */
+    .verified-badge {
+      position: absolute;
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      background: var(--blade-start);
+      border: 2px solid var(--accent-verified);
+      box-shadow: 0 0 30px var(--accent-verified-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-verified);
+      opacity: 0;
+      transform: scale(0.2);
+      pointer-events: none;
+      z-index: 3;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    }
+
+    .verified-badge.is-visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Animated SVG Checkmark */
+    .check-svg {
+      width: 34px;
+      height: 34px;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      stroke: var(--accent-verified);
+      stroke-width: 3.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .verified-badge.is-visible .check-svg {
+      animation: draw-check 0.45s ease forwards 0.15s;
+    }
+
+    @keyframes draw-check {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* ==========================================================================
+       6. Controls & Pill Buttons
+       ========================================================================== */
+    .btn-verify {
+      width: 100%;
+      height: 48px;
+      border-radius: 999px;
+      background: var(--btn-primary);
+      color: #FFFFFF;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-verify:hover:not(:disabled) {
+      background: var(--btn-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(15, 56, 42, 0.25);
+    }
+
+    .btn-verify:disabled {
+      cursor: not-allowed;
+      opacity: 0.9;
+    }
+
+    .btn-verify.is-verifying {
+      background: var(--blade-start);
+      color: var(--accent-gold);
+      border: 1px solid var(--accent-gold);
+    }
+
+    .btn-verify.is-verified {
+      background: var(--blade-start);
+      color: var(--accent-verified);
+      border: 1px solid var(--accent-verified);
+      box-shadow: 0 0 20px var(--accent-verified-glow);
+    }
+
+    /* Spinner */
+    .btn-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(212, 168, 83, 0.2);
+      border-top-color: var(--accent-gold);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Footer Meta Links & Resend */
+    .otp-footer {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: var(--blade-start);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.75rem;
+    }
+
+    .countdown-text {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .change-link {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .change-link:hover {
+      text-decoration: underline;
+      color: var(--text-main);
+    }
+
+    /* Accessibility: Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      .otp-stage, .otp-box, .verified-badge, .pulse-shockwave {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="verso-wrapper">
+    <div class="ambient-glow" aria-hidden="true"></div>
+
+    <main class="otp-card" role="region" aria-label="6-Digit OTP Verification Portal">
+      
+      <!-- ======================================================================
+           Emerald Skewed Blade (Left on Desktop, Top on Mobile)
+           ====================================================================== -->
+      <aside class="auth_band" aria-label="Security Status">
+        <div class="band_inner">
+          <div class="band-icon-badge" id="bandBadge" aria-hidden="true">
+            <!-- Default: Gold Key SVG -->
+            <svg id="iconKey" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m21 2-2 2m-1.5 1.5L14 9a5 5 0 1 0 4 4l3.5-3.5a1 1 0 0 0 0-1.414l-2.086-2.086A1 1 0 0 0 18 5.5l-.5-.5z"/>
+              <circle cx="7.5" cy="15.5" r="2.5"/>
+            </svg>
+            <!-- Verified: Emerald Shield-Check SVG (Hidden initially) -->
+            <svg id="iconShield" style="display:none;" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+
+          <h2 class="band-title" id="bandHeading">Two-Factor Security</h2>
+          <p class="band-desc" id="bandDescription">
+            Enter the 6-digit cryptographic verification key dispatched to your student email inbox to confirm identity.
+          </p>
+        </div>
+      </aside>
+
+      <!-- ======================================================================
+           Right Pane: Kinetic OTP Verification Stage
+           ====================================================================== -->
+      <section class="otp-pane" aria-live="polite">
+        <header class="otp-header">
+          <span class="otp-eyebrow">Identity Gate</span>
+          <h1 class="otp-title" id="otpPaneTitle">Verify Mailbox</h1>
+          <p class="otp-subtitle" id="otpPaneSubtitle">
+            Code sent to <span class="otp-target-email" id="userEmailDisplay">23bcs12850@cuchd.in</span>
+          </p>
+        </header>
+
+        <!-- Kinetic Hexagon Stage -->
+        <div class="otp-stage-container">
+          <!-- Circular Shockwave Ring -->
+          <div class="pulse-shockwave" id="shockwave"></div>
+
+          <!-- Central Verified Badge with Animated SVG Checkmark -->
+          <div class="verified-badge" id="verifiedBadge" aria-label="Verified Successfully">
+            <svg class="check-svg" viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+
+          <!-- Stage Hosting the 6 Input Boxes -->
+          <div class="otp-stage" id="otpStage">
+            <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="otp-0" autocomplete="one-time-code" aria-label="OTP Digit 1" />
+            <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="otp-1" aria-label="OTP Digit 2" />
+            <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="otp-2" aria-label="OTP Digit 3" />
+            <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="otp-3" aria-label="OTP Digit 4" />
+            <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="otp-4" aria-label="OTP Digit 5" />
+            <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="otp-5" aria-label="OTP Digit 6" />
+          </div>
+        </div>
+
+        <!-- Verification Button -->
+        <button type="button" class="btn-verify" id="btnVerify">
+          <span id="btnVerifyText">Verify Passcode</span>
+        </button>
+
+        <!-- Footer Meta -->
+        <div class="otp-footer">
+          <div id="resendContainer">
+            <span id="resendCountdown">Resend code in <span class="countdown-text" id="countdownSec">45s</span></span>
+            <button type="button" class="resend-btn" id="btnResend" style="display:none;">Resend OTP</button>
+          </div>
+          <a href="#change" class="change-link">Change Email</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       7. Kinetic Hexagon Orbit & Merge Logic
+       ========================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      const boxes = Array.from(document.querySelectorAll('.otp-box'));
+      const stage = document.getElementById('otpStage');
+      const shockwave = document.getElementById('shockwave');
+      const verifiedBadge = document.getElementById('verifiedBadge');
+      const btnVerify = document.getElementById('btnVerify');
+      const btnVerifyText = document.getElementById('btnVerifyText');
+      const bandBadge = document.getElementById('bandBadge');
+      const iconKey = document.getElementById('iconKey');
+      const iconShield = document.getElementById('iconShield');
+      const bandHeading = document.getElementById('bandHeading');
+      const bandDesc = document.getElementById('bandDescription');
+      const otpPaneTitle = document.getElementById('otpPaneTitle');
+      const otpPaneSubtitle = document.getElementById('otpPaneSubtitle');
+      const btnResend = document.getElementById('btnResend');
+      const resendCountdown = document.getElementById('resendCountdown');
+      const countdownSec = document.getElementById('countdownSec');
+
+      let isVerifying = false;
+      let scrambleTimer = null;
+      let countdownTimer = null;
+      let secondsLeft = 45;
+
+      // Hexagon Geometry Configuration (radius = 64px, angles = 0, 60, 120, 180, 240, 300 deg)
+      const HEX_RADIUS = 64;
+      const HEX_ANGLES = [0, 60, 120, 180, 240, 300];
+
+      /**
+       * Calculate horizontal row offsets vs hexagon ring vertex offsets
+       */
+      function updateBoxGeometry() {
+        const isMobile = window.innerWidth < 768;
+        const boxWidth = isMobile ? 44 : 48;
+        const gap = isMobile ? 8 : 10;
+        const step = boxWidth + gap;
+
+        boxes.forEach((box, index) => {
+          // Horizontal row centered X offset
+          const rowX = (index - 2.5) * step;
+          box.style.setProperty('--row-x', `${rowX}px`);
+
+          // Regular Hexagon vertex coordinates
+          const rad = (HEX_ANGLES[index] * Math.PI) / 180;
+          const hexX = Math.round(HEX_RADIUS * Math.cos(rad));
+          const hexY = Math.round(HEX_RADIUS * Math.sin(rad));
+          box.style.setProperty('--hex-x', `${hexX}px`);
+          box.style.setProperty('--hex-y', `${hexY}px`);
+
+          // Apply initial horizontal row transform
+          if (!isVerifying) {
+            box.style.transform = `translate(${rowX}px, 0)`;
+          }
+        });
+      }
+
+      updateBoxGeometry();
+      window.addEventListener('resize', updateBoxGeometry);
+
+      // Focus first box automatically
+      if (boxes[0]) boxes[0].focus();
+
+      // ========================================================================
+      // 1. Input State Interactions (Auto-advance, Backspace, Paste)
+      // ========================================================================
+      boxes.forEach((box, index) => {
+        box.addEventListener('focus', () => box.select());
+
+        box.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/\D/g, '');
+          box.value = val ? val[val.length - 1] : '';
+
+          if (box.value && index < boxes.length - 1) {
+            boxes[index + 1].focus();
+          }
+
+          checkCompletion();
+        });
+
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace') {
+            if (!box.value && index > 0) {
+              boxes[index - 1].focus();
+              boxes[index - 1].value = '';
+            }
+          } else if (e.key === 'ArrowLeft' && index > 0) {
+            boxes[index - 1].focus();
+          } else if (e.key === 'ArrowRight' && index < boxes.length - 1) {
+            boxes[index + 1].focus();
+          }
+        });
+
+        // 6-digit clipboard paste support
+        box.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const paste = (e.clipboardData || window.clipboardData).getData('text');
+          const digits = paste.replace(/\D/g, '').slice(0, 6);
+          if (!digits) return;
+
+          digits.split('').forEach((d, i) => {
+            if (boxes[i]) boxes[i].value = d;
+          });
+
+          const nextIndex = Math.min(digits.length, boxes.length - 1);
+          boxes[nextIndex].focus();
+          checkCompletion();
+        });
+      });
+
+      function checkCompletion() {
+        const code = boxes.map(b => b.value).join('');
+        if (code.length === 6) {
+          triggerKineticVerification();
+        }
+      }
+
+      btnVerify.addEventListener('click', () => {
+        triggerKineticVerification();
+      });
+
+      // ========================================================================
+      // 2, 3 & 4. Kinetic Animation Sequence
+      // ========================================================================
+      function triggerKineticVerification() {
+        if (isVerifying) return;
+        isVerifying = true;
+
+        // Freeze inputs & show verifying state on button
+        boxes.forEach(b => {
+          b.setAttribute('readonly', 'true');
+          b.blur();
+        });
+
+        btnVerify.disabled = true;
+        btnVerify.classList.add('is-verifying');
+        btnVerify.innerHTML = '<div class="btn-spinner"></div><span>Verifying Code...</span>';
+
+        // Stage 2A: Animate boxes from horizontal row into 6-point Hexagon Ring
+        boxes.forEach((box) => {
+          const hexX = box.style.getPropertyValue('--hex-x');
+          const hexY = box.style.getPropertyValue('--hex-y');
+          box.style.transform = `translate(${hexX}, ${hexY})`;
+        });
+
+        // Stage 2B: Start Hexagon 360deg Orbit & Scramble random digits
+        setTimeout(() => {
+          stage.classList.add('is-orbiting');
+
+          scrambleTimer = setInterval(() => {
+            boxes.forEach(b => {
+              b.value = Math.floor(Math.random() * 10);
+            });
+          }, 85);
+        }, 400);
+
+        // Stage 3: Magnetic Collapse & Pulse Shockwave (t = 1800ms)
+        setTimeout(() => {
+          clearInterval(scrambleTimer);
+          stage.classList.remove('is-orbiting');
+          stage.classList.add('is-collapsing');
+
+          // Trigger Jade Emerald expanding shockwave
+          shockwave.classList.add('is-trigger');
+        }, 1800);
+
+        // Stage 4: Verified Morph (t = 2300ms)
+        setTimeout(() => {
+          // Hide boxes and pop in central verified badge with checkmark
+          boxes.forEach(b => b.style.display = 'none');
+          verifiedBadge.classList.add('is-visible');
+
+          // Cross-fade header icon from Gold Key to Emerald Shield-Check
+          iconKey.style.display = 'none';
+          iconShield.style.display = 'block';
+          bandBadge.classList.add('verified');
+
+          // Morph header and card text
+          bandHeading.textContent = 'Identity Verified';
+          bandDesc.textContent = 'Two-factor cryptographic challenge solved. University access unlocked.';
+          otpPaneTitle.textContent = 'Verified Successfully';
+          otpPaneSubtitle.textContent = 'Authenticated. Redirecting to your campus workspace...';
+
+          // Update CTA button to verified
+          btnVerify.classList.remove('is-verifying');
+          btnVerify.classList.add('is-verified');
+          btnVerify.innerHTML = '<span>Verified &amp; Secured</span>';
+        }, 2300);
+      }
+
+      // ========================================================================
+      // 5. Resend Countdown Timer
+      // ========================================================================
+      countdownTimer = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          countdownSec.textContent = `${secondsLeft}s`;
+        } else {
+          clearInterval(countdownTimer);
+          resendCountdown.style.display = 'none';
+          btnResend.style.display = 'inline-block';
+        }
+      }, 1000);
+
+      btnResend.addEventListener('click', () => {
+        secondsLeft = 45;
+        countdownSec.textContent = '45s';
+        btnResend.style.display = 'none';
+        resendCountdown.style.display = 'inline-block';
+        countdownTimer = setInterval(() => {
+          secondsLeft--;
+          if (secondsLeft > 0) {
+            countdownSec.textContent = `${secondsLeft}s`;
+          } else {
+            clearInterval(countdownTimer);
+            resendCountdown.style.display = 'none';
+            btnResend.style.display = 'inline-block';
+          }
+        }, 1000);
+
+        alert('A new 6-digit confirmation code has been dispatched to your email.');
+      });
+    })();
+  </script>
+</body>
+</html>

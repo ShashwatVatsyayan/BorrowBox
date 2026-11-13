@@ -1,0 +1,528 @@
+/* ==========================================================================
+   Verso 6-Digit OTP Card with Kinetic Hexagon Orbit & Merge
+   ========================================================================== */
+
+:root {
+  --otp-bg-page: #080C0A;
+  --otp-surface-card: #F5F2EB;
+  --otp-card-border: rgba(15, 56, 42, 0.12);
+  --otp-text-main: #1A1A1A;
+  --otp-text-muted: #666666;
+  --otp-text-light: #8A8A8A;
+
+  --otp-blade-start: #0F382A;
+  --otp-blade-end: #061F17;
+  --otp-blade-gradient: linear-gradient(135deg, #0F382A 0%, #061F17 100%);
+  --otp-blade-text: #F5F2EB;
+
+  --otp-accent-gold: #D4A853;
+  --otp-accent-gold-glow: rgba(212, 168, 83, 0.35);
+
+  --otp-accent-verified: #10B981;
+  --otp-accent-verified-glow: rgba(16, 185, 129, 0.45);
+
+  --otp-btn-primary: #0F382A;
+  --otp-btn-primary-hover: #164e3b;
+
+  --otp-font-serif: 'Playfair Display', Georgia, serif;
+  --otp-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --otp-easing: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.verso-otp-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--otp-bg-page);
+  color: var(--otp-text-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  position: relative;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+.verso-otp-ambient-glow {
+  position: absolute;
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, rgba(15, 56, 42, 0.4) 0%, rgba(8, 12, 10, 0) 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(48px);
+}
+
+.verso-otp-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card Container */
+.verso-otp-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background: var(--otp-surface-card);
+  border: 1px solid var(--otp-card-border);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+/* Desktop: 900px x 540px Split Card */
+@media (min-width: 768px) {
+  .verso-otp-card {
+    height: 540px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile: Single Column */
+@media (max-width: 767.98px) {
+  .verso-otp-card {
+    max-width: 420px;
+    min-height: 580px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Left/Top Skewed Blade */
+.verso-otp-band {
+  position: relative;
+  background: var(--otp-blade-gradient);
+  color: var(--otp-blade-text);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.verso-otp-band-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .verso-otp-band {
+    height: 124%;
+    margin-top: -12%;
+    margin-bottom: -12%;
+    transform: skewX(-8deg);
+    transform-origin: center center;
+    box-shadow: 6px 0 28px rgba(212, 168, 83, 0.35), inset -2px 0 0 var(--otp-accent-gold);
+  }
+
+  .verso-otp-band-inner {
+    transform: skewX(8deg); /* Inverse transform */
+  }
+}
+
+@media (max-width: 767.98px) {
+  .verso-otp-band {
+    width: 116%;
+    margin-left: -8%;
+    height: 190px;
+    transform: skewY(-4deg);
+    transform-origin: top left;
+    box-shadow: 0 6px 24px rgba(212, 168, 83, 0.35), inset 0 -2px 0 var(--otp-accent-gold);
+  }
+
+  .verso-otp-band-inner {
+    transform: skewY(4deg); /* Inverse transform */
+    padding: 1.5rem 1.25rem 1rem;
+  }
+}
+
+/* Badge Icon on Blade */
+.verso-otp-badge-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(212, 168, 83, 0.15);
+  border: 1px solid var(--otp-accent-gold);
+  color: var(--otp-accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 16px var(--otp-accent-gold-glow);
+}
+
+.verso-otp-badge-icon.verified {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--otp-accent-verified);
+  color: var(--otp-accent-verified);
+  box-shadow: 0 0 20px var(--otp-accent-verified-glow);
+}
+
+.verso-otp-band-title {
+  font-family: var(--otp-font-serif);
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #F5F2EB;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .verso-otp-band-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.verso-otp-band-desc {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgba(245, 242, 235, 0.8);
+  max-width: 300px;
+}
+
+@media (max-width: 767.98px) {
+  .verso-otp-band-desc {
+    font-size: 0.75rem;
+    max-width: 280px;
+  }
+}
+
+/* Right Pane: OTP Stage */
+.verso-otp-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem 2rem;
+  background: var(--otp-surface-card);
+  position: relative;
+}
+
+@media (max-width: 767.98px) {
+  .verso-otp-pane {
+    padding: 2rem 1.25rem calc(2rem + env(safe-area-inset-bottom, 0px));
+    flex: 1;
+  }
+}
+
+.verso-otp-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.verso-otp-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--otp-blade-start);
+  margin-bottom: 0.25rem;
+  display: inline-block;
+}
+
+.verso-otp-title {
+  font-family: var(--otp-font-serif);
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--otp-text-main);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.verso-otp-subtitle {
+  font-size: 0.8125rem;
+  color: var(--otp-text-muted);
+  margin-top: 0.35rem;
+  line-height: 1.4;
+}
+
+.verso-otp-email {
+  font-weight: 600;
+  color: var(--otp-text-main);
+}
+
+/* ==========================================================================
+   Kinetic Hexagon Stage
+   ========================================================================== */
+.verso-stage-container {
+  position: relative;
+  width: 100%;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.verso-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+/* Stage Orbit Animation */
+.verso-stage.is-orbiting {
+  animation: verso-stage-orbit 1.35s linear infinite;
+}
+
+@keyframes verso-stage-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* 6 Input Boxes */
+.verso-box {
+  position: absolute;
+  width: 48px;
+  height: 56px;
+  border-radius: 12px;
+  background: var(--otp-blade-start);
+  color: #F5F2EB;
+  font-family: var(--otp-font-sans);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid rgba(212, 168, 83, 0.25);
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  caret-color: var(--otp-accent-gold);
+  user-select: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.45s var(--otp-easing);
+  will-change: transform, opacity;
+  z-index: 2;
+}
+
+@media (max-width: 767.98px) {
+  .verso-box {
+    width: 44px;
+    height: 52px;
+    font-size: 1.25rem;
+  }
+}
+
+.verso-box:focus {
+  border: 2px solid var(--otp-accent-gold);
+  box-shadow: 0 0 16px var(--otp-accent-gold-glow);
+}
+
+/* Counter-rotation to keep digits upright during orbit */
+.verso-stage.is-orbiting .verso-box {
+  animation: verso-counter-orbit 1.35s linear infinite;
+  border-color: var(--otp-accent-gold);
+  box-shadow: 0 0 14px var(--otp-accent-gold-glow);
+}
+
+@keyframes verso-counter-orbit {
+  from { transform: translate(var(--hex-x), var(--hex-y)) rotate(0deg); }
+  to   { transform: translate(var(--hex-x), var(--hex-y)) rotate(-360deg); }
+}
+
+/* Stage 3: Collapse */
+.verso-stage.is-collapsing .verso-box {
+  transform: translate(0, 0) scale(0.65) !important;
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease;
+}
+
+/* Stage 3: Shockwave Pulse */
+.verso-shockwave {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 2.5px solid var(--otp-accent-verified);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+}
+
+.verso-shockwave.is-trigger {
+  animation: verso-shockwave-expand 0.65s cubic-bezier(0.1, 0.85, 0.25, 1) forwards;
+}
+
+@keyframes verso-shockwave-expand {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--otp-accent-verified-glow);
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+    box-shadow: 0 0 35px 8px rgba(16, 185, 129, 0);
+  }
+}
+
+/* Stage 4: Verified Central Badge */
+.verso-verified-badge {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  background: var(--otp-blade-start);
+  border: 2px solid var(--otp-accent-verified);
+  box-shadow: 0 0 30px var(--otp-accent-verified-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--otp-accent-verified);
+  opacity: 0;
+  transform: scale(0.2);
+  pointer-events: none;
+  z-index: 3;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.verso-verified-badge.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.verso-check-svg {
+  width: 34px;
+  height: 34px;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: var(--otp-accent-verified);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.verso-verified-badge.is-visible .verso-check-svg {
+  animation: verso-draw-check 0.45s ease forwards 0.15s;
+}
+
+@keyframes verso-draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Primary Button */
+.verso-btn-verify {
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--otp-btn-primary);
+  color: #FFFFFF;
+  border: none;
+  font-family: var(--otp-font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+  touch-action: manipulation;
+}
+
+.verso-btn-verify:hover:not(:disabled) {
+  background: var(--otp-btn-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(15, 56, 42, 0.25);
+}
+
+.verso-btn-verify:disabled {
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.verso-btn-verify.is-verifying {
+  background: var(--otp-blade-start);
+  color: var(--otp-accent-gold);
+  border: 1px solid var(--otp-accent-gold);
+}
+
+.verso-btn-verify.is-verified {
+  background: var(--otp-blade-start);
+  color: var(--otp-accent-verified);
+  border: 1px solid var(--otp-accent-verified);
+  box-shadow: 0 0 20px var(--otp-accent-verified-glow);
+}
+
+.verso-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(212, 168, 83, 0.2);
+  border-top-color: var(--otp-accent-gold);
+  border-radius: 50%;
+  animation: verso-spin 0.75s linear infinite;
+}
+
+@keyframes verso-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer Links */
+.verso-otp-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--otp-text-muted);
+}
+
+.verso-resend-btn {
+  background: none;
+  border: none;
+  color: var(--otp-blade-start);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.75rem;
+  padding: 0;
+}
+
+.verso-countdown-text {
+  color: var(--otp-accent-gold);
+  font-weight: 600;
+}
+
+.verso-change-link {
+  color: var(--otp-text-muted);
+  text-decoration: none;
+}
+
+.verso-change-link:hover {
+  text-decoration: underline;
+  color: var(--otp-text-main);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verso-stage, .verso-box, .verso-verified-badge, .verso-shockwave {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
