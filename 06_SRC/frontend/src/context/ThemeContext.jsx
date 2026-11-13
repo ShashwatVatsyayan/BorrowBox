@@ -108,11 +108,26 @@ export function ThemeProvider({ children }) {
   };
 
   const toggleTheme = (eventOrPoint) => {
+    const next = resolvedTheme === 'dark' ? 'light' : 'dark';
+
+    // Prioritize native View Transitions for 100% zero-shift GPU transitions
+    if (typeof document !== 'undefined' && document.startViewTransition) {
+      document.startViewTransition(() => {
+        applyDomTheme(next);
+        setThemeState(next);
+        try {
+          localStorage.setItem(THEME_STORAGE_KEY, next);
+        } catch {
+          // Ignore storage errors
+        }
+      });
+      return;
+    }
+
     const point = extractPoint(eventOrPoint);
     if (inkTransitionRef.current) {
       inkTransitionRef.current.toggle(point);
     } else {
-      const next = resolvedTheme === 'dark' ? 'light' : 'dark';
       applyDomTheme(next);
       setThemeState(next);
       try {

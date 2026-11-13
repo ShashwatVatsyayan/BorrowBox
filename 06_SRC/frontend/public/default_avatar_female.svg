@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="femBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F382A" />
+      <stop offset="100%" stop-color="#061F17" />
+    </linearGradient>
+    <linearGradient id="femSkin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD5B5" />
+      <stop offset="100%" stop-color="#EDB892" />
+    </linearGradient>
+    <linearGradient id="femBlazer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E3527" />
+      <stop offset="100%" stop-color="#072017" />
+    </linearGradient>
+    <linearGradient id="femGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3DC99" />
+      <stop offset="100%" stop-color="#D4A853" />
+    </linearGradient>
+    <clipPath id="femAvatarClip">
+      <circle cx="200" cy="200" r="190" />
+    </clipPath>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="200" cy="200" r="190" fill="url(#femBg)" />
+
+  <g clip-path="url(#femAvatarClip)">
+    <!-- Hair Back -->
+    <path d="M 130 180 C 120 280, 135 340, 160 370 L 240 370 C 265 340, 280 280, 270 180 Z" fill="#261A15" />
+
+    <!-- Shoulders & Academic Blazer -->
+    <path d="M 60 400 L 125 280 L 175 305 L 200 345 L 225 305 L 275 280 L 340 400 Z" fill="url(#femBlazer)" />
+    <!-- Cream Blouse Inner -->
+    <polygon points="175,275 200,325 225,275 210,270 200,285 190,270" fill="#F8FAFC" />
+    <!-- Gold Lapel Accent -->
+    <circle cx="155" cy="315" r="5" fill="url(#femGold)" />
+
+    <!-- Neck -->
+    <rect x="183" y="215" width="34" height="60" rx="6" fill="#E2A67D" />
+
+    <!-- Head / Face -->
+    <ellipse cx="200" cy="180" rx="50" ry="62" fill="url(#femSkin)" />
+    <!-- Ears -->
+    <ellipse cx="150" cy="182" rx="7.5" ry="12" fill="#E2A67D" />
+    <ellipse cx="250" cy="182" rx="7.5" ry="12" fill="#E2A67D" />
+
+    <!-- Front Styled Long Hair -->
+    <path d="M 148 165 C 145 110, 165 92, 200 92 C 235 92, 255 110, 252 165 C 248 135, 230 120, 200 120 C 170 120, 152 135, 148 165 Z" fill="#3D291F" />
+    <path d="M 148 165 C 146 195, 142 245, 158 275 C 160 260, 162 210, 160 180 Z" fill="#2E1F17" />
+    <path d="M 252 165 C 254 195, 258 245, 242 275 C 240 260, 238 210, 240 180 Z" fill="#2E1F17" />
+
+    <!-- Eyebrows -->
+    <path d="M 168 158 Q 180 153 189 157" stroke="#2E1F17" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M 232 158 Q 220 153 211 157" stroke="#2E1F17" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+    <!-- Eyes -->
+    <ellipse cx="179" cy="169" rx="4.5" ry="5.5" fill="#2E1F17" />
+    <ellipse cx="221" cy="169" rx="4.5" ry="5.5" fill="#2E1F17" />
+    <circle cx="180.5" cy="167.5" r="1.5" fill="#FFFFFF" />
+    <circle cx="222.5" cy="167.5" r="1.5" fill="#FFFFFF" />
+
+    <!-- Nose -->
+    <path d="M 200 170 L 198 186 Q 200 189 202 186 Z" fill="#D78F65" />
+
+    <!-- Soft Smile -->
+    <path d="M 189 205 Q 200 215 211 205" stroke="#A74B39" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- Gold Ring Border -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="url(#femGold)" stroke-width="6" opacity="0.85" />
+</svg>

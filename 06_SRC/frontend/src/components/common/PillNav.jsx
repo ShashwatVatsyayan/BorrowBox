@@ -21,40 +21,40 @@ export const RouterPillLink = ({ href, children, ...rest }) => {
 
 const THEMES = {
   dark: {
-    '--pn-surface': 'rgba(9, 9, 11, 0.92)',
-    '--pn-solid': '#000000',
-    '--pn-edge': 'rgba(255, 107, 0, 0.28)',
-    '--pn-rim': 'rgba(255, 107, 0, 0.22)',
-    '--pn-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.98), 0 6px 18px -8px rgba(255, 107, 0, 0.25)',
-    '--pn-text': 'rgba(244, 244, 245, 0.7)',
-    '--pn-strong': '#ffffff',
-    '--pn-pill': 'linear-gradient(180deg, #ff7a00 0%, #ea580c 100%)',
-    '--pn-pill-ink': '#ffffff',
-    '--pn-pill-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 20px -4px rgba(255, 107, 0, 0.65)',
-    '--pn-dot': '#ff7a00',
-    '--pn-ring': 'rgba(255, 107, 0, 0.6)',
-    '--pn-row-hover': 'rgba(255, 107, 0, 0.12)',
-    '--pn-tile': 'linear-gradient(180deg, #18181b 0%, #09090b 100%)',
+    '--pn-surface': 'rgba(14, 21, 18, 0.92)',
+    '--pn-solid': '#080C0A',
+    '--pn-edge': 'rgba(16, 185, 129, 0.25)',
+    '--pn-rim': 'rgba(212, 168, 83, 0.28)',
+    '--pn-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.98), 0 6px 18px -8px rgba(16, 185, 129, 0.25)',
+    '--pn-text': 'rgba(245, 242, 235, 0.75)',
+    '--pn-strong': '#F5F2EB',
+    '--pn-pill': 'linear-gradient(135deg, #0F382A 0%, #061F17 100%)',
+    '--pn-pill-ink': '#F5F2EB',
+    '--pn-pill-shadow': 'inset 0 1px 0 rgba(212, 168, 83, 0.45), 0 6px 20px -4px rgba(16, 185, 129, 0.65)',
+    '--pn-dot': '#D4A853',
+    '--pn-ring': 'rgba(212, 168, 83, 0.6)',
+    '--pn-row-hover': 'rgba(16, 185, 129, 0.12)',
+    '--pn-tile': 'linear-gradient(180deg, #131E19 0%, #080C0A 100%)',
     '--pn-tile-rim':
-      'inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 107, 0, 0.35), 0 4px 10px -4px rgba(0, 0, 0, 0.95)'
+      'inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(212, 168, 83, 0.35), 0 4px 10px -4px rgba(0, 0, 0, 0.95)'
   },
   light: {
-    '--pn-surface': 'rgba(240, 240, 243, 0.8)',
-    '--pn-solid': '#f0f0f3',
-    '--pn-edge': 'rgba(24, 24, 27, 0.07)',
+    '--pn-surface': 'rgba(245, 242, 235, 0.88)',
+    '--pn-solid': '#F5F2EB',
+    '--pn-edge': 'rgba(15, 56, 42, 0.12)',
     '--pn-rim': 'rgba(255, 255, 255, 0.95)',
-    '--pn-shadow': '0 22px 44px -22px rgba(24, 24, 27, 0.3), 0 6px 16px -10px rgba(24, 24, 27, 0.16)',
-    '--pn-text': 'rgba(24, 24, 27, 0.6)',
-    '--pn-strong': '#18181b',
-    '--pn-pill': 'linear-gradient(180deg, #2c2c31 0%, #18181b 100%)',
-    '--pn-pill-ink': '#ffffff',
-    '--pn-pill-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 14px -6px rgba(24, 24, 27, 0.45)',
-    '--pn-dot': '#18181b',
-    '--pn-ring': 'rgba(24, 24, 27, 0.45)',
-    '--pn-row-hover': 'rgba(24, 24, 27, 0.05)',
-    '--pn-tile': 'linear-gradient(180deg, #ffffff 0%, #f6f6f8 100%)',
+    '--pn-shadow': '0 22px 44px -22px rgba(15, 56, 42, 0.2), 0 6px 16px -10px rgba(15, 56, 42, 0.12)',
+    '--pn-text': 'rgba(15, 56, 42, 0.75)',
+    '--pn-strong': '#080C0A',
+    '--pn-pill': 'linear-gradient(135deg, #0F382A 0%, #061F17 100%)',
+    '--pn-pill-ink': '#F5F2EB',
+    '--pn-pill-shadow': 'inset 0 1px 0 rgba(212, 168, 83, 0.35), 0 6px 14px -6px rgba(15, 56, 42, 0.4)',
+    '--pn-dot': '#D4A853',
+    '--pn-ring': 'rgba(15, 56, 42, 0.45)',
+    '--pn-row-hover': 'rgba(15, 56, 42, 0.06)',
+    '--pn-tile': 'linear-gradient(180deg, #FFFFFF 0%, #F5F2EB 100%)',
     '--pn-tile-rim':
-      'inset 0 0 0 1px rgba(24, 24, 27, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1), 0 4px 10px -5px rgba(24, 24, 27, 0.25)'
+      'inset 0 0 0 1px rgba(15, 56, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1), 0 4px 10px -5px rgba(15, 56, 42, 0.15)'
   }
 };
 

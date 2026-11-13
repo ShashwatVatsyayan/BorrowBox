@@ -712,7 +712,7 @@ export default function HoloCard({
       {shadow ? <span ref={shadowRef} className="holo-card__shadow" aria-hidden="true" /> : null}
       <div ref={rotorRef} className="holo-card__rotor">
         <div className="holo-card__face holo-card__face--front">
-          {image ? <img src={image} alt="" draggable={false} /> : null}
+          {image ? <img src={image} alt="" draggable={false} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} /> : null}
           {children}
           <canvas ref={canvasRef} />
         </div>

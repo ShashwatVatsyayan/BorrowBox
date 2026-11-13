@@ -24,7 +24,7 @@ export const DesktopSidebar = () => {
       <div className="mb-4">
         <NavLink
           to="/app/items/new"
-          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm transition-colors shadow-sm"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-xs hover:-translate-y-0.5"
         >
           <Plus size={18} />
           <span>List an Item</span>

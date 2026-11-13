@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Key, ShieldCheck } from 'lucide-react';
+import { Key, Check } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { AuthTunnelTransition } from '../common/AuthTunnelTransition';
 import { Logo } from '../common/Logo';
@@ -250,7 +250,7 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
                 aria-hidden="true"
               >
                 {stageState === 'verified' ? (
-                  <ShieldCheck size={24} />
+                  <Check size={24} />
                 ) : (
                   <Key size={22} />
                 )}

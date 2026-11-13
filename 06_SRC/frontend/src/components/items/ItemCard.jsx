@@ -164,7 +164,7 @@ export const ItemCard = ({ item }) => {
           <div className="flex items-center gap-1.5">
             {/* ClickSpark Like Button */}
             <ClickSpark
-              sparkColor="#ff6b00"
+              sparkColor="#fff"
               shape="line"
               sparkCount={8}
               sparkSize={14}

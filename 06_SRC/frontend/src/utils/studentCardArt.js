@@ -8,6 +8,7 @@ export function generateStudentCardSvg({
   uid = '23BCS12850',
   email = '23bcs12850@cuchd.in',
   avatarUrl = '',
+  gender = 'male',
   department = 'Computer Science & Engineering',
   hostelRoom = 'Hostel BH-3, Room 412',
   role = 'student',
@@ -24,39 +25,94 @@ export function generateStudentCardSvg({
   const safeDept = department.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const safeHostel = hostelRoom.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-  // If avatar is a valid data URI or image URL, render <image>, else vector monogram avatar
-  const avatarElement = avatarUrl
+  const isFemale = gender === 'female' || String(avatarUrl).toLowerCase().includes('female');
+
+  // Vector Default Student Portraits (100% self-contained inside SVG, immune to CORS or broken images)
+  const maleVectorPortrait = `
+    <g transform="translate(225, 160) scale(0.45)">
+      <circle cx="200" cy="200" r="190" fill="#0F382A" />
+      <g clip-path="url(#innerAvatarClip)">
+        <path d="M 60 400 L 120 270 L 175 295 L 200 340 L 225 295 L 280 270 L 340 400 Z" fill="#061F17" />
+        <polygon points="170,265 200,320 230,265 210,260 200,280 190,260" fill="#F8FAFC" />
+        <polygon points="195,280 205,280 208,360 200,375 192,360" fill="#D4A853" />
+        <path d="M 120 270 L 175 295 L 200 370 L 180 370 L 135 290 Z" fill="#0B2B20" />
+        <path d="M 280 270 L 225 295 L 200 370 L 220 370 L 265 290 Z" fill="#0B2B20" />
+        <rect x="180" y="210" width="40" height="60" rx="6" fill="#DFA074" />
+        <ellipse cx="200" cy="180" rx="55" ry="68" fill="#F7C8A4" />
+        <ellipse cx="145" cy="180" rx="9" ry="15" fill="#DFA074" />
+        <ellipse cx="255" cy="180" rx="9" ry="15" fill="#DFA074" />
+        <path d="M 145 165 C 142 120, 160 95, 200 95 C 240 95, 258 120, 255 165 C 250 145, 240 135, 200 135 C 160 135, 150 145, 145 165 Z" fill="#1C1917" />
+        <path d="M 148 150 C 146 125, 170 100, 205 100 C 235 100, 254 118, 252 145 C 235 130, 215 130, 190 135 C 170 139, 158 148, 148 150 Z" fill="#292524" />
+        <ellipse cx="178" cy="168" rx="4.5" ry="5.5" fill="#1C1917" />
+        <ellipse cx="222" cy="168" rx="4.5" ry="5.5" fill="#1C1917" />
+        <circle cx="179.5" cy="166.5" r="1.5" fill="#FFFFFF" />
+        <circle cx="223.5" cy="166.5" r="1.5" fill="#FFFFFF" />
+        <path d="M 200 168 L 197 186 Q 200 190 203 186 Z" fill="#D58F61" />
+        <path d="M 188 205 Q 200 216 212 205" stroke="#9A5034" stroke-width="3" stroke-linecap="round" fill="none" />
+      </g>
+      <circle cx="200" cy="200" r="190" fill="none" stroke="#D4A853" stroke-width="8" opacity="0.9" />
+    </g>
+  `;
+
+  const femaleVectorPortrait = `
+    <g transform="translate(225, 160) scale(0.45)">
+      <circle cx="200" cy="200" r="190" fill="#0F382A" />
+      <g clip-path="url(#innerAvatarClip)">
+        <path d="M 130 180 C 120 280, 135 340, 160 370 L 240 370 C 265 340, 280 280, 270 180 Z" fill="#261A15" />
+        <path d="M 60 400 L 125 280 L 175 305 L 200 345 L 225 305 L 275 280 L 340 400 Z" fill="#061F17" />
+        <polygon points="175,275 200,325 225,275 210,270 200,285 190,270" fill="#F8FAFC" />
+        <circle cx="155" cy="315" r="5" fill="#D4A853" />
+        <rect x="183" y="215" width="34" height="60" rx="6" fill="#E2A67D" />
+        <ellipse cx="200" cy="180" rx="50" ry="62" fill="#FCD5B5" />
+        <ellipse cx="150" cy="182" rx="7.5" ry="12" fill="#E2A67D" />
+        <ellipse cx="250" cy="182" rx="7.5" ry="12" fill="#E2A67D" />
+        <path d="M 148 165 C 145 110, 165 92, 200 92 C 235 92, 255 110, 252 165 C 248 135, 230 120, 200 120 C 170 120, 152 135, 148 165 Z" fill="#3D291F" />
+        <path d="M 148 165 C 146 195, 142 245, 158 275 C 160 260, 162 210, 160 180 Z" fill="#2E1F17" />
+        <path d="M 252 165 C 254 195, 258 245, 242 275 C 240 260, 238 210, 240 180 Z" fill="#2E1F17" />
+        <ellipse cx="179" cy="169" rx="4.5" ry="5.5" fill="#2E1F17" />
+        <ellipse cx="221" cy="169" rx="4.5" ry="5.5" fill="#2E1F17" />
+        <circle cx="180.5" cy="167.5" r="1.5" fill="#FFFFFF" />
+        <circle cx="222.5" cy="167.5" r="1.5" fill="#FFFFFF" />
+        <path d="M 200 170 L 198 186 Q 200 189 202 186 Z" fill="#D78F65" />
+        <path d="M 189 205 Q 200 215 211 205" stroke="#A74B39" stroke-width="2.5" stroke-linecap="round" fill="none" />
+      </g>
+      <circle cx="200" cy="200" r="190" fill="none" stroke="#D4A853" stroke-width="8" opacity="0.9" />
+    </g>
+  `;
+
+  const avatarElement = avatarUrl && String(avatarUrl).startsWith('data:image/')
     ? `<image href="${avatarUrl}" x="225" y="160" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" />`
-    : `<g>
-        <circle cx="315" cy="250" r="88" fill="url(#avatarGrad)" />
-        <text x="315" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="82" font-weight="900" fill="#ffffff" text-anchor="middle">${initial}</text>
-       </g>`;
+    : (isFemale ? femaleVectorPortrait : maleVectorPortrait);
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 630 880" width="630" height="880">
     <defs>
       <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#0a0e17" />
-        <stop offset="50%" stop-color="#121824" />
-        <stop offset="100%" stop-color="#070a10" />
+        <stop offset="0%" stop-color="#080C0A" />
+        <stop offset="50%" stop-color="#0F382A" />
+        <stop offset="100%" stop-color="#061F17" />
       </linearGradient>
 
       <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#ff7a00" />
-        <stop offset="50%" stop-color="#ff9d33" />
-        <stop offset="100%" stop-color="#ff6b00" />
+        <stop offset="0%" stop-color="#F3DC99" />
+        <stop offset="50%" stop-color="#D4A853" />
+        <stop offset="100%" stop-color="#B88B38" />
       </linearGradient>
 
       <linearGradient id="avatarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#ff7a00" />
-        <stop offset="100%" stop-color="#b84600" />
+        <stop offset="0%" stop-color="#0F382A" />
+        <stop offset="100%" stop-color="#061F17" />
       </linearGradient>
 
       <pattern id="gridPattern" width="30" height="30" patternUnits="userSpaceOnUse">
-        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" />
+        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(212, 168, 83, 0.08)" stroke-width="1" />
       </pattern>
 
       <clipPath id="avatarClip">
         <rect x="225" y="160" width="180" height="180" rx="90" ry="90" />
+      </clipPath>
+
+      <clipPath id="innerAvatarClip">
+        <circle cx="200" cy="200" r="190" />
       </clipPath>
 
       <clipPath id="cardClip">
@@ -70,14 +126,14 @@ export function generateStudentCardSvg({
       <rect x="0" y="0" width="630" height="880" fill="url(#gridPattern)" />
 
       <!-- Outer Security Borders -->
-      <rect x="14" y="14" width="602" height="852" rx="20" fill="none" stroke="rgba(255, 122, 0, 0.4)" stroke-width="2" />
+      <rect x="14" y="14" width="602" height="852" rx="20" fill="none" stroke="rgba(212, 168, 83, 0.45)" stroke-width="2" />
       <rect x="24" y="24" width="582" height="832" rx="14" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
 
       <!-- Top Header Banner -->
       <rect x="25" y="25" width="580" height="90" fill="rgba(255, 255, 255, 0.03)" />
       
       <!-- BorrowBox & University Brand Text -->
-      <text x="50" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" letter-spacing="3" fill="#ff7a00">BORROWBOX</text>
+      <text x="50" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" letter-spacing="3" fill="#D4A853">BORROWBOX</text>
       <text x="50" y="88" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#94a3b8">CHANDIGARH UNIVERSITY</text>
 
       <!-- Security Microchip Vector -->
@@ -94,15 +150,15 @@ export function generateStudentCardSvg({
       ${avatarElement}
 
       <!-- Role Badge -->
-      <rect x="200" y="375" width="230" height="30" rx="15" fill="rgba(255, 122, 0, 0.15)" stroke="rgba(255, 122, 0, 0.6)" stroke-width="1.5" />
-      <text x="315" y="395" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#ff9d33" text-anchor="middle">${roleLabel}</text>
+      <rect x="200" y="375" width="230" height="30" rx="15" fill="rgba(16, 185, 129, 0.15)" stroke="rgba(212, 168, 83, 0.6)" stroke-width="1.5" />
+      <text x="315" y="395" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#D4A853" text-anchor="middle">${roleLabel}</text>
 
       <!-- Student Name -->
       <text x="315" y="445" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="800" fill="#ffffff" text-anchor="middle">${safeName}</text>
 
       <!-- Immutable Student UID Box -->
-      <rect x="155" y="475" width="320" height="48" rx="10" fill="rgba(10, 14, 23, 0.85)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" />
-      <text x="315" y="505" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="18" font-weight="900" letter-spacing="3" fill="#ff7a00" text-anchor="middle">UID: ${safeUid}</text>
+      <rect x="155" y="475" width="320" height="48" rx="10" fill="rgba(10, 14, 23, 0.85)" stroke="rgba(212, 168, 83, 0.3)" stroke-width="1.5" />
+      <text x="315" y="505" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="18" font-weight="900" letter-spacing="3" fill="#10B981" text-anchor="middle">UID: ${safeUid}</text>
 
       <!-- Details Table Section -->
       <g transform="translate(60, 545)">

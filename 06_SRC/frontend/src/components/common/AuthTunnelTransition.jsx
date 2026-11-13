@@ -66,10 +66,10 @@ export const AuthTunnelTransition = ({
         style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
         <LightTunnel
-          cableColor="#3a1c08"
-          pulseColor="#ff6b00"
-          tunnelColor="#ff7a00"
-          tunnelOpacity={0.25}
+          cableColor="#061F17"
+          pulseColor="#D4A853"
+          tunnelColor="#0F382A"
+          tunnelOpacity={0.35}
           speed={0.4}
           pulseSpeed={4.8}
           pulseDensity={0.8}
@@ -96,10 +96,10 @@ export const AuthTunnelTransition = ({
           transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
-        {/* Visible Standalone Logo Directly From Public Folder - No Circle, No Box */}
+        {/* Visible Standalone Logo Directly From Folder - No Circle, No Box */}
         <div className="mb-4 flex items-center justify-center">
           <img
-            src="/logo-dark.png"
+            src="/logo.png"
             alt="BorrowBox - Community Borrowing Platform"
             className="h-14 sm:h-16 md:h-18 w-auto object-contain drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]"
             draggable={false}

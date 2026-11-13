@@ -75,21 +75,16 @@ export const AppHeader = () => {
           <div className="relative">
             <button
               onClick={() => setProfileModalOpen(true)}
-              className="flex items-center gap-1.5 px-2 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-ink-primary transition-all min-h-[34px] shadow-xs group"
+              className="flex items-center gap-2 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-ink-primary transition-all min-h-[34px] shadow-xs group"
               title="Click to view & edit your Holographic Campus ID Card"
               aria-label="Student Profile & ID Card"
             >
-              {user?.avatar_url ? (
-                <img
-                  src={user.avatar_url}
-                  alt={user?.full_name || 'Profile'}
-                  className="w-5 h-5 rounded-full object-cover border border-brand-500 shrink-0"
-                />
-              ) : (
-                <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/30 flex items-center justify-center font-bold text-[10px] shrink-0">
-                  {user?.full_name?.charAt(0).toUpperCase() || 'U'}
-                </span>
-              )}
+              <img
+                src={user?.avatar_url || '/default_avatar_male.svg'}
+                alt={user?.full_name || 'Profile'}
+                className="w-5 h-5 rounded-full object-cover border border-emerald-600/30 shrink-0"
+                onError={(e) => { e.currentTarget.src = '/default_avatar_male.svg'; }}
+              />
               <span className="max-w-[100px] truncate">{user?.full_name?.split(' ')[0] || 'User'}</span>
               <ChevronDown size={12} className="text-ink-muted group-hover:text-ink-primary transition-transform" />
             </button>

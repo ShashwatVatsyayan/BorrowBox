@@ -5,7 +5,6 @@ import {
   User,
   Mail,
   MapPin,
-  Sparkles,
   Package,
   BookOpen,
   CheckCheck,

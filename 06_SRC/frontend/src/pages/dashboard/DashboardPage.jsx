@@ -9,7 +9,6 @@ import {
   PlusCircle,
   ArrowLeftRight,
   HelpCircle,
-  Sparkles,
   CheckCircle2,
   Filter,
   X,

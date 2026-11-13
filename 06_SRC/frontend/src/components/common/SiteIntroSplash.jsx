@@ -97,21 +97,21 @@ export const SiteIntroSplash = ({ onFinish }) => {
       }}
       aria-label="BorrowBox introductory animation - tap or click to skip"
     >
-      {/* Ambient center radial glow in brand orange */}
+      {/* Ambient center radial glow in brand emerald */}
       <div
         className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-700 ${
           isZooming ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        <div className="w-[520px] h-[520px] rounded-full bg-brand-600/15 blur-[120px]" />
+        <div className="w-[520px] h-[520px] rounded-full bg-emerald-500/15 blur-[120px]" />
       </div>
 
       {/* Main animated StrokeText wordmark */}
       <div className="relative z-10 w-full max-w-[92vw] sm:max-w-4xl px-2 sm:px-4 flex flex-col items-center">
         <StrokeText
           text="BorrowBox"
-          strokeColor="#ff6b00"
-          fillColor="#ffffff"
+          strokeColor="#10B981"
+          fillColor="#F5F2EB"
           strokeWidth={2.0}
           drawDuration={1.35}
           fillDelay={0.12}
@@ -124,7 +124,7 @@ export const SiteIntroSplash = ({ onFinish }) => {
           fontWeight={900}
           letterSpacing={-1}
           shadow={true}
-          shadowColor="rgba(255, 107, 0, 0.4)"
+          shadowColor="rgba(16, 185, 129, 0.45)"
           onAnimationComplete={handleDrawComplete}
         />
 
@@ -134,11 +134,11 @@ export const SiteIntroSplash = ({ onFinish }) => {
             isZooming ? 'opacity-0 translate-y-4' : 'opacity-80 translate-y-0'
           }`}
         >
-          <span className="h-px w-6 bg-gradient-to-r from-transparent to-brand-600" />
-          <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.28em] text-neutral-300">
-            Campus Peer Lending Platform
+          <span className="h-px w-6 bg-gradient-to-r from-transparent to-emerald-500" />
+          <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.28em] text-[#F5F2EB]/90">
+            Community Borrowing Platform
           </span>
-          <span className="h-px w-6 bg-gradient-to-l from-transparent to-brand-600" />
+          <span className="h-px w-6 bg-gradient-to-l from-transparent to-emerald-500" />
         </div>
       </div>
 

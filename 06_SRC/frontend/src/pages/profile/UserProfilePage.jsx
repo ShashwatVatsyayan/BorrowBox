@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Mail, MapPin, Sparkles, BookOpen, CheckCheck, ArrowLeftRight, Package } from 'lucide-react';
+import { ArrowLeft, Mail, MapPin, BookOpen, CheckCheck, ArrowLeftRight, Package } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { HoloCard } from '../../components/common/HoloCard';
 import { ItemGrid } from '../../components/items/ItemGrid';

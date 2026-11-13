@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="maleBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F382A" />
+      <stop offset="100%" stop-color="#061F17" />
+    </linearGradient>
+    <linearGradient id="skin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7C8A4" />
+      <stop offset="100%" stop-color="#EAA678" />
+    </linearGradient>
+    <linearGradient id="blazer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B2B20" />
+      <stop offset="100%" stop-color="#061A13" />
+    </linearGradient>
+    <linearGradient id="goldPin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3DC99" />
+      <stop offset="100%" stop-color="#D4A853" />
+    </linearGradient>
+    <clipPath id="avatarClip">
+      <circle cx="200" cy="200" r="190" />
+    </clipPath>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="200" cy="200" r="190" fill="url(#maleBg)" />
+
+  <g clip-path="url(#avatarClip)">
+    <!-- Shoulders & Blazer -->
+    <path d="M 60 400 L 120 270 L 175 295 L 200 340 L 225 295 L 280 270 L 340 400 Z" fill="url(#blazer)" />
+    <!-- White Shirt Collar -->
+    <polygon points="170,265 200,320 230,265 210,260 200,280 190,260" fill="#F8FAFC" />
+    <!-- Gold University Tie / Accent -->
+    <polygon points="195,280 205,280 208,360 200,375 192,360" fill="url(#goldPin)" />
+    <!-- Blazer Lapels -->
+    <path d="M 120 270 L 175 295 L 200 370 L 180 370 L 135 290 Z" fill="#0E3527" />
+    <path d="M 280 270 L 225 295 L 200 370 L 220 370 L 265 290 Z" fill="#0E3527" />
+    <!-- Gold Lapel Pin -->
+    <circle cx="150" cy="305" r="5" fill="url(#goldPin)" />
+
+    <!-- Neck -->
+    <rect x="180" y="210" width="40" height="60" rx="6" fill="#DFA074" />
+
+    <!-- Head / Face -->
+    <ellipse cx="200" cy="180" rx="55" ry="68" fill="url(#skin)" />
+    <!-- Ears -->
+    <ellipse cx="145" cy="180" rx="9" ry="15" fill="#DFA074" />
+    <ellipse cx="255" cy="180" rx="9" ry="15" fill="#DFA074" />
+
+    <!-- Clean Modern Short Hair -->
+    <path d="M 145 165 C 142 120, 160 95, 200 95 C 240 95, 258 120, 255 165 C 250 145, 240 135, 200 135 C 160 135, 150 145, 145 165 Z" fill="#1C1917" />
+    <path d="M 148 150 C 146 125, 170 100, 205 100 C 235 100, 254 118, 252 145 C 235 130, 215 130, 190 135 C 170 139, 158 148, 148 150 Z" fill="#292524" />
+
+    <!-- Eyebrows -->
+    <path d="M 165 156 Q 178 152 188 155" stroke="#1C1917" stroke-width="3" stroke-linecap="round" fill="none" />
+    <path d="M 235 156 Q 222 152 212 155" stroke="#1C1917" stroke-width="3" stroke-linecap="round" fill="none" />
+
+    <!-- Eyes -->
+    <ellipse cx="178" cy="168" rx="4.5" ry="5.5" fill="#1C1917" />
+    <ellipse cx="222" cy="168" rx="4.5" ry="5.5" fill="#1C1917" />
+    <circle cx="179.5" cy="166.5" r="1.5" fill="#FFFFFF" />
+    <circle cx="223.5" cy="166.5" r="1.5" fill="#FFFFFF" />
+
+    <!-- Nose -->
+    <path d="M 200 168 L 197 186 Q 200 190 203 186 Z" fill="#D58F61" />
+
+    <!-- Friendly Smile -->
+    <path d="M 188 205 Q 200 216 212 205" stroke="#9A5034" stroke-width="3" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- Gold Ring Border -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="url(#goldPin)" stroke-width="6" opacity="0.85" />
+</svg>

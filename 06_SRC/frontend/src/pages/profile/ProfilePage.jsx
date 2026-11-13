@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Edit2, Package, Clock, Settings, LogOut, ChevronRight, Sparkles } from 'lucide-react';
+import { Edit2, Package, Clock, Settings, LogOut, ChevronRight, User } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ProfileHeader } from '../../components/profile/ProfileHeader';
 import { ProfileStats } from '../../components/profile/ProfileStats';
@@ -56,7 +56,7 @@ export const ProfilePage = () => {
         <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Student Profile</h1>
         <div className="flex items-center gap-2">
           <Button size="sm" variant="primary" onClick={() => setCardModalOpen(true)} className="gap-1.5 shadow-xs">
-            <Sparkles size={14} />
+            <User size={14} />
             <span>Holographic ID Pass</span>
           </Button>
           <Link to="/app/profile/edit">

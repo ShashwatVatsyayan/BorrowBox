@@ -12,7 +12,6 @@ import {
   ArrowLeftRight,
   Clock,
   Search,
-  Sparkles,
   Heart,
   Bookmark,
   MessageSquare,
@@ -374,7 +373,7 @@ export const ItemDetailsPage = () => {
             {/* Social Interaction Buttons: Like, Save, Comments */}
             <div className="flex items-center gap-2 self-start shrink-0">
               <ClickSpark
-                sparkColor="#ff6b00"
+                sparkColor="#fff"
                 shape="line"
                 sparkCount={8}
                 sparkSize={14}

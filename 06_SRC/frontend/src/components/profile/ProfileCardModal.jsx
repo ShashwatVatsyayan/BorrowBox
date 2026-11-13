@@ -3,10 +3,7 @@ import {
   X,
   Camera,
   User,
-  Lock,
-  Mail,
   MapPin,
-  Sparkles,
   Check,
   Upload,
   LogOut,
@@ -21,11 +18,10 @@ import { profileService } from '../../services/profileService';
 import { generateStudentCardSvg } from '../../utils/studentCardArt';
 
 const PRESET_AVATARS = [
-  { label: 'Hosteler A', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80' },
-  { label: 'Hosteler B', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80' },
-  { label: 'Scholar C', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80' },
-  { label: 'Tech Lead D', url: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80' },
-  { label: 'Athlete E', url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80' }
+  { label: 'Male Scholar', url: '/default_avatar_male.svg', gender: 'male' },
+  { label: 'Female Scholar', url: '/default_avatar_female.svg', gender: 'female' },
+  { label: 'Hosteler Male', url: '/default_avatar_male.svg', gender: 'male' },
+  { label: 'Hosteler Female', url: '/default_avatar_female.svg', gender: 'female' }
 ];
 
 const HOLO_PRESETS = [
@@ -130,12 +126,14 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // Generate dynamic vector artwork for the HoloCard
+  // Generate dynamic vector artwork for the HoloCard with guaranteed default student portrait
+  const effectiveAvatar = avatarUrl || user?.avatar_url || '/default_avatar_male.svg';
   const cardArt = generateStudentCardSvg({
     fullName: fullName || user?.full_name || 'Student Peer',
     uid: immutableUid,
     email: studentEmail,
-    avatarUrl,
+    avatarUrl: effectiveAvatar,
+    gender: effectiveAvatar.includes('female') ? 'female' : 'male',
     department,
     hostelRoom,
     role: user?.role || 'student',
@@ -152,10 +150,8 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
       >
         {/* Header Bar */}
         <div className="px-5 py-4 border-b border-surface-border flex items-center justify-between bg-surface-card/95">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-brand-500/10 text-brand-600 border border-brand-500/20">
-              <Sparkles size={16} />
-            </span>
+          <div className="flex items-center gap-2.5">
+            <User size={18} className="text-emerald-700 dark:text-emerald-400" />
             <div>
               <h2 id="profile-card-title" className="text-base sm:text-lg font-bold text-ink-primary">
                 Student Profile &amp; Holographic ID Card
@@ -317,17 +313,11 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
                 required
               />
 
-              {/* Immutable Student UID (Derived from email, read-only) */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="immutableUidInput" className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1">
-                    <Lock size={12} className="text-amber-600" />
-                    <span>Student UID (University Roll Number)</span>
-                  </label>
-                  <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
-                    Immutable
-                  </span>
-                </div>
+              {/* Student UID (Derived from email, read-only) */}
+              <div className="flex flex-col gap-1">
+                <label htmlFor="immutableUidInput" className="text-xs font-semibold text-ink-muted">
+                  Student UID
+                </label>
                 <input
                   id="immutableUidInput"
                   type="text"
@@ -335,25 +325,14 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
                   readOnly
                   disabled
                   className="w-full px-3.5 py-2.5 rounded-xl border border-surface-border bg-slate-100 dark:bg-slate-900 text-ink-muted font-mono font-bold text-xs cursor-not-allowed select-all"
-                  aria-describedby="uid-immutable-help"
                 />
-                <p id="uid-immutable-help" className="text-[11px] text-ink-muted">
-                  Student UID cannot be modified. It is permanently bound to your university email address (<code className="text-ink-primary font-mono">{studentEmail}</code>).
-                </p>
               </div>
 
               {/* University Email (Read-Only) */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="emailDisplayInput" className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1">
-                    <Mail size={12} className="text-brand-600" />
-                    <span>Verified University Mailbox</span>
-                  </label>
-                  <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-                    <Check size={11} />
-                    <span>Domain Verified</span>
-                  </span>
-                </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="emailDisplayInput" className="text-xs font-semibold text-ink-muted">
+                  University Email
+                </label>
                 <input
                   id="emailDisplayInput"
                   type="email"

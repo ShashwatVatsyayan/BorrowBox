@@ -84,7 +84,8 @@
    -------------------------------------------------------------------------- */
 @media (min-width: 768px) {
   .verso-card {
-    height: 600px;
+    min-height: 660px;
+    height: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
@@ -106,10 +107,21 @@
 .verso-pane {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 2.25rem 2.5rem;
+  justify-content: flex-start;
+  padding: 2rem 2.5rem;
   background: var(--verso-surface-card);
   transition: opacity 280ms ease;
+  box-sizing: border-box;
+}
+
+.verso-pane--signin {
+  justify-content: center;
+}
+
+.verso-pane--signup {
+  justify-content: flex-start;
+  padding-top: 1.75rem;
+  padding-bottom: 2rem;
 }
 
 .verso-pane[inert] {
@@ -163,7 +175,7 @@
 
 .verso-pane-title {
   font-family: var(--verso-font-serif);
-  font-size: 2rem;
+  font-size: 1.85rem;
   line-height: 1.15;
   font-weight: 700;
   color: var(--verso-text-main);
@@ -173,16 +185,16 @@
 .verso-pane-subtitle {
   font-size: 0.8125rem;
   color: var(--verso-text-muted);
-  margin-top: 0.35rem;
-  line-height: 1.4;
-  margin-bottom: 1.25rem;
+  margin-top: 0.25rem;
+  line-height: 1.35;
+  margin-bottom: 0.85rem;
 }
 
 /* Bottom-Border Inputs with Animated Focus State */
 .verso-input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.15rem;
+  margin-bottom: 0.8rem;
   position: relative;
 }
 
@@ -192,12 +204,12 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--verso-text-muted);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .verso-input {
   width: 100%;
-  height: 40px;
+  height: 38px;
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--verso-border-input);
@@ -351,9 +363,9 @@
 /* Desktop Skewed Blade */
 @media (min-width: 768px) {
   .auth_band {
-    top: -12%;
-    bottom: -12%;
-    height: 124%;
+    top: -5%;
+    bottom: -5%;
+    height: 110%;
     width: 54%;
     transform: skewX(-8deg);
     transform-origin: center center;
