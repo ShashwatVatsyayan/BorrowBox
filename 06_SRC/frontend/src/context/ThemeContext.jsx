@@ -161,3 +161,5 @@ export function useThemeContext() {
   }
   return context;
 }
+
+export const useTheme = useThemeContext;

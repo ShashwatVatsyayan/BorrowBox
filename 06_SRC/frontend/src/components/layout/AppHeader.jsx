@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Bell, Shield, ChevronDown } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {
+  Bell,
+  Shield,
+  ChevronDown,
+  Home,
+  Compass,
+  Package,
+  Clock,
+  PlusCircle
+} from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
-import { Logo } from '../common/Logo';
+import { useTheme } from '../../context/ThemeContext';
+import { PillNav } from '../common/PillNav';
 import { ThemeToggle } from '../common/ThemeToggle';
 
 export const AppHeader = () => {
   const { user, switchAccount, logout } = useAuth();
   const { unreadCount } = useNotifications();
+  const { resolvedTheme } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSwitch = async (roleName) => {
     await switchAccount(roleName);
@@ -18,14 +30,42 @@ export const AppHeader = () => {
     navigate('/app');
   };
 
+  const navItems = [
+    { label: 'Dashboard', href: '/app', icon: <Home size={13} /> },
+    { label: 'Explore', href: '/app/explore', icon: <Compass size={13} /> },
+    { label: 'Listings', href: '/app/listings', icon: <Package size={13} /> },
+    { label: 'Activity', href: '/app/activity', icon: <Clock size={13} /> },
+    { label: 'List Item', href: '/app/items/new', icon: <PlusCircle size={13} /> }
+  ];
+
+  if (user?.role === 'admin') {
+    navItems.push({ label: 'Admin', href: '/admin', icon: <Shield size={13} /> });
+  }
+
   return (
     <header className="sticky top-0 z-40 w-full bg-surface-card border-b border-surface-border">
-      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Logo size="sm" to="/app" />
+      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+        {/* React Bits PillNav Interactive Navigation */}
+        <div className="flex-1 min-w-0 flex items-center">
+          <PillNav
+            logo="/logo.png"
+            logoAlt="BorrowBox"
+            logoHref="/app"
+            items={navItems}
+            activeHref={location.pathname}
+            theme={resolvedTheme}
+            itemStyle="pill"
+            hoverEffect="fill"
+            indicator="dot"
+            surface="glass"
+            size="sm"
+            collapse="auto"
+            ariaLabel="Campus App Navigation"
+          />
+        </div>
 
         {/* Header Right Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Quick Demo Account Switcher Pill */}
           <div className="relative">
             <button
@@ -119,3 +159,4 @@ export const AppHeader = () => {
   );
 };
 
+export default AppHeader;

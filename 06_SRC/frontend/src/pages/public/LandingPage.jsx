@@ -1,28 +1,49 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, BookOpen, Calculator, FlaskConical, Shield, CheckCircle2, Clock, MapPin, ExternalLink } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
+import { PillNav } from '../../components/common/PillNav';
+import { useTheme } from '../../context/ThemeContext';
 
 export const LandingPage = () => {
+  const { resolvedTheme } = useTheme();
+  const location = useLocation();
+
+  const landingNavItems = [
+    { label: 'Home', href: '/' },
+    { label: 'Essentials', href: '#essentials' },
+    { label: 'How It Works', href: '#how-it-works' },
+    { label: 'Safety', href: '#safety' },
+    { label: 'Sign In', href: '/login' },
+    { label: 'Create Account', href: '/signup' }
+  ];
+
   return (
     <div className="min-h-screen bg-surface-base flex flex-col">
-      {/* Navigation Header */}
-      <header className="w-full bg-surface-card border-b border-surface-border sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Logo size="md" to="/" />
-          <div className="flex items-center gap-3">
+      {/* Navigation Header with React Bits PillNav */}
+      <header className="w-full bg-surface-card/85 backdrop-blur-md border-b border-surface-border sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+          <div className="flex-1 min-w-0 flex items-center">
+            <PillNav
+              logo="/logo.png"
+              logoAlt="BorrowBox"
+              logoHref="/"
+              items={landingNavItems}
+              activeHref={location.pathname}
+              theme={resolvedTheme}
+              itemStyle="pill"
+              hoverEffect="fill"
+              indicator="dot"
+              surface="glass"
+              size="md"
+              collapse="auto"
+              ariaLabel="Public Site Navigation"
+            />
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
             <ThemeToggle size="sm" />
-            <Link
-              to="/login"
-              className="text-sm font-semibold text-ink-primary hover:text-brand-600 px-3 py-2 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link to="/signup">
-              <Button size="sm" variant="primary">Create Account</Button>
-            </Link>
           </div>
         </div>
       </header>
@@ -58,7 +79,7 @@ export const LandingPage = () => {
       </section>
 
       {/* Academic Essentials Categories */}
-      <section className="py-12 px-4 max-w-5xl mx-auto w-full">
+      <section id="essentials" className="py-12 px-4 max-w-5xl mx-auto w-full">
         <div className="text-center mb-8">
           <h2 className="text-xl sm:text-2xl font-bold text-ink-primary tracking-tight">
             Popular Campus Essentials
@@ -102,7 +123,7 @@ export const LandingPage = () => {
       </section>
 
       {/* Lifecycle Steps */}
-      <section className="py-14 bg-surface-card border-y border-surface-border px-4">
+      <section id="how-it-works" className="py-14 bg-surface-card border-y border-surface-border px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold text-ink-primary tracking-tight">How the Lending Flow Works</h2>
@@ -135,7 +156,7 @@ export const LandingPage = () => {
       </section>
 
       {/* Safety & Trust */}
-      <section className="py-14 px-4 max-w-4xl mx-auto">
+      <section id="safety" className="py-14 px-4 max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-ink-primary">Built for Campus Security</h2>
         </div>
