@@ -132,7 +132,7 @@ export function generateStudentCardSvg({
       <!-- Top Header Banner -->
       <rect x="25" y="25" width="580" height="90" fill="rgba(255, 255, 255, 0.03)" />
       
-      <!-- BorrowBox & University Brand Text -->
+      <!-- BorrowBox and University Brand Text -->
       <text x="50" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" letter-spacing="3" fill="#D4A853">BORROWBOX</text>
       <text x="50" y="88" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#94a3b8">CHANDIGARH UNIVERSITY</text>
 

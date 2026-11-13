@@ -755,10 +755,10 @@ export const PillNav = ({
             <span ref={markRef} className={MARK}>
               {typeof logo === 'string' ? (
                 <img
-                  src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
+                  src={theme === 'dark' ? '/logo-dark.svg' : '/logo.svg'}
                   alt={logoAlt}
                   draggable={false}
-                  className="h-9 w-auto object-contain"
+                  className="h-9 sm:h-10 w-auto object-contain"
                 />
               ) : (
                 logo

@@ -97,11 +97,11 @@ export const AuthTunnelTransition = ({
         }}
       >
         {/* Visible Standalone Logo Directly From Folder - No Circle, No Box */}
-        <div className="mb-4 flex items-center justify-center">
+        <div className="mb-5 flex items-center justify-center">
           <img
-            src="/logo.png"
+            src="/logo-dark.svg"
             alt="BorrowBox - Community Borrowing Platform"
-            className="h-14 sm:h-16 md:h-18 w-auto object-contain drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]"
+            className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-[0_0_20px_rgba(16,185,129,0.45)]"
             draggable={false}
           />
         </div>

@@ -184,30 +184,12 @@ html.dark .glass-block {
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Ink Bleed WebGL2 Canvas Overlay (https://github.com/codemure-official/ink-bleed-theme-changer) */
+/* Ink Bleed Overlay Disabled - Native Zero-Shift GPU Theme Transitions Active */
 .ink-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  width: 100%;
-  height: 100%;
-  pointer-events: none !important;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-}
-
-.ink-canvas.is-active {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Hide ink canvas during intro splash screen */
-html.has-intro-splash .ink-canvas,
-body.has-intro-splash .ink-canvas {
   display: none !important;
-  opacity: 0 !important;
   visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* CSS fallback cross-fade transition when View Transitions are not available or reduced-motion is active */

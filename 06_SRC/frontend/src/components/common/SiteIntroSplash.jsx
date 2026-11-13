@@ -111,9 +111,9 @@ export const SiteIntroSplash = ({ onFinish }) => {
         {/* Prominent Visible Standalone Logo Directly From Folder - No Box, No Circle */}
         <div className="mb-4 flex items-center justify-center">
           <img
-            src="/logo.png"
+            src="/logo-dark.svg"
             alt="BorrowBox - Community Borrowing Platform"
-            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(16,185,129,0.35)]"
+            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_24px_rgba(16,185,129,0.4)]"
             draggable={false}
           />
         </div>
