@@ -126,6 +126,8 @@ export const itemService = {
       listing_type: itemData.listing_type || 'borrow',
       lending_duration: itemData.lending_duration || '1 - 3 Days',
       trade_preference: itemData.trade_preference ? itemData.trade_preference.trim() : '',
+      trade_item_desired: itemData.trade_item_desired ? itemData.trade_item_desired.trim() : '',
+      is_permanent_trade: itemData.is_permanent_trade !== undefined ? Boolean(itemData.is_permanent_trade) : (itemData.listing_type === 'trade'),
       needed_by: itemData.needed_by ? itemData.needed_by.trim() : '',
       is_active: true,
       created_at: new Date().toISOString(),
@@ -192,6 +194,12 @@ export const itemService = {
       category: itemData.category,
       condition: itemData.condition,
       location_label: itemData.location_label,
+      listing_type: itemData.listing_type || item.listing_type,
+      lending_duration: itemData.lending_duration || item.lending_duration,
+      trade_preference: itemData.trade_preference !== undefined ? itemData.trade_preference : item.trade_preference,
+      trade_item_desired: itemData.trade_item_desired !== undefined ? itemData.trade_item_desired : item.trade_item_desired,
+      is_permanent_trade: itemData.is_permanent_trade !== undefined ? itemData.is_permanent_trade : item.is_permanent_trade,
+      needed_by: itemData.needed_by !== undefined ? itemData.needed_by : item.needed_by,
       updated_at: new Date().toISOString()
     });
 

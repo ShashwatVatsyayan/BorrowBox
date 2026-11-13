@@ -32,6 +32,7 @@ const BorrowingsPage = lazy(() => import('./pages/activity/BorrowingsPage').then
 const LendingPage = lazy(() => import('./pages/activity/LendingPage').then(m => ({ default: m.LendingPage })));
 const NotificationsPage = lazy(() => import('./pages/notifications/NotificationsPage').then(m => ({ default: m.NotificationsPage })));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const UserProfilePage = lazy(() => import('./pages/profile/UserProfilePage').then(m => ({ default: m.UserProfilePage })));
 const EditProfilePage = lazy(() => import('./pages/profile/EditProfilePage').then(m => ({ default: m.EditProfilePage })));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage').then(m => ({ default: m.SettingsPage })));
 
@@ -81,6 +82,7 @@ export function App() {
               <Route path="/app/lending" element={<ProtectedRoute><LendingPage /></ProtectedRoute>} />
               <Route path="/app/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
               <Route path="/app/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/app/users/:userId" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
               <Route path="/app/profile/edit" element={<ProtectedRoute><EditProfilePage /></ProtectedRoute>} />
               <Route path="/app/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 

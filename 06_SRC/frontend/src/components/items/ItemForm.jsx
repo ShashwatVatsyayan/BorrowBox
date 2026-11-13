@@ -17,6 +17,8 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
     listing_type: initialValues?.listing_type || 'borrow',
     lending_duration: initialValues?.lending_duration || LENDING_DURATIONS[1],
     trade_preference: initialValues?.trade_preference || '',
+    trade_item_desired: initialValues?.trade_item_desired || '',
+    is_permanent_trade: initialValues?.is_permanent_trade !== undefined ? initialValues.is_permanent_trade : true,
     needed_by: initialValues?.needed_by || ''
   });
 
@@ -113,25 +115,68 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
       )}
 
       {formData.listing_type === 'trade' && (
-        <div className="flex flex-col gap-1.5 p-3.5 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
-          <label htmlFor="trade_preference" className="text-xs font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
-            <ArrowLeftRight size={14} />
-            <span>Trade / Barter Preference <span className="text-state-danger">*</span></span>
+        <div className="flex flex-col gap-3 p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/25 border border-amber-300 dark:border-amber-800">
+          <div className="flex items-center justify-between border-b border-amber-200 dark:border-amber-800/60 pb-2">
+            <span className="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+              <ArrowLeftRight size={14} className="text-amber-600" />
+              <span>Permanent Trade: I Will Trade This For That</span>
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 rounded">
+              Permanent Swap
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="trade_item_desired" className="text-xs font-semibold text-ink-primary">
+              What specific item will you trade this for? <span className="text-state-danger">*</span>
+            </label>
+            <input
+              id="trade_item_desired"
+              type="text"
+              placeholder="e.g. Casio fx-991CW Calculator, Formal Shoes Size 9, or Mini Drafter"
+              value={formData.trade_item_desired}
+              onChange={(e) => {
+                handleChange('trade_item_desired', e.target.value);
+                if (!formData.trade_preference) {
+                  handleChange('trade_preference', e.target.value);
+                }
+              }}
+              className="w-full min-h-[42px] px-3.5 py-2 rounded-lg border border-amber-300 dark:border-amber-700 bg-surface-card text-ink-primary text-sm outline-none focus:border-amber-600"
+              required
+            />
+            <p className="text-[11px] text-ink-muted">
+              Students on campus who have this item will see your listing and can initiate a direct exchange.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="trade_preference" className="text-xs font-semibold text-ink-primary">
+              Additional Barter Notes / Alternatives Accepted
+            </label>
+            <input
+              id="trade_preference"
+              type="text"
+              placeholder="e.g. Also open to electric kettle, mechanical notes, or graphics tablet"
+              value={formData.trade_preference}
+              onChange={(e) => handleChange('trade_preference', e.target.value)}
+              className="w-full min-h-[42px] px-3.5 py-2 rounded-lg border border-surface-border bg-surface-card text-ink-primary text-sm outline-none focus:border-brand-600"
+            />
+            {errors.trade_preference && (
+              <span className="text-xs text-state-danger font-medium">{errors.trade_preference}</span>
+            )}
+          </div>
+
+          <label className="flex items-center gap-2 cursor-pointer pt-1">
+            <input
+              type="checkbox"
+              checked={formData.is_permanent_trade}
+              onChange={(e) => handleChange('is_permanent_trade', e.target.checked)}
+              className="rounded border-amber-400 text-amber-600 focus:ring-amber-500"
+            />
+            <span className="text-xs text-ink-primary font-medium">
+              Permanent Ownership Trade (Permanent exchange - no return needed)
+            </span>
           </label>
-          <input
-            id="trade_preference"
-            type="text"
-            placeholder="e.g. Willing to trade formal shoes (UK 9) for interview blazer (size 40) or kettle"
-            value={formData.trade_preference}
-            onChange={(e) => handleChange('trade_preference', e.target.value)}
-            className="w-full min-h-[42px] px-3.5 py-2 rounded-lg border border-amber-300 dark:border-amber-700 bg-surface-card text-ink-primary text-sm outline-none focus:border-amber-600"
-          />
-          {errors.trade_preference && (
-            <span className="text-xs text-state-danger font-medium">{errors.trade_preference}</span>
-          )}
-          <p className="text-[11px] text-amber-700 dark:text-amber-300">
-            Specify what items, clothes, or appliances you would accept in barter. All peer trades are direct student agreements.
-          </p>
         </div>
       )}
 

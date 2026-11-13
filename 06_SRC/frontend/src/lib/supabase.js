@@ -117,7 +117,9 @@ const INITIAL_SEED = {
       condition: 'Good',
       location_label: 'Student Center Cafe',
       listing_type: 'trade',
+      trade_item_desired: 'Casio fx-991EX Calculator or Formal Blazer Size 42',
       trade_preference: 'Willing to trade for size 42 formal blazer or Casio 991EX calculator',
+      is_permanent_trade: true,
       is_active: true,
       created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 3).toISOString(),
@@ -167,6 +169,28 @@ const INITIAL_SEED = {
         'https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=600&auto=format&fit=crop&q=80',
         'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80'
       ]
+    },
+    {
+      id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
+      owner_id: '11111111-1111-1111-1111-111111111111',
+      title: 'Data Structures & Algorithms in Java (Robert Lafore)',
+      description: 'Clean reference textbook for DSA algorithms and data structures course. Traded with student peer for Galvin OS book.',
+      category: 'Textbooks & Notes',
+      condition: 'Good',
+      location_label: 'Central Library Handoff Point',
+      listing_type: 'trade',
+      trade_item_desired: 'Operating Systems Concepts (Galvin)',
+      trade_preference: 'Permanent book trade for Galvin 9th edition',
+      is_permanent_trade: true,
+      is_active: false,
+      created_at: new Date(Date.now() - 86400000 * 7).toISOString(),
+      updated_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+      images: [
+        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1532012164546-f432f2e37257?w=600&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80'
+      ]
     }
   ],
   borrow_requests: [
@@ -178,8 +202,34 @@ const INITIAL_SEED = {
       end_date: new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
       message: 'Need this for the calculus midterm exam on Friday. Will return right after.',
       status: 'pending',
+      request_type: 'borrow',
       created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
       updated_at: new Date(Date.now() - 3600000 * 4).toISOString()
+    },
+    {
+      id: 'req-trade-001',
+      item_id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
+      borrower_id: '22222222-2222-2222-2222-222222222222',
+      start_date: new Date(Date.now() - 86400000 * 3).toISOString().split('T')[0],
+      end_date: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
+      message: 'Swapped my copy of Operating Systems Concepts for this DSA Java book. Exchange completed at Library.',
+      offer_item: 'Operating Systems Concepts (Silberschatz Galvin)',
+      status: 'completed',
+      request_type: 'trade',
+      created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
+      updated_at: new Date(Date.now() - 86400000 * 2).toISOString()
+    },
+    {
+      id: 'req-borrow-001',
+      item_id: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
+      borrower_id: '11111111-1111-1111-1111-111111111111',
+      start_date: new Date(Date.now() - 86400000 * 10).toISOString().split('T')[0],
+      end_date: new Date(Date.now() - 86400000 * 6).toISOString().split('T')[0],
+      message: 'Borrowed for hostel room use during semester exam week.',
+      status: 'completed',
+      request_type: 'borrow',
+      created_at: new Date(Date.now() - 86400000 * 11).toISOString(),
+      updated_at: new Date(Date.now() - 86400000 * 6).toISOString()
     }
   ],
   notifications: [

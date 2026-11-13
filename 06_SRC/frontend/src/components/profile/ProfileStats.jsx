@@ -1,15 +1,16 @@
 import React from 'react';
-import { Package, BookOpen, CheckCheck } from 'lucide-react';
+import { Package, BookOpen, CheckCheck, ArrowLeftRight } from 'lucide-react';
 
 export const ProfileStats = ({ stats }) => {
   const cards = [
-    { label: 'Active Listings', value: stats?.listings || 0, icon: Package, color: 'text-brand-600 bg-brand-50' },
-    { label: 'Items Borrowed', value: stats?.borrowings || 0, icon: BookOpen, color: 'text-indigo-600 bg-indigo-50' },
-    { label: 'Successful Lendings', value: stats?.lendings || 0, icon: CheckCheck, color: 'text-emerald-600 bg-emerald-50' },
+    { label: 'Active Listings', value: stats?.listings || 0, icon: Package, color: 'text-brand-600 bg-brand-50 dark:bg-brand-950/40' },
+    { label: 'Completed Borrows', value: stats?.borrowings || 0, icon: BookOpen, color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/40' },
+    { label: 'Completed Lendings', value: stats?.lendings || 0, icon: CheckCheck, color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40' },
+    { label: 'Permanent Trades', value: stats?.trades || 0, icon: ArrowLeftRight, color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/40' },
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-3 my-4">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
       {cards.map((card, i) => {
         const Icon = card.icon;
         return (

@@ -129,8 +129,12 @@ export const validateItemForm = (values) => {
     errors.images = 'Please provide at least 4 photos showing the top, bottom, left side, and right side views of the item.';
   }
 
-  if (values.listing_type === 'trade' && (!values.trade_preference || values.trade_preference.trim().length < 3)) {
-    errors.trade_preference = 'Please specify what items or gear you are looking to trade or swap for.';
+  if (values.listing_type === 'trade') {
+    const hasDesired = values.trade_item_desired && values.trade_item_desired.trim().length >= 2;
+    const hasPref = values.trade_preference && values.trade_preference.trim().length >= 3;
+    if (!hasDesired && !hasPref) {
+      errors.trade_preference = 'Please specify what item you want in exchange (e.g. Casio Calculator or Formal Blazer).';
+    }
   }
 
   return {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
-import { Check, X, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { Check, X, RotateCcw, CheckCircle2, ArrowLeftRight } from 'lucide-react';
+import { requestService } from '../../services/requestService';
 
 export const RequestActions = ({
   request,
@@ -10,10 +11,12 @@ export const RequestActions = ({
   onReject,
   onCancel,
   onMarkReturn,
-  onConfirmReturn
+  onConfirmReturn,
+  onCompleteTrade
 }) => {
   const [activeAction, setActiveAction] = useState(null);
   const [loading, setLoading] = useState(false);
+  const isTrade = request.request_type === 'trade' || request.item?.listing_type === 'trade';
 
   const handleConfirm = async () => {
     setLoading(true);
@@ -23,6 +26,13 @@ export const RequestActions = ({
       if (activeAction === 'cancel') await onCancel(request.id);
       if (activeAction === 'return_pending') await onMarkReturn(request.id);
       if (activeAction === 'confirm_return') await onConfirmReturn(request.id);
+      if (activeAction === 'complete_trade') {
+        if (onCompleteTrade) {
+          await onCompleteTrade(request.id);
+        } else {
+          await requestService.completeTrade(request.id);
+        }
+      }
       setActiveAction(null);
     } catch (err) {
       alert(err.message || 'Operation failed');
@@ -32,7 +42,7 @@ export const RequestActions = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+    <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
       {/* Owner Actions for Pending Request */}
       {isOwner && request.status === 'pending' && (
         <>
@@ -43,7 +53,7 @@ export const RequestActions = ({
             className="gap-1.5"
           >
             <Check size={16} />
-            <span>Approve Request</span>
+            <span>{isTrade ? 'Approve Trade Offer' : 'Approve Request'}</span>
           </Button>
           <Button
             size="sm"
@@ -57,7 +67,7 @@ export const RequestActions = ({
         </>
       )}
 
-      {/* Borrower Action for Pending Request */}
+      {/* Requester Action for Pending Request */}
       {!isOwner && request.status === 'pending' && (
         <Button
           size="sm"
@@ -69,8 +79,21 @@ export const RequestActions = ({
         </Button>
       )}
 
-      {/* Borrower Action for Approved (Active) Borrowing */}
-      {!isOwner && request.status === 'approved' && (
+      {/* Trade Completion Action for Approved Trade (Both participants can confirm exchange) */}
+      {isTrade && request.status === 'approved' && (
+        <Button
+          size="sm"
+          variant="primary"
+          onClick={() => setActiveAction('complete_trade')}
+          className="gap-1.5 bg-amber-600 hover:bg-amber-700 text-white"
+        >
+          <ArrowLeftRight size={16} />
+          <span>Confirm Permanent Trade Completed</span>
+        </Button>
+      )}
+
+      {/* Borrower Action for Approved (Active) Borrowing (Not trade) */}
+      {!isTrade && !isOwner && request.status === 'approved' && (
         <Button
           size="sm"
           variant="primary"
@@ -82,8 +105,8 @@ export const RequestActions = ({
         </Button>
       )}
 
-      {/* Owner Action for Return Pending */}
-      {isOwner && request.status === 'return_pending' && (
+      {/* Owner Action for Return Pending (Borrowing only) */}
+      {!isTrade && isOwner && request.status === 'return_pending' && (
         <Button
           size="sm"
           variant="primary"
@@ -96,7 +119,7 @@ export const RequestActions = ({
       )}
 
       {/* Borrower view when Return is Pending */}
-      {!isOwner && request.status === 'return_pending' && (
+      {!isTrade && !isOwner && request.status === 'return_pending' && (
         <span className="text-xs text-sky-700 font-medium italic">
           Waiting for owner to inspect and confirm receipt
         </span>
@@ -105,7 +128,8 @@ export const RequestActions = ({
       {/* Completed State */}
       {request.status === 'completed' && (
         <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
-          <CheckCircle2 size={14} /> Transaction Completed
+          <CheckCircle2 size={14} />
+          <span>{isTrade ? 'Permanent Trade Completed' : 'Transaction Completed'}</span>
         </span>
       )}
 
@@ -114,8 +138,12 @@ export const RequestActions = ({
         isOpen={activeAction === 'approve'}
         onClose={() => setActiveAction(null)}
         onConfirm={handleConfirm}
-        title="Approve Borrow Request"
-        message={`Are you sure you want to approve this request for dates ${request.start_date} to ${request.end_date}? The system will verify that no overlapping approved bookings exist.`}
+        title={isTrade ? 'Approve Trade Proposal' : 'Approve Borrow Request'}
+        message={
+          isTrade
+            ? `Are you sure you want to accept this trade offer? Both parties will meet to inspect items and exchange.`
+            : `Are you sure you want to approve this request for dates ${request.start_date} to ${request.end_date}? The system will verify that no overlapping approved bookings exist.`
+        }
         confirmLabel="Approve"
         loading={loading}
       />
@@ -124,8 +152,8 @@ export const RequestActions = ({
         isOpen={activeAction === 'reject'}
         onClose={() => setActiveAction(null)}
         onConfirm={handleConfirm}
-        title="Decline Borrow Request"
-        message="Are you sure you want to decline this borrow request? This action cannot be reversed."
+        title={isTrade ? 'Decline Trade Proposal' : 'Decline Borrow Request'}
+        message="Are you sure you want to decline this request? This action cannot be reversed."
         confirmLabel="Decline"
         isDestructive
         loading={loading}
@@ -135,8 +163,8 @@ export const RequestActions = ({
         isOpen={activeAction === 'cancel'}
         onClose={() => setActiveAction(null)}
         onConfirm={handleConfirm}
-        title="Cancel Borrow Request"
-        message="Are you sure you want to cancel your pending borrow request?"
+        title="Cancel Request"
+        message="Are you sure you want to cancel your pending request?"
         confirmLabel="Cancel Request"
         isDestructive
         loading={loading}
@@ -159,6 +187,16 @@ export const RequestActions = ({
         title="Confirm Item Return"
         message="Have you inspected the item and confirmed it was returned in satisfactory condition? This will mark the transaction as completed."
         confirmLabel="Confirm Receipt"
+        loading={loading}
+      />
+
+      <ConfirmDialog
+        isOpen={activeAction === 'complete_trade'}
+        onClose={() => setActiveAction(null)}
+        onConfirm={handleConfirm}
+        title="Confirm Permanent Trade Completed"
+        message="Have both students met in person, inspected each other's items across all 4 angles, and finalized the permanent exchange? This will mark the listing as traded and permanently close the exchange."
+        confirmLabel="Confirm Permanent Trade"
         loading={loading}
       />
     </div>

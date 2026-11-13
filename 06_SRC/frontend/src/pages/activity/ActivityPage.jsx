@@ -37,6 +37,11 @@ export const ActivityPage = () => {
     await refresh();
   };
 
+  const handleCompleteTrade = async (reqId) => {
+    await requestService.completeTrade(reqId);
+    await refresh();
+  };
+
   const currentList = activeTab === 'received' ? receivedRequests : sentRequests;
   const filteredList = statusFilter === 'all'
     ? currentList
@@ -124,6 +129,7 @@ export const ActivityPage = () => {
               onCancel={handleCancel}
               onMarkReturn={handleMarkReturn}
               onConfirmReturn={handleConfirmReturn}
+              onCompleteTrade={handleCompleteTrade}
             />
           ))}
         </div>

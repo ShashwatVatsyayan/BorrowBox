@@ -310,6 +310,43 @@ export const requestService = {
 
     saveLocalDB(db);
     return req;
+  },
+
+  async completeTrade(requestId) {
+    const user = await authService.getUser();
+    if (!user) throw new Error('Authentication required.');
+
+    const db = getLocalDB();
+    const req = db.borrow_requests.find((r) => r.id === requestId);
+    if (!req) throw new Error('Request not found');
+
+    const item = db.items.find((i) => i.id === req.item_id);
+    if (!item) throw new Error('Item not found');
+
+    if (item.owner_id !== user.id && req.borrower_id !== user.id) {
+      throw new Error('Unauthorized: Only participants in this trade can confirm completion.');
+    }
+
+    req.status = 'completed';
+    req.updated_at = new Date().toISOString();
+    // Mark item as permanently traded / inactive
+    item.is_active = false;
+
+    const partnerId = user.id === item.owner_id ? req.borrower_id : item.owner_id;
+    db.notifications.unshift({
+      id: `notif-${Date.now()}`,
+      user_id: partnerId,
+      title: 'Permanent Trade Completed',
+      message: `The permanent trade exchange for "${item.title}" [Swapped for: ${req.offer_item || 'Item'}] has been confirmed completed.`,
+      type: 'trade_completed',
+      related_request_id: req.id,
+      related_item_id: item.id,
+      is_read: false,
+      created_at: new Date().toISOString()
+    });
+
+    saveLocalDB(db);
+    return req;
   }
 };
 

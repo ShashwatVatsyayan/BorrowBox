@@ -75,21 +75,32 @@ export const profileService = {
     }
 
     const db = getLocalDB();
-    const listingsCount = db.items.filter((i) => i.owner_id === userId).length;
-    const completedBorrowings = db.borrow_requests.filter(
-      (r) => r.borrower_id === userId && r.status === 'completed'
+    const userItemIds = new Set(db.items.filter((i) => i.owner_id === userId).map((i) => i.id));
+    const activeListings = db.items.filter((i) => i.owner_id === userId && i.is_active).length;
+
+    // Completed borrowings: where user was borrower and request was not a permanent trade
+    const completedBorrowings = (db.borrow_requests || []).filter(
+      (r) => r.borrower_id === userId && r.status === 'completed' && r.request_type !== 'trade'
     ).length;
 
-    // Completed lendings: where user owns the item
-    const userItemIds = new Set(db.items.filter((i) => i.owner_id === userId).map((i) => i.id));
-    const completedLendings = db.borrow_requests.filter(
-      (r) => userItemIds.has(r.item_id) && r.status === 'completed'
+    // Completed lendings: where user owned the item and request was not a permanent trade
+    const completedLendings = (db.borrow_requests || []).filter(
+      (r) => userItemIds.has(r.item_id) && r.status === 'completed' && r.request_type !== 'trade'
+    ).length;
+
+    // Completed permanent trades: where request was a trade and completed (as either party)
+    const completedTrades = (db.borrow_requests || []).filter(
+      (r) => r.request_type === 'trade' && r.status === 'completed' && (r.borrower_id === userId || userItemIds.has(r.item_id))
     ).length;
 
     return {
-      listings: listingsCount,
+      listings: activeListings,
       borrowings: completedBorrowings,
-      lendings: completedLendings
+      lendings: completedLendings,
+      trades: completedTrades,
+      total_completed: completedBorrowings + completedLendings + completedTrades,
+      trust_score: '5.0',
+      fulfillment_rate: '100%'
     };
   }
 };

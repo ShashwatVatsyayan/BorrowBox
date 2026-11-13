@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, User, Clock, ArrowLeftRight, HelpCircle, Camera, Heart, Bookmark, MessageSquare } from 'lucide-react';
 import { ClickSpark } from '../common/ClickSpark';
+import { PublicProfileModal } from '../profile/PublicProfileModal';
 import { itemService } from '../../services/itemService';
 
 export const ItemCard = ({ item }) => {
@@ -9,6 +10,7 @@ export const ItemCard = ({ item }) => {
   const [likesCount, setLikesCount] = useState(item.likes_count || 0);
   const [isSaved, setIsSaved] = useState(Boolean(item.is_saved));
   const [commentsCount] = useState(item.comments_count || 0);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const imageUrl = item.images && item.images.length > 0
     ? item.images[0]
@@ -113,10 +115,13 @@ export const ItemCard = ({ item }) => {
           </div>
         )}
 
-        {listingType === 'trade' && item.trade_preference && (
+        {listingType === 'trade' && (item.trade_item_desired || item.trade_preference) && (
           <div className="flex items-center gap-1 text-[11px] text-amber-700 dark:text-amber-400 font-medium mb-2">
             <ArrowLeftRight size={11} className="shrink-0" />
-            <span className="truncate">Trade for: {item.trade_preference}</span>
+            <span className="truncate">
+              {item.is_permanent_trade ? 'Permanent Trade: ' : 'Trade for: '}
+              {item.trade_item_desired || item.trade_preference}
+            </span>
           </div>
         )}
 
@@ -132,9 +137,25 @@ export const ItemCard = ({ item }) => {
             <MapPin size={12} className="shrink-0 text-slate-400" />
             <span className="truncate">{item.location_label}</span>
           </div>
-          <div className="flex items-center gap-1.5 truncate">
-            <User size={12} className="shrink-0 text-slate-400" />
-            <span className="truncate">{item.owner?.full_name || 'Verified Student'}</span>
+          <div className="flex items-center justify-between gap-1.5">
+            <div className="flex items-center gap-1.5 truncate">
+              <User size={12} className="shrink-0 text-slate-400" />
+              <span className="truncate">{item.owner?.full_name || 'Verified Student'}</span>
+            </div>
+            {item.owner_id && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowProfileModal(true);
+                }}
+                className="text-[10px] font-semibold text-brand-600 hover:text-brand-700 hover:underline shrink-0"
+                title="View peer profile & stats"
+              >
+                View Profile
+              </button>
+            )}
           </div>
         </div>
 
@@ -193,6 +214,15 @@ export const ItemCard = ({ item }) => {
           </button>
         </div>
       </div>
+
+      {showProfileModal && item.owner_id && (
+        <PublicProfileModal
+          isOpen={showProfileModal}
+          onClose={() => setShowProfileModal(false)}
+          userId={item.owner_id}
+          userName={item.owner?.full_name}
+        />
+      )}
     </Link>
   );
 };

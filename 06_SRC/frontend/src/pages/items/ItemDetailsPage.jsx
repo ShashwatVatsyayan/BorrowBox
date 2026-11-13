@@ -27,6 +27,7 @@ import { Input } from '../../components/common/Input';
 import { Loader } from '../../components/common/Loader';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { ClickSpark } from '../../components/common/ClickSpark';
+import { PublicProfileModal } from '../../components/profile/PublicProfileModal';
 import { itemService } from '../../services/itemService';
 import { requestService } from '../../services/requestService';
 import { reportService } from '../../services/notificationService';
@@ -77,6 +78,9 @@ export const ItemDetailsPage = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportData, setReportData] = useState({ reason: REPORT_REASONS[0], description: '' });
   const [reportSubmitted, setReportSubmitted] = useState(false);
+
+  // Peer public profile modal state
+  const [isPublicProfileOpen, setIsPublicProfileOpen] = useState(false);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -428,15 +432,36 @@ export const ItemDetailsPage = () => {
           {/* Listing Intent Highlight Box */}
           {listingType === 'trade' && (
             <div className="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/50">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide mb-1">
-                <ArrowLeftRight size={14} />
-                <span>Trade / Barter Preference</span>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide">
+                  <ArrowLeftRight size={14} />
+                  <span>
+                    {item.is_permanent_trade ? 'Permanent Trade: I Will Trade This For That' : 'Trade / Barter Preference'}
+                  </span>
+                </div>
+                {item.is_permanent_trade && (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white tracking-wide uppercase">
+                    Permanent Swap (No Return)
+                  </span>
+                )}
               </div>
-              <p className="text-sm font-semibold text-ink-primary">
-                {item.trade_preference || 'Open to equal value barter (clothes, shoes, gadgets, or course gear).'}
-              </p>
-              <p className="text-[11px] text-ink-muted mt-1.5">
-                Propose an item you wish to swap in exchange. Physical trade condition must be verified by both students upon meeting.
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-ink-primary">
+                  Desired Item:{' '}
+                  <span className="text-purple-900 dark:text-purple-200 font-bold">
+                    {item.trade_item_desired || item.trade_preference || 'Open to equal value barter (clothes, shoes, gadgets, or course gear)'}
+                  </span>
+                </p>
+                {item.trade_preference && item.trade_item_desired && (
+                  <p className="text-xs text-ink-muted">
+                    Additional notes: {item.trade_preference}
+                  </p>
+                )}
+              </div>
+              <p className="text-[11px] text-ink-muted mt-2">
+                {item.is_permanent_trade
+                  ? 'This is a permanent ownership trade: both students permanently keep what they trade, with no return required. Condition must be inspected across all 4 angles upon campus meetup.'
+                  : 'Propose an item you wish to swap in exchange. Physical trade condition must be verified by both students upon meeting.'}
               </p>
             </div>
           )}
@@ -489,19 +514,34 @@ export const ItemDetailsPage = () => {
           </div>
 
           {/* Owner Info Preview */}
-          <div className="flex items-center justify-between p-3.5 rounded-xl border border-surface-border bg-surface-card">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-surface-border bg-surface-card gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm">
+              <div className="w-11 h-11 rounded-full bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm shrink-0">
                 {item.owner?.full_name?.charAt(0) || 'U'}
               </div>
-              <div>
-                <p className="text-xs font-bold text-ink-primary">{item.owner?.full_name || 'Verified Student'}</p>
-                <p className="text-[11px] text-ink-muted">{item.owner?.university_email}</p>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-bold text-ink-primary truncate">{item.owner?.full_name || 'Verified Student'}</p>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+                    Verified Campus Peer
+                  </span>
+                </div>
+                <p className="text-xs text-ink-muted truncate">{item.owner?.university_email}</p>
               </div>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Verified Campus Peer
-            </span>
+
+            <div className="flex items-center gap-2 shrink-0">
+              {item.owner_id && (
+                <button
+                  type="button"
+                  onClick={() => setIsPublicProfileOpen(true)}
+                  className="px-3 py-1.5 rounded-lg border border-surface-border hover:border-brand-500 text-xs font-semibold text-ink-primary hover:text-brand-600 bg-surface-base transition-colors flex items-center gap-1.5"
+                >
+                  <User size={13} className="text-brand-600" />
+                  <span>View Student Profile &amp; Stats</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* In-Person Verification & Zero-Fault Platform Disclaimer */}
@@ -659,11 +699,23 @@ export const ItemDetailsPage = () => {
             {/* Trade specifics */}
             {listingType === 'trade' && (
               <div className="flex flex-col gap-3">
+                <div className="p-3 rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 text-xs">
+                  <p className="font-semibold text-purple-900 dark:text-purple-200">
+                    Owner is looking for:{' '}
+                    <span className="font-bold">{item.trade_item_desired || item.trade_preference || 'Equal value exchange'}</span>
+                  </p>
+                  {item.is_permanent_trade && (
+                    <p className="text-[11px] text-purple-700 dark:text-purple-300 mt-1">
+                      Permanent ownership trade: once agreed, both students keep the exchanged items permanently.
+                    </p>
+                  )}
+                </div>
+
                 <Input
                   label="What item are you offering to swap?"
                   id="offerItem"
                   type="text"
-                  placeholder="e.g. Navy Blue Blazer Size 42, Nike Air Max 8, or JBL Earbuds"
+                  placeholder="e.g. Navy Blue Blazer Size 42, Casio fx-991CW, or Nike Shoes"
                   value={requestDates.offerItem}
                   onChange={(e) => setRequestDates({ ...requestDates, offerItem: e.target.value })}
                   required
@@ -678,7 +730,7 @@ export const ItemDetailsPage = () => {
                     placeholder="Mention the condition of your item, sizes, and preferred campus meetup area..."
                     value={requestDates.message}
                     onChange={(e) => setRequestDates({ ...requestDates, message: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-surface-border text-ink-primary text-xs outline-none focus:border-brand-600"
+                    className="w-full px-3 py-2 rounded-lg border border-surface-border text-ink-primary text-xs outline-none focus:border-brand-600 bg-surface-card"
                   />
                 </div>
               </div>
@@ -817,6 +869,15 @@ export const ItemDetailsPage = () => {
           </form>
         )}
       </Modal>
+
+      {/* Public Profile & Holographic Pass Modal */}
+      {isPublicProfileOpen && item.owner_id && (
+        <PublicProfileModal
+          isOpen={isPublicProfileOpen}
+          onClose={() => setIsPublicProfileOpen(false)}
+          userId={item.owner_id}
+        />
+      )}
     </PageContainer>
   );
 };
