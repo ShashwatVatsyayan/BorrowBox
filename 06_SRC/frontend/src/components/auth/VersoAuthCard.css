@@ -1,0 +1,514 @@
+/* ==========================================================================
+   Verso Skewed Blade Authentication Card Styles
+   Inspired by the Verso editorial diagonal transition
+   ========================================================================== */
+
+:root {
+  --verso-bg-page: #080C0A;
+  --verso-surface-card: #F5F2EB;
+  --verso-text-main: #1A1A1A;
+  --verso-text-muted: #666666;
+  --verso-text-light: #8A8A8A;
+  --verso-border-input: #CCCCCC;
+
+  --verso-blade-start: #0F382A;
+  --verso-blade-end: #061F17;
+  --verso-blade-gradient: linear-gradient(135deg, #0F382A 0%, #061F17 100%);
+  --verso-blade-text: #F5F2EB;
+
+  --verso-accent-gold: #D4A853;
+  --verso-accent-gold-glow: rgba(212, 168, 83, 0.42);
+
+  --verso-btn-primary: #0F382A;
+  --verso-btn-primary-hover: #164e3b;
+
+  --verso-font-serif: 'Playfair Display', Georgia, serif;
+  --verso-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --verso-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  --verso-duration: 750ms;
+}
+
+/* Page Outer Container */
+.verso-page-container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--verso-bg-page);
+  color: var(--verso-text-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  position: relative;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+/* Ambient Radial Glow */
+.verso-ambient-glow {
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(15, 56, 42, 0.4) 0%, rgba(8, 12, 10, 0) 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(48px);
+}
+
+.verso-card-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Base Verso Card */
+.verso-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background: var(--verso-surface-card);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop (>= 768px): 2-Column Grid
+   -------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .verso-card {
+    height: 600px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile (< 768px): Single Column Vertical Stack
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .verso-card {
+    max-width: 420px;
+    min-height: 660px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Form Panes */
+.verso-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.25rem 2.5rem;
+  background: var(--verso-surface-card);
+  transition: opacity 280ms ease;
+}
+
+.verso-pane[inert] {
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .verso-pane {
+    height: 100%;
+    overflow-y: auto;
+  }
+  .verso-pane--signin {
+    grid-column: 1 / 2;
+  }
+  .verso-pane--signup {
+    grid-column: 2 / 3;
+  }
+  .verso-card.is-signin .verso-pane--signup {
+    opacity: 0;
+  }
+  .verso-card.is-signup .verso-pane--signin {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .verso-pane {
+    padding: 1.75rem 1.5rem calc(2rem + env(safe-area-inset-bottom, 0px));
+    flex: 1;
+    overflow-y: auto;
+  }
+  .verso-card.is-signin .verso-pane--signup {
+    display: none;
+  }
+  .verso-card.is-signup .verso-pane--signin {
+    display: none;
+  }
+}
+
+/* Typography Inside Forms */
+.verso-pane-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--verso-blade-start);
+  margin-bottom: 0.25rem;
+  display: inline-block;
+}
+
+.verso-pane-title {
+  font-family: var(--verso-font-serif);
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--verso-text-main);
+  letter-spacing: -0.02em;
+}
+
+.verso-pane-subtitle {
+  font-size: 0.8125rem;
+  color: var(--verso-text-muted);
+  margin-top: 0.35rem;
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+}
+
+/* Bottom-Border Inputs with Animated Focus State */
+.verso-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.15rem;
+  position: relative;
+}
+
+.verso-input-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--verso-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.verso-input {
+  width: 100%;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--verso-border-input);
+  color: var(--verso-text-main);
+  font-family: var(--verso-font-sans);
+  font-size: 0.9375rem;
+  outline: none;
+  border-radius: 0;
+  padding: 0 0.25rem;
+  transition: border-color 0.25s ease, border-width 0.1s ease;
+}
+
+.verso-input:focus {
+  border-bottom: 2px solid var(--verso-blade-start);
+}
+
+.verso-input::placeholder {
+  color: var(--verso-text-light);
+  font-size: 0.875rem;
+}
+
+.verso-input[readonly] {
+  color: var(--verso-text-muted);
+  cursor: not-allowed;
+  border-bottom-style: dashed;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Pill-Shaped Primary Submit Button */
+.verso-btn-submit {
+  width: 100%;
+  height: 46px;
+  border-radius: 999px;
+  background: var(--verso-btn-primary);
+  color: #FFFFFF;
+  border: none;
+  font-family: var(--verso-font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 0.5rem;
+  touch-action: manipulation;
+}
+
+.verso-btn-submit:hover:not(:disabled) {
+  background: var(--verso-btn-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(15, 56, 42, 0.25);
+}
+
+.verso-btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.verso-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   The Skewed Blade (Verso Overlying Band)
+   ========================================================================== */
+.auth_band {
+  position: absolute;
+  background: var(--verso-blade-gradient);
+  color: var(--verso-blade-text);
+  z-index: 10;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, left, width, height, top;
+}
+
+/* Inverse Transform Wrapper: cancels skew/distortions so copy remains upright */
+.band_inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.25rem;
+  will-change: transform, opacity;
+  transition: opacity 250ms ease;
+}
+
+.band_tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--verso-accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.band_title {
+  font-family: var(--verso-font-serif);
+  font-size: 2.25rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #F5F2EB;
+  margin-bottom: 0.75rem;
+}
+
+.band_desc {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(245, 242, 235, 0.78);
+  margin-bottom: 1.5rem;
+  max-width: 320px;
+}
+
+.band_btn {
+  height: 42px;
+  padding: 0 1.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--verso-accent-gold);
+  background: rgba(212, 168, 83, 0.12);
+  color: #F5F2EB;
+  font-family: var(--verso-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  touch-action: manipulation;
+}
+
+.band_btn:hover {
+  background: var(--verso-accent-gold);
+  color: #080C0A;
+  box-shadow: 0 8px 24px var(--verso-accent-gold-glow);
+  transform: translateY(-1px);
+}
+
+/* Desktop Skewed Blade */
+@media (min-width: 768px) {
+  .auth_band {
+    top: -12%;
+    bottom: -12%;
+    height: 124%;
+    width: 54%;
+    transform: skewX(-8deg);
+    transform-origin: center center;
+    transition: left var(--verso-duration) var(--verso-easing),
+                width var(--verso-duration) var(--verso-easing),
+                box-shadow var(--verso-duration) var(--verso-easing);
+  }
+
+  .band_inner {
+    transform: skewX(8deg); /* Perfect Inverse Skew */
+  }
+
+  /* Resting in Sign-In Mode (Blade on the right) */
+  .verso-card.is-signin .auth_band {
+    left: 48%;
+    box-shadow: -6px 0 28px var(--verso-accent-gold-glow), inset 2px 0 0 var(--verso-accent-gold);
+  }
+
+  /* Resting in Sign-Up Mode (Blade on the left) */
+  .verso-card.is-signup .auth_band {
+    left: -2%;
+    box-shadow: 6px 0 28px var(--verso-accent-gold-glow), inset -2px 0 0 var(--verso-accent-gold);
+  }
+
+  /* Mid-Transition Sweep State (covers 100% of card) */
+  .verso-card.is-sweeping .auth_band {
+    left: -6% !important;
+    width: 112% !important;
+  }
+}
+
+/* Mobile Skewed Blade */
+@media (max-width: 767.98px) {
+  .auth_band {
+    top: 0;
+    left: -8%;
+    width: 116%;
+    height: 33%;
+    transform: skewY(-4deg);
+    transform-origin: top left;
+    box-shadow: 0 6px 24px var(--verso-accent-gold-glow), inset 0 -2px 0 var(--verso-accent-gold);
+    transition: height var(--verso-duration) var(--verso-easing);
+  }
+
+  .band_inner {
+    transform: skewY(4deg); /* Perfect Inverse Skew */
+    padding: 1.5rem 1.25rem 1rem;
+  }
+
+  .band_title {
+    font-size: 1.625rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .band_desc {
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+    max-width: 260px;
+  }
+
+  .band_btn {
+    height: 36px;
+    padding: 0 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  /* Mid-Transition Sweep State: stretches down across 100% of vertical card */
+  .verso-card.is-sweeping .auth_band {
+    height: 116% !important;
+  }
+}
+
+/* Quick Switch on Mobile under form */
+.verso-mobile-switch {
+  display: none;
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--verso-text-muted);
+}
+
+@media (max-width: 767.98px) {
+  .verso-mobile-switch {
+    display: block;
+  }
+}
+
+.verso-mobile-switch-btn {
+  background: none;
+  border: none;
+  color: var(--verso-blade-start);
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.25rem;
+}
+
+/* One-Click Evaluator Presets */
+.verso-demo-presets {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.verso-demo-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--verso-text-muted);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.verso-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.verso-demo-btn {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.verso-demo-btn:hover {
+  background: rgba(15, 56, 42, 0.06);
+  border-color: var(--verso-blade-start);
+}
+
+.verso-demo-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--verso-text-main);
+}
+
+.verso-demo-sub {
+  font-size: 0.625rem;
+  color: var(--verso-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .auth_band,
+  .band_inner,
+  .verso-pane {
+    transition-duration: 0.01ms !important;
+  }
+}
