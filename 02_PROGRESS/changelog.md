@@ -44,3 +44,4 @@ This file logs every meaningful change in the project.
 - Updated navigation headers, login, signup, forgot password, and email verification pages with official branding.
 - Updated HTML favicon and touch icons.
 - Verified production build (`npm run build`) with zero errors.
+- Installed `gravitas` reliability runtime skill to `.agents/skills/gravitas` for Antigravity agent execution.

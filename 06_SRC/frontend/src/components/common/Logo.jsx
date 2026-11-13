@@ -41,3 +41,4 @@ export const Logo = ({ size = 'md', showText = true, to = '/app', className = ''
 
   return content;
 };
+
