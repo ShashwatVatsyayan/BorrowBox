@@ -10,16 +10,42 @@
   --color-ink-primary: #172033;
   --color-ink-muted: #64748B;
   --color-ink-light: #94A3B8;
+
+  --color-brand-50: #FFF7ED;
+  --color-brand-100: #FFEDD5;
+  --color-brand-200: #FED7AA;
+  --color-brand-300: #FDBA74;
+  --color-brand-400: #FB923C;
+  --color-brand-500: #F97316;
+  --color-brand-600: #EA580C;
+  --color-brand-700: #C2410C;
+  --color-brand-800: #9A3412;
+  --color-brand-900: #7C2D12;
+  --color-brand-950: #431407;
 }
 
 html.dark {
   color-scheme: dark;
-  --color-surface-base: #0B0F19;
-  --color-surface-card: #131B2E;
-  --color-surface-border: #1E293B;
-  --color-ink-primary: #F8FAFC;
-  --color-ink-muted: #94A3B8;
-  --color-ink-light: #64748B;
+  /* Pitch-black OLED base and ultra-deep black card surfaces */
+  --color-surface-base: #000000;
+  --color-surface-card: #09090b;
+  --color-surface-border: #1f1f23;
+  --color-ink-primary: #ffffff;
+  --color-ink-muted: #a1a1aa;
+  --color-ink-light: #71717a;
+
+  /* Vibrant Orange Accent and Highlight Palette */
+  --color-brand-50: #1b0c03;
+  --color-brand-100: #341605;
+  --color-brand-200: #542207;
+  --color-brand-300: #83340b;
+  --color-brand-400: #c2410c;
+  --color-brand-500: #f97316;
+  --color-brand-600: #ff6b00; /* Electrifying university orange highlight */
+  --color-brand-700: #ff781f; /* Luminous hover */
+  --color-brand-800: #ea580c;
+  --color-brand-900: #9a3412;
+  --color-brand-950: #130602;
 }
 
 body {
@@ -42,7 +68,7 @@ body {
 }
 
 html.dark ::-webkit-scrollbar-track {
-  background: #0B0F19;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -51,7 +77,7 @@ html.dark ::-webkit-scrollbar-track {
 }
 
 html.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #27272a;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -59,12 +85,12 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 
 html.dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #ff6b00;
 }
 
 /* Accessible focus styling */
 *:focus-visible {
-  outline: 2px solid #0D9488;
+  outline: 2px solid #ff6b00;
   outline-offset: 2px;
 }
 
@@ -98,7 +124,5 @@ html.theme-fade *::after {
     border-color var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
     color var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
     fill var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
-    stroke var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1) !important;
+    stroke var(--theme-fade, 0.45s) cubic-bezier(0.22, 1, 0.36, 1);
 }
-

@@ -9,13 +9,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#F0FDFA',
-          100: '#CCFBF1',
-          500: '#14B8A6',
-          600: '#0D9488', // PRD Primary
-          700: '#0F766E', // PRD Primary Hover
-          800: '#115E59',
-          900: '#134E4A',
+          50: 'var(--color-brand-50, #FFF7ED)',
+          100: 'var(--color-brand-100, #FFEDD5)',
+          200: 'var(--color-brand-200, #FED7AA)',
+          300: 'var(--color-brand-300, #FDBA74)',
+          400: 'var(--color-brand-400, #FB923C)',
+          500: 'var(--color-brand-500, #F97316)',
+          600: 'var(--color-brand-600, #EA580C)', // Vibrant Orange Highlight
+          700: 'var(--color-brand-700, #C2410C)',
+          800: 'var(--color-brand-800, #9A3412)',
+          900: 'var(--color-brand-900, #7C2D12)',
+          950: 'var(--color-brand-950, #431407)',
         },
         ink: {
           primary: 'var(--color-ink-primary, #172033)',
@@ -40,4 +44,3 @@ export default {
   },
   plugins: [],
 }
-

@@ -21,22 +21,22 @@ export const RouterPillLink = ({ href, children, ...rest }) => {
 
 const THEMES = {
   dark: {
-    '--pn-surface': 'rgba(38, 35, 46, 0.66)',
-    '--pn-solid': '#26232e',
-    '--pn-edge': 'rgba(255, 255, 255, 0.08)',
-    '--pn-rim': 'rgba(255, 255, 255, 0.07)',
-    '--pn-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
-    '--pn-text': 'rgba(244, 244, 245, 0.64)',
-    '--pn-strong': '#f4f4f5',
-    '--pn-pill': 'linear-gradient(180deg, #ffffff 0%, #ebebf0 100%)',
-    '--pn-pill-ink': '#121016',
-    '--pn-pill-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 6px 16px -6px rgba(0, 0, 0, 0.6)',
-    '--pn-dot': '#f4f4f5',
-    '--pn-ring': 'rgba(244, 244, 245, 0.55)',
-    '--pn-row-hover': 'rgba(255, 255, 255, 0.06)',
-    '--pn-tile': 'linear-gradient(180deg, #3a3644 0%, #27242f 100%)',
+    '--pn-surface': 'rgba(9, 9, 11, 0.92)',
+    '--pn-solid': '#000000',
+    '--pn-edge': 'rgba(255, 107, 0, 0.28)',
+    '--pn-rim': 'rgba(255, 107, 0, 0.22)',
+    '--pn-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.98), 0 6px 18px -8px rgba(255, 107, 0, 0.25)',
+    '--pn-text': 'rgba(244, 244, 245, 0.7)',
+    '--pn-strong': '#ffffff',
+    '--pn-pill': 'linear-gradient(180deg, #ff7a00 0%, #ea580c 100%)',
+    '--pn-pill-ink': '#ffffff',
+    '--pn-pill-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 20px -4px rgba(255, 107, 0, 0.65)',
+    '--pn-dot': '#ff7a00',
+    '--pn-ring': 'rgba(255, 107, 0, 0.6)',
+    '--pn-row-hover': 'rgba(255, 107, 0, 0.12)',
+    '--pn-tile': 'linear-gradient(180deg, #18181b 0%, #09090b 100%)',
     '--pn-tile-rim':
-      'inset 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 10px -4px rgba(0, 0, 0, 0.7)'
+      'inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 107, 0, 0.35), 0 4px 10px -4px rgba(0, 0, 0, 0.95)'
   },
   light: {
     '--pn-surface': 'rgba(240, 240, 243, 0.8)',
@@ -753,7 +753,19 @@ export const PillNav = ({
         <span ref={logoRef} className={[LOGO, joined ? '' : SURFACE].filter(Boolean).join(' ')}>
           <LinkComponent href={logoHref} className={LOGO_LINK} aria-label={logoAlt} onPointerEnter={spin}>
             <span ref={markRef} className={MARK}>
-              {typeof logo === 'string' ? <img src={logo} alt="" draggable={false} /> : logo}
+              {typeof logo === 'string' ? (
+                <>
+                  <img src={logo} alt="" draggable={false} className="block dark:hidden w-full h-full object-contain" />
+                  <img
+                    src="/logo-dark.png"
+                    alt=""
+                    draggable={false}
+                    className="hidden dark:block w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,107,0,0.55)]"
+                  />
+                </>
+              ) : (
+                logo
+              )}
             </span>
           </LinkComponent>
           {!joined && <span className={RIM} />}
