@@ -80,3 +80,4 @@ export const CookieConsentBanner = () => {
 };
 
 export default CookieConsentBanner;
+

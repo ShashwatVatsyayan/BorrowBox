@@ -89,3 +89,4 @@ export default {
   trackEvent,
   CONSENT_STATUS
 };
+

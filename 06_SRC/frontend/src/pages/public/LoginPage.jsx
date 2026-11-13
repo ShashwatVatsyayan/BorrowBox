@@ -7,6 +7,7 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { AuthTunnelTransition } from '../../components/common/AuthTunnelTransition';
+import { validatePassword } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 
 export const LoginPage = () => {
@@ -31,6 +32,13 @@ export const LoginPage = () => {
       setError('Please provide both university email and password.');
       return;
     }
+
+    const passCheck = validatePassword(password);
+    if (!passCheck.valid) {
+      setError(passCheck.error);
+      return;
+    }
+
     setError(null);
     setLoading(true);
     try {
@@ -115,6 +123,7 @@ export const LoginPage = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                helperText="At least 8 letters with uppercase, lowercase, number, and special character"
                 required
               />
               <button

@@ -1,4 +1,4 @@
-import { CATEGORIES, CONDITIONS, DEFAULT_ALLOWED_DOMAINS } from './constants';
+import { CATEGORIES, CONDITIONS, DEFAULT_ALLOWED_DOMAINS } from './constants.js';
 
 export const validateEmail = (email, allowedDomains = DEFAULT_ALLOWED_DOMAINS) => {
   if (!email || typeof email !== 'string') {
@@ -23,11 +23,80 @@ export const validateEmail = (email, allowedDomains = DEFAULT_ALLOWED_DOMAINS) =
   return { valid: true };
 };
 
+/**
+ * Evaluates individual password complexity criteria.
+ * Rules:
+ * 1. Minimum 8 characters long
+ * 2. At least one uppercase letter (A-Z)
+ * 3. At least one lowercase letter (a-z)
+ * 4. At least one number (0-9)
+ * 5. At least one special character (!@#$%^&*...)
+ */
+export const getPasswordCriteria = (password = '') => {
+  const p = typeof password === 'string' ? password : '';
+  return {
+    minLength: p.length >= 8,
+    hasUpper: /[A-Z]/.test(p),
+    hasLower: /[a-z]/.test(p),
+    hasNumber: /[0-9]/.test(p),
+    hasSpecial: /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/~`';]/.test(p)
+  };
+};
+
 export const validatePassword = (password) => {
-  if (!password || password.length < 8) {
-    return { valid: false, error: 'Password must be at least 8 characters long.' };
+  if (!password || typeof password !== 'string') {
+    return {
+      valid: false,
+      error: 'Password is required.',
+      criteria: {
+        minLength: false,
+        hasUpper: false,
+        hasLower: false,
+        hasNumber: false,
+        hasSpecial: false
+      }
+    };
   }
-  return { valid: true };
+
+  const criteria = getPasswordCriteria(password);
+
+  if (!criteria.minLength) {
+    return {
+      valid: false,
+      error: 'Password must be at least 8 characters long.',
+      criteria
+    };
+  }
+  if (!criteria.hasUpper) {
+    return {
+      valid: false,
+      error: 'Password must contain at least one capital letter (A-Z).',
+      criteria
+    };
+  }
+  if (!criteria.hasLower) {
+    return {
+      valid: false,
+      error: 'Password must contain at least one small letter (a-z).',
+      criteria
+    };
+  }
+  if (!criteria.hasNumber) {
+    return {
+      valid: false,
+      error: 'Password must contain at least one number (0-9).',
+      criteria
+    };
+  }
+  if (!criteria.hasSpecial) {
+    return {
+      valid: false,
+      error: 'Password must contain at least one special character (e.g. !@#$%^&*).',
+      criteria
+    };
+  }
+
+  return { valid: true, criteria };
 };
 
 export const validateItemForm = (values) => {

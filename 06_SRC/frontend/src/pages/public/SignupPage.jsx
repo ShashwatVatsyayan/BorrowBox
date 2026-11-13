@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { AuthTunnelTransition } from '../../components/common/AuthTunnelTransition';
-import { validateEmail, validatePassword } from '../../utils/validators';
+import { validateEmail, validatePassword, getPasswordCriteria } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 
 export const SignupPage = () => {
@@ -178,6 +179,40 @@ export const SignupPage = () => {
                 required
               />
             </div>
+
+            {/* Live Password Complexity Checklist */}
+            {(() => {
+              const criteria = getPasswordCriteria(formData.password);
+              return (
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-surface-border text-xs space-y-1.5">
+                  <p className="font-semibold text-[11px] text-ink-muted uppercase tracking-wider">
+                    Password Security Requirements
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]">
+                    <div className={`flex items-center gap-1.5 transition-colors ${criteria.minLength ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-ink-muted'}`}>
+                      <Check size={12} className={criteria.minLength ? 'text-emerald-600 opacity-100' : 'opacity-30'} />
+                      <span>8+ letters long</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 transition-colors ${criteria.hasUpper ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-ink-muted'}`}>
+                      <Check size={12} className={criteria.hasUpper ? 'text-emerald-600 opacity-100' : 'opacity-30'} />
+                      <span>1 capital letter</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 transition-colors ${criteria.hasLower ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-ink-muted'}`}>
+                      <Check size={12} className={criteria.hasLower ? 'text-emerald-600 opacity-100' : 'opacity-30'} />
+                      <span>1 small letter</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 transition-colors ${criteria.hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-ink-muted'}`}>
+                      <Check size={12} className={criteria.hasNumber ? 'text-emerald-600 opacity-100' : 'opacity-30'} />
+                      <span>1 number</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 sm:col-span-2 transition-colors ${criteria.hasSpecial ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-ink-muted'}`}>
+                      <Check size={12} className={criteria.hasSpecial ? 'text-emerald-600 opacity-100' : 'opacity-30'} />
+                      <span>1 special character</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             <div className="flex items-start gap-2 pt-1">
               <input

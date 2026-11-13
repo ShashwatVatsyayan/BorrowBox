@@ -173,3 +173,4 @@ export const CookiePolicyPage = () => {
 };
 
 export default CookiePolicyPage;
+
