@@ -4,9 +4,12 @@ import { PageContainer } from '../../components/layout/PageContainer';
 import { ItemFilters } from '../../components/items/ItemFilters';
 import { ItemGrid } from '../../components/items/ItemGrid';
 import { Loader } from '../../components/common/Loader';
+import { SkeletonGrid } from '../../components/common/Skeleton';
 import { useItems } from '../../hooks/useItems';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const ExplorePage = () => {
+  usePageTitle('Explore Campus Gear');
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || 'All';
   const initialSearch = searchParams.get('search') || '';
@@ -50,7 +53,9 @@ export const ExplorePage = () => {
       />
 
       {loading ? (
-        <Loader label="Searching listings..." fullPage />
+        <div className="py-4">
+          <SkeletonGrid count={6} />
+        </div>
       ) : (
         <ItemGrid items={items} onResetFilters={handleClear} />
       )}

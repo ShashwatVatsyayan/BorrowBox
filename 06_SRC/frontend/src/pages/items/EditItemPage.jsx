@@ -6,8 +6,10 @@ import { Loader } from '../../components/common/Loader';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { itemService } from '../../services/itemService';
 import { useAuth } from '../../hooks/useAuth';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const EditItemPage = () => {
+  usePageTitle('Edit Listing');
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();

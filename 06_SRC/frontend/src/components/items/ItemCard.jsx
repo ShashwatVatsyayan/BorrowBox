@@ -45,7 +45,7 @@ export const ItemCard = ({ item }) => {
   return (
     <Link
       to={`/app/items/${item.id}`}
-      className="group flex flex-col bg-surface-card rounded-2xl border border-surface-border overflow-hidden hover:shadow-md hover:border-brand-400 transition-all duration-200"
+      className="group flex flex-col bg-surface-card rounded-2xl border border-surface-border overflow-hidden interactive-card"
     >
       {/* Item Image with Fixed Ratio */}
       <div className="relative aspect-[4/3] w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
@@ -59,19 +59,19 @@ export const ItemCard = ({ item }) => {
         {/* Listing Type Badge */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 items-start">
           {listingType === 'trade' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#D4A853] text-[#080C0A] shadow-xs">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4A853] text-[#080C0A] shadow-xs">
               <ArrowLeftRight size={10} />
               <span>{item.is_permanent_trade ? 'Permanent Trade' : 'For Trade'}</span>
             </span>
           )}
           {listingType === 'wanted' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-600 text-white shadow-xs">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#0F382A] text-[#D4A853] border border-[#D4A853]/40 shadow-xs">
               <HelpCircle size={10} />
               <span>Wanted</span>
             </span>
           )}
           {listingType === 'borrow' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-600 text-white shadow-xs">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white shadow-xs">
               <Clock size={10} />
               <span>To Borrow</span>
             </span>
@@ -126,8 +126,8 @@ export const ItemCard = ({ item }) => {
         )}
 
         {listingType === 'wanted' && item.needed_by && (
-          <div className="flex items-center gap-1 text-[11px] text-indigo-700 dark:text-indigo-400 font-medium mb-2">
-            <HelpCircle size={11} className="shrink-0" />
+          <div className="flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-400 font-medium mb-2">
+            <HelpCircle size={11} className="shrink-0 text-[#D4A853]" />
             <span className="truncate">{item.needed_by}</span>
           </div>
         )}

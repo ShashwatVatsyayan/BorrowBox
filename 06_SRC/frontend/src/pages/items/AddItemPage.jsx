@@ -4,8 +4,10 @@ import { PageContainer } from '../../components/layout/PageContainer';
 import { ItemForm } from '../../components/items/ItemForm';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { itemService } from '../../services/itemService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const AddItemPage = () => {
+  usePageTitle('List an Item');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

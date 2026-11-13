@@ -7,10 +7,12 @@ import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { PillNav } from '../../components/common/PillNav';
 import { SiteIntroSplash } from '../../components/common/SiteIntroSplash';
 import { useTheme } from '../../context/ThemeContext';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 let hasShownIntroOnOpen = false;
 
 export const LandingPage = () => {
+  usePageTitle('Campus Peer Lending');
   const { resolvedTheme } = useTheme();
   const location = useLocation();
 

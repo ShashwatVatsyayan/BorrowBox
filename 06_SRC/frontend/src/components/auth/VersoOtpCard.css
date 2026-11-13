@@ -25,7 +25,7 @@
   --otp-btn-primary-hover: #164e3b;
 
   --otp-font-serif: 'Playfair Display', Georgia, serif;
-  --otp-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --otp-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --otp-easing: cubic-bezier(0.65, 0, 0.35, 1);
 }

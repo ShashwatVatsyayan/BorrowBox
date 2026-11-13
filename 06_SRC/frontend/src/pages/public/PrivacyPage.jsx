@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Shield, Lock, Eye, Database, Trash2, ExternalLink } from 'lucide-react';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const PrivacyPage = () => {
+  usePageTitle('Privacy Policy');
   return (
     <div className="min-h-screen bg-surface-base flex flex-col">
       {/* Top Header */}

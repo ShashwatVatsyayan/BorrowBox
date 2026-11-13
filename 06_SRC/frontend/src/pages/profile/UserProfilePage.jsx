@@ -9,12 +9,14 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { profileService } from '../../services/profileService';
 import { itemService } from '../../services/itemService';
 import { generateStudentCardSvg } from '../../utils/studentCardArt';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const UserProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
+  usePageTitle(profile?.full_name ? `${profile.full_name}'s Profile` : 'Student Profile');
   const [stats, setStats] = useState(null);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -139,7 +141,7 @@ export const UserProfilePage = () => {
           {/* Peer Stats Record Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-surface-border">
             <div className="p-3 rounded-xl bg-surface-base border border-surface-border text-center">
-              <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 flex items-center justify-center mx-auto mb-1">
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto mb-1">
                 <BookOpen size={15} />
               </div>
               <span className="text-lg font-black text-ink-primary">{stats?.borrowings || 0}</span>

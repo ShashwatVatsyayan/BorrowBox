@@ -7,8 +7,10 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { Loader } from '../../components/common/Loader';
 import { useNotifications } from '../../hooks/useNotifications';
 import { formatRelativeTime } from '../../utils/dateUtils';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const NotificationsPage = () => {
+  usePageTitle('Notifications');
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications();
 
   return (

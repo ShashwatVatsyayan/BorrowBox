@@ -8,8 +8,10 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { Loader } from '../../components/common/Loader';
 import { useAuth } from '../../hooks/useAuth';
 import { profileService } from '../../services/profileService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const EditProfilePage = () => {
+  usePageTitle('Edit Profile');
   const { user, updateUserData } = useAuth();
   const navigate = useNavigate();
 

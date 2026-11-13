@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { RequestCard } from '../../components/requests/RequestCard';
 import { Loader } from '../../components/common/Loader';
 import { EmptyState } from '../../components/common/EmptyState';
 import { useRequests } from '../../hooks/useRequests';
 import { requestService } from '../../services/requestService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import { Clock } from 'lucide-react';
 
 export const ActivityPage = () => {
+  usePageTitle('Activity & Requests');
+  const navigate = useNavigate();
   const { sentRequests, receivedRequests, loading, refresh } = useRequests();
   const [activeTab, setActiveTab] = useState('received'); // 'received' (as owner) or 'sent' (as borrower)
   const [statusFilter, setStatusFilter] = useState('all');
@@ -114,8 +118,10 @@ export const ActivityPage = () => {
           description={
             activeTab === 'received'
               ? 'You have not received any requests matching this filter.'
-              : 'You have not submitted any requests matching this filter.'
+              : 'You have not submitted any borrow or trade requests yet.'
           }
+          actionLabel="Explore Campus Gear"
+          onAction={() => navigate('/app/explore')}
         />
       ) : (
         <div className="flex flex-col gap-3.5">

@@ -181,9 +181,9 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
       )}
 
       {formData.listing_type === 'wanted' && (
-        <div className="flex flex-col gap-1.5 p-3.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800">
-          <label htmlFor="needed_by" className="text-xs font-bold text-indigo-800 dark:text-indigo-400 flex items-center gap-1.5">
-            <HelpCircle size={14} />
+        <div className="flex flex-col gap-1.5 p-3.5 rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800">
+          <label htmlFor="needed_by" className="text-xs font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
+            <HelpCircle size={14} className="text-[#D4A853]" />
             <span>Needed By Date / Context</span>
           </label>
           <input
@@ -192,9 +192,9 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Listi
             placeholder="e.g. Needed by Friday for TCS placement interview or Chemistry lab on Monday"
             value={formData.needed_by}
             onChange={(e) => handleChange('needed_by', e.target.value)}
-            className="w-full min-h-[42px] px-3.5 py-2 rounded-lg border border-indigo-300 dark:border-indigo-700 bg-surface-card text-ink-primary text-sm outline-none focus:border-indigo-600"
+            className="w-full min-h-[42px] px-3.5 py-2 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-surface-card text-ink-primary text-sm outline-none focus:border-[#0F382A]"
           />
-          <p className="text-[11px] text-indigo-700 dark:text-indigo-300">
+          <p className="text-[11px] text-emerald-700 dark:text-emerald-300">
             Let campus students know the urgency or reason for your request.
           </p>
         </div>

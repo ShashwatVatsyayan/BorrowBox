@@ -39,7 +39,7 @@ export const RequestCard = ({
                 {item?.title || 'Unknown Item'}
               </Link>
               {isTrade && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4A853]/20 text-[#0F382A] dark:text-[#D4A853] border border-[#D4A853]/40">
                   {item?.is_permanent_trade ? 'Permanent Trade' : 'Trade'}
                 </span>
               )}
@@ -67,13 +67,13 @@ export const RequestCard = ({
 
       {/* Trade Offer Details */}
       {isTrade && (
-        <div className="p-2.5 rounded-lg bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/40 text-xs">
-          <div className="flex items-center gap-1.5 font-bold text-purple-900 dark:text-purple-200">
-            <ArrowLeftRight size={13} className="text-purple-600" />
+        <div className="p-3 rounded-xl bg-[#D4A853]/10 dark:bg-[#D4A853]/5 border border-[#D4A853]/30 text-xs">
+          <div className="flex items-center gap-1.5 font-bold text-[#0F382A] dark:text-[#F5F2EB]">
+            <ArrowLeftRight size={13} className="text-[#D4A853]" />
             <span>Offered in Exchange: {request.offer_item || 'Item specified in proposal'}</span>
           </div>
           {item?.is_permanent_trade && (
-            <p className="text-[11px] text-purple-700 dark:text-purple-300 mt-1">
+            <p className="text-[11px] text-ink-muted mt-1 leading-relaxed">
               Permanent swap: both students keep the exchanged items permanently once trade is completed.
             </p>
           )}

@@ -4,7 +4,7 @@ import { Package, BookOpen, CheckCheck, ArrowLeftRight } from 'lucide-react';
 export const ProfileStats = ({ stats }) => {
   const cards = [
     { label: 'Active Listings', value: stats?.listings || 0, icon: Package, color: 'text-brand-600 bg-brand-50 dark:bg-brand-950/40' },
-    { label: 'Completed Borrows', value: stats?.borrowings || 0, icon: BookOpen, color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/40' },
+    { label: 'Completed Borrows', value: stats?.borrowings || 0, icon: BookOpen, color: 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40' },
     { label: 'Completed Lendings', value: stats?.lendings || 0, icon: CheckCheck, color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40' },
     { label: 'Permanent Trades', value: stats?.trades || 0, icon: ArrowLeftRight, color: 'text-[#916C16] dark:text-[#E8CA7A] bg-[#D4A853]/15' },
   ];

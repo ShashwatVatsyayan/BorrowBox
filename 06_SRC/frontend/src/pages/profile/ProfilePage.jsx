@@ -9,8 +9,10 @@ import { Loader } from '../../components/common/Loader';
 import { ProfileCardModal } from '../../components/profile/ProfileCardModal';
 import { useAuth } from '../../hooks/useAuth';
 import { profileService } from '../../services/profileService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const ProfilePage = () => {
+  usePageTitle('My Profile');
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
@@ -105,7 +107,7 @@ export const ProfilePage = () => {
           className="p-4 rounded-xl bg-surface-card border border-surface-border hover:border-brand-200 flex items-center justify-between transition-colors shadow-xs"
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400">
               <Clock size={18} />
             </div>
             <div>

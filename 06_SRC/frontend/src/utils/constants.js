@@ -30,7 +30,7 @@ export const LISTING_TYPES = [
     id: 'wanted',
     label: 'Wanted Request',
     badge: 'Looking for Item',
-    color: 'indigo',
+    color: 'emerald',
     description: 'Ask campus peers if anyone has this item available'
   }
 ];

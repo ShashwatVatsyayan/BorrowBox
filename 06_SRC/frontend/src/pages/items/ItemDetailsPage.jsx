@@ -31,6 +31,7 @@ import { requestService } from '../../services/requestService';
 import { reportService } from '../../services/notificationService';
 import { validateBorrowDates } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import { REPORT_REASONS } from '../../utils/constants';
 import { formatRelativeTime } from '../../utils/dateUtils';
 
@@ -47,6 +48,7 @@ export const ItemDetailsPage = () => {
   const { user } = useAuth();
 
   const [item, setItem] = useState(null);
+  usePageTitle(item?.title ? item.title : 'Item Details');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -292,7 +294,7 @@ export const ItemDetailsPage = () => {
                 </span>
               )}
               {listingType === 'wanted' && (
-                <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-indigo-600 text-white shadow-xs flex items-center gap-1">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#0F382A] text-[#D4A853] border border-[#D4A853]/40 shadow-xs flex items-center gap-1.5">
                   <Search size={13} />
                   <span>Wanted Request</span>
                 </span>
@@ -449,7 +451,7 @@ export const ItemDetailsPage = () => {
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-ink-primary">
                   Desired Item:{' '}
-                  <span className="text-purple-900 dark:text-purple-200 font-bold">
+                  <span className="text-[#0F382A] dark:text-[#D4A853] font-bold">
                     {item.trade_item_desired || item.trade_preference || 'Open to equal value barter (clothes, shoes, gadgets, or course gear)'}
                   </span>
                 </p>
@@ -459,7 +461,7 @@ export const ItemDetailsPage = () => {
                   </p>
                 )}
               </div>
-              <p className="text-[11px] text-ink-muted mt-2">
+              <p className="text-[11px] text-ink-muted mt-2 leading-relaxed">
                 {item.is_permanent_trade
                   ? 'This is a permanent ownership trade: both students permanently keep what they trade, with no return required. Condition must be inspected across all 4 angles upon campus meetup.'
                   : 'Propose an item you wish to swap in exchange. Physical trade condition must be verified by both students upon meeting.'}
@@ -468,13 +470,13 @@ export const ItemDetailsPage = () => {
           )}
 
           {listingType === 'wanted' && (
-            <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/50">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wide mb-1">
-                <Search size={14} />
+            <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide mb-1">
+                <Search size={14} className="text-[#D4A853]" />
                 <span>Student Wanted Notice</span>
               </div>
               <p className="text-sm font-semibold text-ink-primary">
-                Needed by: <span className="text-indigo-900 dark:text-indigo-200 font-bold">{item.needed_by || 'Urgent / Exam or Class need'}</span>
+                Needed by: <span className="text-emerald-900 dark:text-emerald-200 font-bold">{item.needed_by || 'Urgent / Exam or Class need'}</span>
               </p>
               <p className="text-[11px] text-ink-muted mt-1.5">
                 If you have this item in your hostel room or backpack, click "Offer Item to Student" to coordinate with them.

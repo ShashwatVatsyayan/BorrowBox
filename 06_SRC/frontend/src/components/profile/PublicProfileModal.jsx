@@ -170,7 +170,7 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   <div className="p-3 rounded-xl bg-surface-card border border-surface-border text-center shadow-xs">
-                    <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 flex items-center justify-center mx-auto mb-1">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto mb-1">
                       <BookOpen size={15} />
                     </div>
                     <span className="text-base font-extrabold text-ink-primary">{stats?.borrowings || 0}</span>
@@ -250,7 +250,7 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
                                 <ArrowLeftRight size={10} className="text-[#D4A853]" /> Trade
                               </span>
                             ) : item.listing_type === 'wanted' ? (
-                              <span className="text-[10px] font-bold text-indigo-600">Wanted</span>
+                              <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300">Wanted</span>
                             ) : (
                               <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5">
                                 <Clock size={10} /> Borrow

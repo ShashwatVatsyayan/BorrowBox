@@ -17,12 +17,16 @@ import {
 import { PageContainer } from '../../components/layout/PageContainer';
 import { ItemGrid } from '../../components/items/ItemGrid';
 import { Loader } from '../../components/common/Loader';
+import { EmptyState } from '../../components/common/EmptyState';
+import { SkeletonGrid } from '../../components/common/Skeleton';
 import { CATEGORIES, LISTING_TYPES } from '../../utils/constants';
 import { useAuth } from '../../hooks/useAuth';
 import { useItems } from '../../hooks/useItems';
 import { useRequests } from '../../hooks/useRequests';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const DashboardPage = () => {
+  usePageTitle('Campus Dashboard');
   const { user } = useAuth();
   const [selectedListingType, setSelectedListingType] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -335,25 +339,27 @@ export const DashboardPage = () => {
 
       {/* Unified Listings Grid */}
       {itemsLoading ? (
-        <Loader label="Loading unified campus feed..." />
-      ) : filteredItems.length === 0 ? (
-        <div className="text-center py-16 px-6 rounded-3xl bg-[#FBF9F4] dark:bg-zinc-900/60 border border-[#0F382A]/10 dark:border-emerald-500/20 shadow-xs">
-          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 flex items-center justify-center border border-emerald-200/80 dark:border-emerald-800/40">
-            <Package size={22} />
-          </div>
-          <h3 className="font-serif text-lg font-bold text-ink-primary mb-1">No items found</h3>
-          <p className="text-xs sm:text-sm text-ink-muted max-w-sm mx-auto mb-5 leading-relaxed">
-            No campus listings match your current filters. Be the first to list an item, propose a trade, or post a request!
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            <Link
-              to="/app/items/new"
-              className="px-5 py-2.5 rounded-full bg-[#0F382A] hover:bg-[#164e3b] text-[#F5F2EB] font-semibold text-xs sm:text-sm transition-all shadow-xs hover:-translate-y-0.5"
-            >
-              List an Item
-            </Link>
-          </div>
+        <div className="py-4">
+          <SkeletonGrid count={6} />
         </div>
+      ) : filteredItems.length === 0 ? (
+        <EmptyState
+          icon={Package}
+          title="No campus items found"
+          description="No listings match your current filters. Be the first to list an item, propose a trade, or post a request!"
+          actionLabel="List an Item"
+          onAction={() => navigate('/app/items/new')}
+          secondaryLabel={
+            selectedListingType !== 'All' || selectedCategory !== 'All' || searchQuery
+              ? 'Clear Filters'
+              : null
+          }
+          onSecondary={() => {
+            setSelectedListingType('All');
+            setSelectedCategory('All');
+            setSearchQuery('');
+          }}
+        />
       ) : (
         <ItemGrid items={filteredItems} />
       )}

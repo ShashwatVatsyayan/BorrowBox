@@ -133,8 +133,8 @@ export function generateStudentCardSvg({
       <rect x="25" y="25" width="580" height="90" fill="rgba(255, 255, 255, 0.03)" />
       
       <!-- BorrowBox and University Brand Text -->
-      <text x="50" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" letter-spacing="3" fill="#D4A853">BORROWBOX</text>
-      <text x="50" y="88" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#94a3b8">CHANDIGARH UNIVERSITY</text>
+      <text x="50" y="65" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="900" letter-spacing="3" fill="#D4A853">BORROWBOX</text>
+      <text x="50" y="88" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#94a3b8">CHANDIGARH UNIVERSITY</text>
 
       <!-- Security Microchip Vector -->
       <g transform="translate(520, 52)">
@@ -151,10 +151,10 @@ export function generateStudentCardSvg({
 
       <!-- Role Badge -->
       <rect x="200" y="375" width="230" height="30" rx="15" fill="rgba(16, 185, 129, 0.15)" stroke="rgba(212, 168, 83, 0.6)" stroke-width="1.5" />
-      <text x="315" y="395" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#D4A853" text-anchor="middle">${roleLabel}</text>
+      <text x="315" y="395" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#D4A853" text-anchor="middle">${roleLabel}</text>
 
       <!-- Student Name -->
-      <text x="315" y="445" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="800" fill="#ffffff" text-anchor="middle">${safeName}</text>
+      <text x="315" y="445" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="30" font-weight="800" fill="#ffffff" text-anchor="middle">${safeName}</text>
 
       <!-- Immutable Student UID Box -->
       <rect x="155" y="475" width="320" height="48" rx="10" fill="rgba(10, 14, 23, 0.85)" stroke="rgba(212, 168, 83, 0.3)" stroke-width="1.5" />
@@ -163,20 +163,20 @@ export function generateStudentCardSvg({
       <!-- Details Table Section -->
       <g transform="translate(60, 545)">
         <!-- Email Row -->
-        <text x="0" y="24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">EMAIL</text>
-        <text x="140" y="24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">${safeEmail}</text>
+        <text x="0" y="24" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">EMAIL</text>
+        <text x="140" y="24" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">${safeEmail}</text>
 
         <!-- Department Row -->
-        <text x="0" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">CAMPUS</text>
-        <text x="140" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#cbd5e1">${safeDept}</text>
+        <text x="0" y="58" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">CAMPUS</text>
+        <text x="140" y="58" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="600" fill="#cbd5e1">${safeDept}</text>
 
         <!-- Hostel Row -->
-        <text x="0" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">LOCATION</text>
-        <text x="140" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#cbd5e1">${safeHostel}</text>
+        <text x="0" y="92" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">LOCATION</text>
+        <text x="140" y="92" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="600" fill="#cbd5e1">${safeHostel}</text>
 
         <!-- Trust Score Row -->
-        <text x="0" y="126" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">RATING</text>
-        <text x="140" y="126" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="800" fill="#10b981">${trustScore} / 5.0 (100% Return Rate)</text>
+        <text x="0" y="126" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700" fill="#64748b" letter-spacing="1">RATING</text>
+        <text x="140" y="126" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="800" fill="#10b981">${trustScore} / 5.0 (100% Return Rate)</text>
       </g>
 
       <!-- Security Micro Barcode -->

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PlusCircle, Edit2, Power, Trash2, Package } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { Button } from '../../components/common/Button';
@@ -9,8 +9,11 @@ import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import { useAuth } from '../../hooks/useAuth';
 import { useItems } from '../../hooks/useItems';
 import { itemService } from '../../services/itemService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const MyListingsPage = () => {
+  usePageTitle('My Listings');
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { items, loading, refresh } = useItems({ ownerId: user?.id, includeInactive: true });
   const [targetItem, setTargetItem] = useState(null);
@@ -66,7 +69,7 @@ export const MyListingsPage = () => {
           title="No Items Listed Yet"
           description="You haven't listed any equipment or textbooks yet. Help your campus peers by listing something you don't use every day."
           actionLabel="List Your First Item"
-          onAction={() => window.location.href = '/app/items/new'}
+          onAction={() => navigate('/app/items/new')}
         />
       ) : (
         <div className="flex flex-col gap-3.5">

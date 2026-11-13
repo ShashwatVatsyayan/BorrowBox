@@ -5,8 +5,10 @@ import { Button } from '../../components/common/Button';
 import { Shield, Bell, Lock, FileText, CheckCircle2, Sun, Moon, Laptop, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const SettingsPage = () => {
+  usePageTitle('Settings');
   const { user } = useAuth();
   const { theme, setTheme } = useTheme();
   const [emailNotifs, setEmailNotifs] = useState(true);
