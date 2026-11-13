@@ -53,8 +53,8 @@ export const AppHeader = () => {
           <Logo size="md" to="/app" />
         </div>
 
-        {/* React Bits PillNav Interactive Navigation */}
-        <div className="flex-1 min-w-0 flex items-center justify-center sm:justify-start">
+        {/* React Bits PillNav Interactive Navigation (desktop & tablet; mobile uses BottomNav) */}
+        <div className="flex-1 min-w-0 hidden md:flex items-center justify-center sm:justify-start">
           <PillNav
             items={navItems}
             activeHref={location.pathname}

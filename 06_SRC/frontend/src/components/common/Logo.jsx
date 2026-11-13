@@ -5,7 +5,7 @@ export const Logo = ({ size = 'md', showText = false, to = '/app', className = '
   const sizeClasses = {
     xs: 'h-8 w-auto',
     sm: 'h-10 sm:h-11 w-auto',
-    md: 'h-12 sm:h-14 w-auto',
+    md: 'h-10 sm:h-12 md:h-14 w-auto',
     lg: 'h-20 sm:h-24 w-auto',
     xl: 'h-28 sm:h-32 w-auto'
   };

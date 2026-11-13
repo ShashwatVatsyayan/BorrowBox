@@ -226,7 +226,7 @@ export const ItemDetailsPage = () => {
   if (loading) {
     return (
       <PageContainer>
-        <Loader label="Loading item details..." />
+        <Loader label="Loading item details..." fullPage />
       </PageContainer>
     );
   }

@@ -70,7 +70,7 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
     : '';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-fade-in overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 pb-[env(safe-area-inset-bottom,0px)] bg-black/75 backdrop-blur-sm animate-fade-in overflow-y-auto">
       <div
         className="relative w-full max-w-4xl bg-surface-card border border-surface-border rounded-2xl shadow-2xl overflow-hidden my-auto"
         role="dialog"
@@ -94,7 +94,7 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors touch-manipulation"
             aria-label="Close modal"
           >
             <X size={18} />
@@ -110,7 +110,7 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
             Student profile not found.
           </div>
         ) : (
-          <div className="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 max-h-[80vh] overflow-y-auto">
+          <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 max-h-[82vh] max-h-[82dvh] overflow-y-auto">
             {/* Left Column: Interactive HoloCard */}
             <div className="lg:col-span-5 flex flex-col items-center justify-start gap-3">
               <div className="w-full flex items-center justify-between px-1">

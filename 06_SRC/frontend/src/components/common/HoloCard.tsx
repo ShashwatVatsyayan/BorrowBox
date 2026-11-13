@@ -660,7 +660,6 @@ export default function HoloCard({
   }, []);
 
   const track = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === 'touch' && e.type === 'pointermove' && !e.buttons) return;
     const rect = e.currentTarget.getBoundingClientRect();
     pointerRef.current = {
       x: clamp((e.clientX - rect.left) / rect.width, 0, 1),
@@ -694,6 +693,7 @@ export default function HoloCard({
       onPointerDown={track}
       onPointerLeave={leave}
       onPointerCancel={leave}
+      onPointerUp={leave}
       onClick={toggle}
       onKeyDown={e => {
         if (!flippable || (e.key !== 'Enter' && e.key !== ' ')) return;

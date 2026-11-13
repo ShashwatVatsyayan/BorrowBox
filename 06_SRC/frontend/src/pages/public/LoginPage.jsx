@@ -72,7 +72,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
+    <div className="min-h-screen min-h-[100dvh] bg-surface-base flex flex-col justify-between py-6 px-4 sm:px-6">
       {/* LightTunnel Hyperspace Warp Transition */}
       <AuthTunnelTransition
         isActive={transitioning}

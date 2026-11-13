@@ -46,7 +46,7 @@ export const UserProfilePage = () => {
   if (loading) {
     return (
       <PageContainer>
-        <Loader label="Loading student profile..." />
+        <Loader label="Loading student profile..." fullPage />
       </PageContainer>
     );
   }

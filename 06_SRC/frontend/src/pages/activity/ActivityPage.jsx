@@ -106,7 +106,7 @@ export const ActivityPage = () => {
 
       {/* Content List */}
       {loading ? (
-        <Loader label="Loading requests..." />
+        <Loader label="Loading requests..." fullPage />
       ) : filteredList.length === 0 ? (
         <EmptyState
           icon={Clock}

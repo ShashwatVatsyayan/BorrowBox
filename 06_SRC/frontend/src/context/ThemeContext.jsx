@@ -81,6 +81,15 @@ export function ThemeProvider({ children }) {
 
   const extractPoint = (eventOrPoint) => {
     if (!eventOrPoint) return undefined;
+    // Extract coordinates from Android & mobile touch events
+    if (eventOrPoint.touches && eventOrPoint.touches.length > 0) {
+      const touch = eventOrPoint.touches[0];
+      return { x: touch.clientX, y: touch.clientY };
+    }
+    if (eventOrPoint.changedTouches && eventOrPoint.changedTouches.length > 0) {
+      const touch = eventOrPoint.changedTouches[0];
+      return { x: touch.clientX, y: touch.clientY };
+    }
     if (
       typeof eventOrPoint.clientX === 'number' &&
       typeof eventOrPoint.clientY === 'number' &&

@@ -12,12 +12,14 @@ export const SiteIntroSplash = ({ onFinish }) => {
   useEffect(() => {
     const computeSize = () => {
       const w = window.innerWidth;
-      if (w < 480) {
-        setFontSize(40);
+      if (w < 360) {
+        setFontSize(30);
+      } else if (w < 440) {
+        setFontSize(36);
       } else if (w < 640) {
-        setFontSize(52);
+        setFontSize(48);
       } else if (w < 1024) {
-        setFontSize(72);
+        setFontSize(68);
       } else {
         setFontSize(88);
       }
@@ -81,7 +83,8 @@ export const SiteIntroSplash = ({ onFinish }) => {
   return (
     <div
       onClick={triggerZoomBlend}
-      className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-black select-none cursor-pointer transition-all duration-[850ms] ${
+      onTouchStart={triggerZoomBlend}
+      className={`fixed inset-0 min-h-screen min-h-[100dvh] w-full h-full z-[999999] flex flex-col items-center justify-center bg-black select-none cursor-pointer touch-manipulation transition-all duration-[850ms] ${
         isZooming
           ? 'opacity-0 scale-[2.2] pointer-events-none blur-[14px]'
           : 'opacity-100 scale-100 pointer-events-auto blur-0'
@@ -90,7 +93,7 @@ export const SiteIntroSplash = ({ onFinish }) => {
         transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
         willChange: 'transform, opacity, filter'
       }}
-      aria-label="BorrowBox introductory animation - click to skip"
+      aria-label="BorrowBox introductory animation - tap or click to skip"
     >
       {/* Ambient center radial glow in brand orange */}
       <div
@@ -139,11 +142,11 @@ export const SiteIntroSplash = ({ onFinish }) => {
 
       {/* Subtle skip prompt */}
       <div
-        className={`absolute bottom-8 text-[11px] text-neutral-400 font-medium tracking-wider transition-opacity duration-500 ${
+        className={`absolute bottom-[calc(2rem+env(safe-area-inset-bottom,0px))] px-4 text-center text-[11px] text-neutral-400 font-medium tracking-wider transition-opacity duration-500 ${
           isZooming ? 'opacity-0' : 'opacity-60 hover:opacity-100'
         }`}
       >
-        Click anywhere or press Esc to skip
+        Tap anywhere or press Esc to skip
       </div>
     </div>
   );

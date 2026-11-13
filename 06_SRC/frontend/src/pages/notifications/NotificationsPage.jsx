@@ -27,7 +27,7 @@ export const NotificationsPage = () => {
       </div>
 
       {loading ? (
-        <Loader label="Loading notifications..." />
+        <Loader label="Loading notifications..." fullPage />
       ) : notifications.length === 0 ? (
         <EmptyState
           icon={Bell}

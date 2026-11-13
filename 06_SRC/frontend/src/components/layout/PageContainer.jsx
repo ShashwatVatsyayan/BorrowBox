@@ -7,7 +7,7 @@ import { DesktopSidebar } from './DesktopSidebar';
 
 export const PageContainer = ({ children, maxWidth = 'max-w-4xl' }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-surface-base">
+    <div className="min-h-screen min-h-[100dvh] flex flex-col bg-surface-base">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-600 focus:text-white focus:rounded-xl focus:font-semibold focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-white"

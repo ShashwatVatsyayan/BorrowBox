@@ -59,7 +59,7 @@ export const MyListingsPage = () => {
       </div>
 
       {loading ? (
-        <Loader label="Loading your listings..." />
+        <Loader label="Loading your listings..." fullPage />
       ) : items.length === 0 ? (
         <EmptyState
           icon={Package}

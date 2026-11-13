@@ -42,7 +42,7 @@ export const AdminDashboardPage = () => {
       </div>
 
       {loading ? (
-        <Loader label="Loading moderation reports..." />
+        <Loader label="Loading moderation reports..." fullPage />
       ) : reports.length === 0 ? (
         <EmptyState
           icon={Flag}

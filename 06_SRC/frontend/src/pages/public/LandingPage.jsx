@@ -35,7 +35,7 @@ export const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-surface-base flex flex-col">
+    <div className="min-h-screen min-h-[100dvh] bg-surface-base flex flex-col">
       {/* Intro Splash with React Bits StrokeText & Cinematic Zoom Blend */}
       {showIntro && <SiteIntroSplash onFinish={() => setShowIntro(false)} />}
 

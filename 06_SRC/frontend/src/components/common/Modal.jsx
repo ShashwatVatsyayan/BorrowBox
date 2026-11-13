@@ -19,9 +19,9 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-md' 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-ink-primary/50 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)] bg-ink-primary/50 backdrop-blur-sm animate-fade-in">
       <div
-        className={`w-full ${maxWidth} bg-surface-card rounded-t-2xl sm:rounded-2xl border border-surface-border shadow-xl max-h-[90vh] flex flex-col overflow-hidden animate-slide-up sm:animate-scale-in`}
+        className={`w-full ${maxWidth} bg-surface-card rounded-t-2xl sm:rounded-2xl border border-surface-border shadow-xl max-h-[85vh] max-h-[85dvh] flex flex-col overflow-hidden animate-slide-up sm:animate-scale-in`}
         role="dialog"
         aria-modal="true"
       >
@@ -29,7 +29,7 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-md' 
           <h2 className="text-base font-semibold text-ink-primary">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors touch-manipulation"
             aria-label="Close modal"
           >
             <X size={18} />

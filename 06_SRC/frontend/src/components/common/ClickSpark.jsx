@@ -67,8 +67,24 @@ export const ClickSpark = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const clientX =
+      typeof e.clientX === 'number' && e.clientX !== 0
+        ? e.clientX
+        : e.touches && e.touches[0]
+        ? e.touches[0].clientX
+        : e.changedTouches && e.changedTouches[0]
+        ? e.changedTouches[0].clientX
+        : rect.left + rect.width / 2;
+    const clientY =
+      typeof e.clientY === 'number' && e.clientY !== 0
+        ? e.clientY
+        : e.touches && e.touches[0]
+        ? e.touches[0].clientY
+        : e.changedTouches && e.changedTouches[0]
+        ? e.changedTouches[0].clientY
+        : rect.top + rect.height / 2;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
     const now = performance.now();
     const count = Math.max(Number(sparkCount) || 8, 1);

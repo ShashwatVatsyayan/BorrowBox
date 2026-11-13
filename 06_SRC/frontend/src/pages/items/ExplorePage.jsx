@@ -50,7 +50,7 @@ export const ExplorePage = () => {
       />
 
       {loading ? (
-        <Loader label="Searching listings..." />
+        <Loader label="Searching listings..." fullPage />
       ) : (
         <ItemGrid items={items} onResetFilters={handleClear} />
       )}

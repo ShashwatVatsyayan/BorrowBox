@@ -27,7 +27,7 @@ export const AuthTunnelTransition = ({
 
   return (
     <div
-      className={`fixed inset-0 z-[99999] bg-black flex flex-col items-center justify-center overflow-hidden transition-opacity duration-300 ${
+      className={`fixed inset-0 min-h-screen min-h-[100dvh] w-full h-full z-[99999] bg-black flex flex-col items-center justify-center overflow-hidden transition-opacity duration-300 ${
         isActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
       aria-live="polite"
@@ -56,13 +56,13 @@ export const AuthTunnelTransition = ({
       </div>
 
       {/* Center High-Contrast Badge & Status Display */}
-      <div className="relative z-10 flex flex-col items-center text-center p-6 max-w-sm mx-4 rounded-3xl bg-black/75 backdrop-blur-md border border-orange-500/40 shadow-[0_0_50px_rgba(255,107,0,0.35)] animate-in fade-in zoom-in-95 duration-300">
+      <div className="relative z-10 flex flex-col items-center text-center p-5 sm:p-6 w-[calc(100%-2rem)] max-w-sm mx-auto rounded-3xl bg-black/80 backdrop-blur-md border border-orange-500/40 shadow-[0_0_50px_rgba(255,107,0,0.35)] animate-in fade-in zoom-in-95 duration-300">
         {/* Visible Standalone Logo - No Box, No Circle */}
         <div className="mb-4 flex items-center justify-center">
           <img
             src="/logo-dark.png"
             alt="BorrowBox - Community Borrowing Platform"
-            className="h-20 sm:h-24 w-auto object-contain drop-shadow-[0_0_16px_rgba(13,184,166,0.4)]"
+            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_16px_rgba(13,184,166,0.4)]"
           />
         </div>
 
