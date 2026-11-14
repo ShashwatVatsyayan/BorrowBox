@@ -272,3 +272,4 @@ console.log('\n[Scenario 4: Direct Messaging & In-Chat Negotiation Workflow]');
 }
 
 console.log('\n--- ALL RENTAL MARKETPLACE & CHAT NEGOTIATION VERIFICATIONS PASSED ---');
+

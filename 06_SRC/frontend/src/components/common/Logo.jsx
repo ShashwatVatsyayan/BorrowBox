@@ -17,9 +17,6 @@ export const Logo = ({
     // Graceful fallback if outside ThemeProvider
   }
 
-  const effectiveVariant = variant || (isDark ? 'dark' : 'light');
-  const logoSrc = effectiveVariant === 'dark' ? '/logo-dark.svg' : '/logo.svg';
-
   // Responsive mobile and desktop sizing for horizontal lockup (840x300 aspect ratio)
   const sizeClasses = {
     xs: 'h-8 sm:h-9 w-auto max-w-[150px] sm:max-w-[170px]',
@@ -31,12 +28,29 @@ export const Logo = ({
 
   const content = (
     <div className={`inline-flex items-center select-none bg-transparent border-0 p-0 m-0 ${className}`}>
-      <img
-        src={logoSrc}
-        alt="BorrowBox - Community Borrowing Platform"
-        className={`${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105`}
-        draggable={false}
-      />
+      {variant ? (
+        <img
+          src={variant === 'dark' ? '/logo-dark.svg' : '/logo.svg'}
+          alt="BorrowBox - Campus Rental Marketplace"
+          className={`${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105`}
+          draggable={false}
+        />
+      ) : (
+        <>
+          <img
+            src="/logo.svg"
+            alt="BorrowBox - Campus Rental Marketplace"
+            className={`${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105 dark:hidden`}
+            draggable={false}
+          />
+          <img
+            src="/logo-dark.svg"
+            alt="BorrowBox - Campus Rental Marketplace"
+            className={`${sizeClasses[size] || sizeClasses.md} object-contain shrink-0 transition-transform duration-200 hover:scale-105 hidden dark:block`}
+            draggable={false}
+          />
+        </>
+      )}
       {showText && <span className="sr-only">BorrowBox</span>}
     </div>
   );

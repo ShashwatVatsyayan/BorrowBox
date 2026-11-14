@@ -46,6 +46,15 @@ export async function capturePage(theme, scale, maxTextureSize) {
   const scrollX = typeof window !== 'undefined' ? window.scrollX || window.pageXOffset || 0 : 0;
   const scrollY = typeof window !== 'undefined' ? window.scrollY || window.pageYOffset || 0 : 0;
 
+  // Ensure document web fonts are completely ready before snapshot measurement
+  if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+    try {
+      await document.fonts.ready;
+    } catch {
+      // Ignore font errors
+    }
+  }
+
   // Never exceed what the GPU can hold; the shader handles scale != canvas DPR.
   const safeScale = Math.min(scale, maxTextureSize / width, maxTextureSize / height);
 
@@ -60,25 +69,50 @@ export async function capturePage(theme, scale, maxTextureSize) {
     height,
     scrollX,
     scrollY,
-    windowWidth: typeof window !== 'undefined' ? window.innerWidth : width,
-    windowHeight: typeof window !== 'undefined' ? window.innerHeight : height,
+    // Pass the client width and height so html2canvas iframe viewport width matches
+    // documentElement.clientWidth 1:1, completely preventing centered container shift
+    windowWidth: width,
+    windowHeight: height,
     logging: false,
     useCORS: true,
-    onclone: (doc) => {
+    onclone: async (doc) => {
+      // Disable all transitions and animations in clone so elements snap to stable final geometry immediately
+      const noTransitionStyle = doc.createElement('style');
+      noTransitionStyle.textContent = `
+        *, *::before, *::after {
+          transition: none !important;
+          animation-duration: 0s !important;
+          animation-delay: 0s !important;
+        }
+      `;
+      doc.head.appendChild(noTransitionStyle);
+
+      // Disable scrollbar-gutter in clone iframe since iframe scrolling is disabled
+      doc.documentElement.style.scrollbarGutter = 'auto';
+
       doc.documentElement.dataset.theme = theme;
       if (theme === 'dark') {
         doc.documentElement.classList.add('dark');
       } else {
         doc.documentElement.classList.remove('dark');
       }
-      // Leave scroll state intact so layout and centered containers do not shift
+
+      // Ensure cloned document fonts are loaded before computing element bounds
+      if (doc.fonts && doc.fonts.ready) {
+        try {
+          await doc.fonts.ready;
+        } catch {
+          // Ignore font errors
+        }
+      }
+
       // The live toggle is drawn above the overlay, so leave a hole for it if tagged
       doc.querySelectorAll('[data-ink-live]').forEach((el) => {
         el.style.visibility = 'hidden';
       });
       // Ensure the canvas itself is not captured into the background image
       doc.querySelectorAll('.ink-canvas').forEach((el) => {
-        el.style.visibility = 'hidden';
+        el.style.display = 'none';
       });
     },
   });

@@ -44,7 +44,7 @@ export const DesktopSidebar = () => {
                 `flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-emerald-950/10 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 font-semibold border-l-2 border-[#D4A853]'
-                    : 'text-ink-muted hover:text-ink-primary hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                    : 'border-l-2 border-transparent text-ink-muted hover:text-ink-primary hover:bg-slate-50 dark:hover:bg-slate-800/60'
                 }`
               }
             >
