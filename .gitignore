@@ -41,7 +41,8 @@ desktop.ini
 *.sw?
 
 # User Documents
-College Project Report/
+College Project Report/*.pdf
+!College Project Report/BorrowBox_Project_Report.pdf
 
 
 .vercel
