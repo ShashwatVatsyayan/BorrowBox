@@ -89,6 +89,9 @@ export const MyListingsPage = () => {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] font-semibold text-brand-600 truncate">{item.category}</span>
+                    <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 font-serif">
+                      INR {item.daily_price || 15}/day
+                    </span>
                     <span
                       className={`px-2 py-0.2 rounded text-[10px] font-bold ${
                         item.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'

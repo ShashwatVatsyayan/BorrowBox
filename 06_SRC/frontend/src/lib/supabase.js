@@ -20,7 +20,7 @@ export const supabaseReal = isConfigured
 // Ensures 100% offline functionality and class demo readiness
 // ==========================================
 
-const LOCAL_STORAGE_KEY = 'borrowbox_local_db_v2';
+const LOCAL_STORAGE_KEY = 'borrowbox_local_db_v3';
 
 const INITIAL_SEED = {
   users: [
@@ -32,7 +32,7 @@ const INITIAL_SEED = {
       role: 'student',
       is_verified: true,
       avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-      bio: 'Computer Science student, 3rd year. Happy to lend lab kits, interview clothes and calculators.',
+      bio: 'Computer Science student, 3rd year. Happy to rent lab kits, interview clothes and calculators.',
       department: 'Computer Science & Engineering',
       hostel_room: 'Boys Hostel 3 (BH-3), Room 412',
       phone: '+91 98765 43210',
@@ -73,11 +73,13 @@ const INITIAL_SEED = {
       owner_id: '11111111-1111-1111-1111-111111111111',
       title: 'Casio fx-991EX ClassWiz Calculator',
       description: 'Genuine scientific calculator with high-resolution LCD display and 552 functions. Essential for engineering mathematics, physics and semester exams.',
-      category: 'Electronics & Gadgets',
+      category: 'Scientific Calculators',
       condition: 'Like New',
       location_label: 'Block B-3, Academic Block',
-      listing_type: 'borrow',
-      lending_duration: '1 - 3 Days (Weekend / Quick Need)',
+      listing_type: 'rent',
+      daily_price: 20,
+      rental_durations: ['1 day', '3 days', '7 days', '14 days'],
+      duration_discounts: { '3': 5, '7': 10, '14': 20 },
       is_active: true,
       created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 5).toISOString(),
@@ -96,8 +98,10 @@ const INITIAL_SEED = {
       category: 'Clothes & Formals',
       condition: 'Like New',
       location_label: 'North Campus Library Entrance',
-      listing_type: 'borrow',
-      lending_duration: '1 - 3 Days (Weekend / Quick Need)',
+      listing_type: 'rent',
+      daily_price: 30,
+      rental_durations: ['1 day', '3 days', '7 days'],
+      duration_discounts: { '3': 10, '7': 15 },
       is_active: true,
       created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 4).toISOString(),
@@ -116,10 +120,10 @@ const INITIAL_SEED = {
       category: 'Shoes & Footwear',
       condition: 'Good',
       location_label: 'Student Center Cafe',
-      listing_type: 'trade',
-      trade_item_desired: 'Casio fx-991EX Calculator or Formal Blazer Size 42',
-      trade_preference: 'Willing to trade for size 42 formal blazer or Casio 991EX calculator',
-      is_permanent_trade: true,
+      listing_type: 'rent',
+      daily_price: 25,
+      rental_durations: ['1 day', '3 days', '7 days'],
+      duration_discounts: { '3': 5, '7': 10 },
       is_active: true,
       created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 3).toISOString(),
@@ -138,8 +142,10 @@ const INITIAL_SEED = {
       category: 'Hostel & Room Essentials',
       condition: 'Like New',
       location_label: 'Hostel Block H1 Ground Floor',
-      listing_type: 'borrow',
-      lending_duration: 'Up to 1 Week (Standard Borrowing)',
+      listing_type: 'rent',
+      daily_price: 15,
+      rental_durations: ['1 day', '3 days', '7 days', '14 days'],
+      duration_discounts: { '7': 10, '14': 20 },
       is_active: true,
       created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 2).toISOString(),
@@ -154,11 +160,12 @@ const INITIAL_SEED = {
       id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
       owner_id: '22222222-2222-2222-2222-222222222222',
       title: 'Looking for Engineering Mini Drafter with Sheet Tube',
-      description: 'Need an engineering mini drafter with sheet holder tube for Monday drawing practical exam. Willing to borrow for 2 days or trade for scientific notes.',
-      category: 'Stationery & Drafting',
+      description: 'Need an engineering mini drafter with sheet holder tube for Monday drawing practical exam. Budget is INR 10/day.',
+      category: 'Stationery',
       condition: 'Good',
       location_label: 'Engineering Workshop Building',
       listing_type: 'wanted',
+      budget_per_day: 10,
       needed_by: 'Needed by Friday afternoon for evaluation',
       is_active: true,
       created_at: new Date(Date.now() - 86400000 * 1).toISOString(),
@@ -174,15 +181,15 @@ const INITIAL_SEED = {
       id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
       owner_id: '11111111-1111-1111-1111-111111111111',
       title: 'Data Structures & Algorithms in Java (Robert Lafore)',
-      description: 'Clean reference textbook for DSA algorithms and data structures course. Traded with student peer for Galvin OS book.',
-      category: 'Textbooks & Notes',
+      description: 'Clean reference textbook for DSA algorithms and data structures course. Available for rent during semester exams.',
+      category: 'Books & Textbooks',
       condition: 'Good',
       location_label: 'Central Library Handoff Point',
-      listing_type: 'trade',
-      trade_item_desired: 'Operating Systems Concepts (Galvin)',
-      trade_preference: 'Permanent book trade for Galvin 9th edition',
-      is_permanent_trade: true,
-      is_active: false,
+      listing_type: 'rent',
+      daily_price: 12,
+      rental_durations: ['1 day', '3 days', '7 days', '14 days'],
+      duration_discounts: { '7': 10, '14': 25 },
+      is_active: true,
       created_at: new Date(Date.now() - 86400000 * 7).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 2).toISOString(),
       images: [
@@ -200,9 +207,12 @@ const INITIAL_SEED = {
       borrower_id: '22222222-2222-2222-2222-222222222222',
       start_date: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
       end_date: new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
+      daily_price: 20,
+      total_days: 2,
+      total_amount: 40,
       message: 'Need this for the calculus midterm exam on Friday. Will return right after.',
       status: 'pending',
-      request_type: 'borrow',
+      request_type: 'rent',
       created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
       updated_at: new Date(Date.now() - 3600000 * 4).toISOString()
     },
@@ -225,19 +235,82 @@ const INITIAL_SEED = {
       borrower_id: '11111111-1111-1111-1111-111111111111',
       start_date: new Date(Date.now() - 86400000 * 10).toISOString().split('T')[0],
       end_date: new Date(Date.now() - 86400000 * 6).toISOString().split('T')[0],
-      message: 'Borrowed for hostel room use during semester exam week.',
+      daily_price: 15,
+      total_days: 4,
+      total_amount: 60,
+      message: 'Rented for hostel room use during semester exam week.',
       status: 'completed',
-      request_type: 'borrow',
+      request_type: 'rent',
       created_at: new Date(Date.now() - 86400000 * 11).toISOString(),
       updated_at: new Date(Date.now() - 86400000 * 6).toISOString()
+    }
+  ],
+  conversations: [
+    {
+      id: 'conv-001',
+      participant_ids: [
+        '11111111-1111-1111-1111-111111111111',
+        '22222222-2222-2222-2222-222222222222'
+      ],
+      item_id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      last_message: 'Special weekend rental rate offered: INR 18/day for 3 days.',
+      last_message_at: new Date(Date.now() - 1800000).toISOString(),
+      unread_count: {
+        '22222222-2222-2222-2222-222222222222': 1,
+        '11111111-1111-1111-1111-111111111111': 0
+      },
+      created_at: new Date(Date.now() - 86400000 * 2).toISOString()
+    }
+  ],
+  messages: [
+    {
+      id: 'msg-001',
+      conversation_id: 'conv-001',
+      sender_id: '22222222-2222-2222-2222-222222222222',
+      sender_name: 'Priya Verma',
+      sender_avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80',
+      type: 'text',
+      text: 'Hi Aarav! Is your Casio ClassWiz calculator available for rent this weekend for math practicals?',
+      payload: null,
+      created_at: new Date(Date.now() - 3600000 * 2).toISOString()
+    },
+    {
+      id: 'msg-002',
+      conversation_id: 'conv-001',
+      sender_id: '11111111-1111-1111-1111-111111111111',
+      sender_name: 'Aarav Sharma',
+      sender_avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+      type: 'text',
+      text: 'Hi Priya! Yes, solar panel and battery backup are 100% operational, and protective hard slip-on case is included.',
+      payload: null,
+      created_at: new Date(Date.now() - 3600000 * 1.5).toISOString()
+    },
+    {
+      id: 'msg-003',
+      conversation_id: 'conv-001',
+      sender_id: '11111111-1111-1111-1111-111111111111',
+      sender_name: 'Aarav Sharma',
+      sender_avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+      type: 'offer',
+      text: 'Special weekend rental rate offered: INR 18/day for 3 days.',
+      payload: {
+        offer_type: 'rental_rate',
+        daily_price: 18,
+        days: 3,
+        total_amount: 54,
+        discount_percent: 10,
+        note: 'Weekend special student rate (INR 18/day for 3 days)',
+        status: 'pending'
+      },
+      created_at: new Date(Date.now() - 1800000).toISOString()
     }
   ],
   notifications: [
     {
       id: 'notif-001',
       user_id: '11111111-1111-1111-1111-111111111111',
-      title: 'New Borrow Request Received',
-      message: 'Priya Verma requested to borrow your "Casio fx-991EX ClassWiz Calculator".',
+      title: 'New Rental Request Received',
+      message: 'Priya Verma requested to rent your "Casio fx-991EX ClassWiz Calculator".',
       type: 'request_received',
       related_request_id: 'req-001',
       is_read: false,
@@ -298,8 +371,27 @@ export const getLocalDB = () => {
     if (!db.likes) db.likes = [];
     if (!db.comments) db.comments = [];
     if (!db.saved_items) db.saved_items = [];
+    if (!db.conversations) db.conversations = JSON.parse(JSON.stringify(INITIAL_SEED.conversations));
+    if (!db.messages) db.messages = JSON.parse(JSON.stringify(INITIAL_SEED.messages));
 
-    // Auto-migrate user records to ensure immutable UID matches university email username
+    // Ensure items have daily_price
+    if (db.items) {
+      db.items.forEach((item) => {
+        if (!item.daily_price) {
+          if (item.category === 'Scientific Calculators') item.daily_price = 20;
+          else if (item.category === 'Clothes & Formals') item.daily_price = 30;
+          else if (item.category === 'Shoes & Footwear') item.daily_price = 25;
+          else if (item.category === 'Hostel & Room Essentials') item.daily_price = 15;
+          else if (item.category === 'Books & Textbooks' || item.category === 'Textbooks & Notes') item.daily_price = 12;
+          else item.daily_price = 15;
+        }
+        if (item.listing_type === 'borrow') {
+          item.listing_type = 'rent';
+        }
+      });
+    }
+
+    // Auto-migrate user records
     if (db.users) {
       db.users.forEach((u) => {
         if (!u.avatar_url) {

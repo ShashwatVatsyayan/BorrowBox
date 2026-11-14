@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Package, Clock, Plus, User, SlidersHorizontal, Settings } from 'lucide-react';
+import { Home, Compass, Package, MessageSquare, Clock, Plus, User, SlidersHorizontal, Settings } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export const DesktopSidebar = () => {
@@ -10,6 +10,7 @@ export const DesktopSidebar = () => {
     { to: '/app', label: 'Dashboard', icon: Home, end: true },
     { to: '/app/explore', label: 'Explore Items', icon: Compass },
     { to: '/app/listings', label: 'My Listings', icon: Package },
+    { to: '/app/messages', label: 'Messages & Offers', icon: MessageSquare },
     { to: '/app/activity', label: 'Activity & Requests', icon: Clock },
     { to: '/app/profile', label: 'My Profile', icon: User },
     { to: '/app/settings', label: 'Settings', icon: Settings },

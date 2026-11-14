@@ -28,9 +28,9 @@ export const AddItemPage = () => {
   return (
     <PageContainer maxWidth="max-w-2xl">
       <div className="mb-5">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">List an Item for Lending</h1>
+        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">List an Item for Rent</h1>
         <p className="text-xs text-ink-muted mt-0.5">
-          Share calculators, textbooks, lab equipment, or tools with students on campus
+          Rent calculators, textbooks, lab equipment, or tools to campus students at protected rates
         </p>
       </div>
 

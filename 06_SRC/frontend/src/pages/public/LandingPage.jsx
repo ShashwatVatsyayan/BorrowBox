@@ -71,12 +71,17 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="py-12 sm:py-20 px-4 text-center max-w-4xl mx-auto flex flex-col items-center">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800/60 mb-4">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Affordable Peer-to-Peer Campus Rentals</span>
+        </span>
+
         <h1 className="text-3xl sm:text-5xl font-extrabold text-ink-primary tracking-tight leading-tight mb-5">
-          Campus Peer Borrowing for Students
+          BorrowBox — Rent What You Need. Earn From What You Own.
         </h1>
 
         <p className="text-base sm:text-lg text-ink-muted max-w-2xl mb-8 leading-relaxed">
-          Borrow scientific calculators for exams, lab coats for practicals, drafting tools, and course textbooks directly from peers. Verified student accounts with scheduled return accountability.
+          Affordable campus peer rentals for students. Rent scientific calculators for exams, lab kits for practicals, camera gear, and course textbooks directly from peers at student-capped rates.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
@@ -142,30 +147,30 @@ export const LandingPage = () => {
       <section id="how-it-works" className="py-14 bg-surface-card border-y border-surface-border px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold text-ink-primary tracking-tight">How the Lending Flow Works</h2>
-            <p className="text-sm text-ink-muted mt-1">Owner-controlled approval with schedule locking</p>
+            <h2 className="text-2xl font-bold text-ink-primary tracking-tight">How the Campus Rental Model Works</h2>
+            <p className="text-sm text-ink-muted mt-1">Student price protection, direct messaging negotiation, and verified returns</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
             <div className="p-4 rounded-xl bg-surface-base border border-surface-border">
               <div className="text-xs font-mono font-bold text-brand-600 mb-2">STEP 01</div>
-              <h3 className="text-sm font-bold text-ink-primary mb-1">List an Item</h3>
-              <p className="text-xs text-ink-muted">Specify condition, pickup landmark, and photos. No private room numbers required.</p>
+              <h3 className="text-sm font-bold text-ink-primary mb-1">List for Rent</h3>
+              <p className="text-xs text-ink-muted">Set a daily price within category price caps. Provide 4 angles of photos and meeting spot.</p>
             </div>
             <div className="p-4 rounded-xl bg-surface-base border border-surface-border">
               <div className="text-xs font-mono font-bold text-brand-600 mb-2">STEP 02</div>
-              <h3 className="text-sm font-bold text-ink-primary mb-1">Request Window</h3>
-              <p className="text-xs text-ink-muted">Borrowers select start and end dates according to academic exam schedules.</p>
+              <h3 className="text-sm font-bold text-ink-primary mb-1">Book or Negotiate</h3>
+              <p className="text-xs text-ink-muted">Borrowers select dates with duration discounts, or negotiate custom rates in Direct Messages.</p>
             </div>
             <div className="p-4 rounded-xl bg-surface-base border border-surface-border">
               <div className="text-xs font-mono font-bold text-brand-600 mb-2">STEP 03</div>
               <h3 className="text-sm font-bold text-ink-primary mb-1">Owner Approves</h3>
-              <p className="text-xs text-ink-muted">Approval locks the item and rejects conflicting overlapping requests automatically.</p>
+              <p className="text-xs text-ink-muted">Owner accepts the booking. Both students coordinate physical handoff at campus landmarks.</p>
             </div>
             <div className="p-4 rounded-xl bg-surface-base border border-surface-border">
               <div className="text-xs font-mono font-bold text-brand-600 mb-2">STEP 04</div>
-              <h3 className="text-sm font-bold text-ink-primary mb-1">Verify Return</h3>
-              <p className="text-xs text-ink-muted">Borrower initiates return; owner inspects condition and confirms completion.</p>
+              <h3 className="text-sm font-bold text-ink-primary mb-1">Verify &amp; Settle</h3>
+              <p className="text-xs text-ink-muted">Borrower returns item; owner confirms receipt and receives 80% payout (20% platform fee).</p>
             </div>
           </div>
         </div>
@@ -174,7 +179,7 @@ export const LandingPage = () => {
       {/* Safety & Trust */}
       <section id="safety" className="py-14 px-4 max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-ink-primary">Built for Campus Security</h2>
+          <h2 className="text-2xl font-bold text-ink-primary">Built for Campus Security &amp; Trust</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="p-4 rounded-xl glass-block">
@@ -189,8 +194,8 @@ export const LandingPage = () => {
           </div>
           <div className="p-4 rounded-xl glass-block">
             <Clock size={20} className="text-brand-600 mb-2" />
-            <h4 className="text-sm font-semibold text-ink-primary mb-1">Clear Accountability</h4>
-            <p className="text-xs text-ink-muted">Every transaction has an audit trail. Delinquent returns are escalated to campus admin.</p>
+            <h4 className="text-sm font-semibold text-ink-primary mb-1">Rate Protection</h4>
+            <p className="text-xs text-ink-muted">Enforced category price caps prevent student price gouging on exam essentials.</p>
           </div>
         </div>
       </section>
@@ -200,7 +205,7 @@ export const LandingPage = () => {
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center sm:items-start gap-1">
             <Logo size="sm" to="/" />
-            <p className="mt-1 text-ink-muted">Campus Peer Lending Platform</p>
+            <p className="mt-1 text-ink-muted">BorrowBox Campus Rental Marketplace</p>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-5">

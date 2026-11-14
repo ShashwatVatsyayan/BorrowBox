@@ -24,7 +24,7 @@ export const PageContainer = ({ children, maxWidth = 'max-w-4xl' }) => {
           <footer className="mt-12 pt-6 border-t border-surface-border text-xs text-ink-muted">
             <div className={`${maxWidth} mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 px-2`}>
               <div className="flex flex-col items-center sm:items-start gap-0.5">
-                <p className="font-medium text-ink-primary">BorrowBox Campus Lending Platform</p>
+                <p className="font-medium text-ink-primary">BorrowBox Campus Rental Marketplace</p>
                 <p className="text-[11px] text-ink-light">© 2026 BorrowBox. Developed by Shashwat Vatsyayan. All rights reserved.</p>
               </div>
               <div className="flex items-center gap-3 flex-wrap justify-center">

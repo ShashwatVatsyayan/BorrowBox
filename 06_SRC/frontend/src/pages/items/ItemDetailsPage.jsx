@@ -16,7 +16,10 @@ import {
   Bookmark,
   MessageSquare,
   Send,
-  Bell
+  Bell,
+  Tag,
+  IndianRupee,
+  ShieldCheck
 } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { Button } from '../../components/common/Button';
@@ -29,10 +32,10 @@ import { PublicProfileModal } from '../../components/profile/PublicProfileModal'
 import { itemService } from '../../services/itemService';
 import { requestService } from '../../services/requestService';
 import { reportService } from '../../services/notificationService';
-import { validateBorrowDates } from '../../utils/validators';
+import { validateBorrowDates, calculateRentalPricing } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { REPORT_REASONS } from '../../utils/constants';
+import { REPORT_REASONS, CATEGORY_PRICE_LIMITS, RENTAL_DURATIONS } from '../../utils/constants';
 import { formatRelativeTime } from '../../utils/dateUtils';
 
 const ANGLE_SLOTS = [
@@ -64,15 +67,38 @@ export const ItemDetailsPage = () => {
 
   // Request modal state
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [selectedDurationPreset, setSelectedDurationPreset] = useState('3d');
   const [requestDates, setRequestDates] = useState({
     startDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-    endDate: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+    endDate: new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
     message: '',
     offerItem: ''
   });
   const [requestError, setRequestError] = useState(null);
   const [requestSuccess, setRequestSuccess] = useState(false);
   const [submittingRequest, setSubmittingRequest] = useState(false);
+
+  const handleDurationPreset = (presetId, days) => {
+    setSelectedDurationPreset(presetId);
+    if (days) {
+      const start = new Date(requestDates.startDate);
+      const end = new Date(start.getTime() + 86400000 * days);
+      setRequestDates((prev) => ({
+        ...prev,
+        endDate: end.toISOString().split('T')[0]
+      }));
+    }
+  };
+
+  // Pricing calculation
+  const dailyRate = item?.daily_price || 15;
+  const calculatedDays = Math.max(1, Math.ceil((new Date(requestDates.endDate) - new Date(requestDates.startDate)) / (1000 * 60 * 60 * 24)));
+  let discountPct = 0;
+  if (calculatedDays >= 14) discountPct = item?.duration_discounts?.['14'] || 15;
+  else if (calculatedDays >= 7) discountPct = item?.duration_discounts?.['7'] || 10;
+  else if (calculatedDays >= 3) discountPct = item?.duration_discounts?.['3'] || 5;
+
+  const pricingBreakdown = calculateRentalPricing(dailyRate, calculatedDays, discountPct);
 
   // Report modal state
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -484,17 +510,30 @@ export const ItemDetailsPage = () => {
             </div>
           )}
 
-          {listingType === 'borrow' && (
-            <div className="p-4 rounded-xl bg-brand-50/70 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800/50">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-brand-700 dark:text-brand-300 uppercase tracking-wide mb-1">
-                <Clock size={14} />
-                <span>Allowed Borrowing Period</span>
+          {(listingType === 'rent' || listingType === 'borrow') && (
+            <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800/60 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide">
+                  <Tag size={14} className="text-[#D4A853]" />
+                  <span>Peer Rental Rate</span>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300/50">
+                  Category Ceiling: INR {CATEGORY_PRICE_LIMITS[item.category] || 50}/day
+                </span>
               </div>
-              <p className="text-sm font-semibold text-ink-primary">
-                {item.lending_duration || 'Flexible borrowing period by student mutual agreement'}
-              </p>
-              <p className="text-[11px] text-ink-muted mt-1.5">
-                Please return this item on or before the agreed return timestamp to maintain campus trust score.
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-2xl sm:text-3xl font-extrabold text-[#0F382A] dark:text-emerald-400 font-serif">
+                  INR {item.daily_price || 15}
+                </span>
+                <span className="text-xs text-ink-muted font-medium">per day</span>
+                {item.duration_discounts?.['7'] && (
+                  <span className="ml-2 text-xs font-semibold text-[#D4A853] bg-[#D4A853]/15 px-2 py-0.5 rounded-full">
+                    {item.duration_discounts['7']}% off on 7+ days
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-ink-muted leading-relaxed">
+                Rent directly from a verified campus peer. Transparent platform pricing with student rate protection. You can also message the owner directly to negotiate or discuss pickup details.
               </p>
             </div>
           )}
@@ -570,11 +609,11 @@ export const ItemDetailsPage = () => {
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-wrap items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5 w-full">
                 <Button
                   variant="primary"
                   size="lg"
-                  className="w-full sm:w-auto sm:min-w-[200px]"
+                  className="flex-1 sm:flex-initial sm:min-w-[180px]"
                   disabled={!item.is_active}
                   onClick={() => {
                     setRequestDates((prev) => ({ ...prev, isTradeProposal: false }));
@@ -583,30 +622,47 @@ export const ItemDetailsPage = () => {
                 >
                   {listingType === 'trade' && 'Propose Permanent Trade'}
                   {listingType === 'wanted' && 'Offer Item to Student'}
-                  {listingType === 'borrow' && 'Request to Borrow'}
+                  {(listingType === 'rent' || listingType === 'borrow') && 'Request to Rent'}
                 </Button>
 
-                {listingType === 'borrow' && item.is_active && (
+                {/* Direct Message to Negotiate button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!user) {
+                      navigate('/login');
+                      return;
+                    }
+                    navigate(`/app/messages?userId=${item.owner_id}&itemId=${item.id}`);
+                  }}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border border-surface-border bg-surface-card hover:bg-slate-100 dark:hover:bg-slate-800 text-ink-primary font-semibold text-xs sm:text-sm transition-all shadow-xs"
+                  title="Chat directly with student owner to negotiate price or ask questions"
+                >
+                  <MessageSquare size={14} className="text-[#D4A853]" />
+                  <span>Message Owner</span>
+                </button>
+
+                {item.is_active && (
                   <button
                     type="button"
                     onClick={() => {
                       setRequestDates((prev) => ({ ...prev, isTradeProposal: true, offerItem: '' }));
                       setIsRequestModalOpen(true);
                     }}
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border border-[#D4A853] bg-[#D4A853]/15 hover:bg-[#D4A853]/25 text-[#0F382A] dark:text-[#D4A853] font-semibold text-xs sm:text-sm transition-all shadow-xs"
+                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-full border border-[#D4A853]/40 bg-[#D4A853]/10 hover:bg-[#D4A853]/20 text-[#0F382A] dark:text-[#D4A853] font-semibold text-xs sm:text-sm transition-all"
                     title="Offer to permanently exchange an item with this student"
                   >
                     <ArrowLeftRight size={14} />
-                    <span>Offer Permanent Trade</span>
+                    <span>Propose Trade</span>
                   </button>
                 )}
 
                 <button
                   onClick={() => setIsReportModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-state-danger transition-colors p-2"
+                  className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-state-danger transition-colors p-2 ml-auto"
                 >
                   <Flag size={14} />
-                  <span>Report Listing</span>
+                  <span>Report</span>
                 </button>
               </div>
             )}
@@ -703,14 +759,18 @@ export const ItemDetailsPage = () => {
             ? `Propose Permanent Trade for "${item.title}"`
             : listingType === 'wanted'
             ? `Offer Item for "${item.title}"`
-            : `Request to Borrow "${item.title}"`
+            : `Request to Rent "${item.title}"`
         }
       >
         {requestSuccess ? (
           <div className="p-4 rounded-xl bg-emerald-50 text-emerald-800 text-center flex flex-col items-center gap-2">
             <CheckCircle2 size={32} className="text-emerald-600" />
             <p className="font-bold text-sm">
-              {(listingType === 'trade' || requestDates.isTradeProposal) ? 'Trade Proposal Submitted!' : listingType === 'wanted' ? 'Offer Submitted to Student!' : 'Borrow Request Submitted!'}
+              {(listingType === 'trade' || requestDates.isTradeProposal)
+                ? 'Trade Proposal Submitted!'
+                : listingType === 'wanted'
+                ? 'Offer Submitted to Student!'
+                : 'Rental Request Submitted!'}
             </p>
             <p className="text-xs">The owner has been notified and can review your submission in their dashboard.</p>
           </div>
@@ -784,26 +844,102 @@ export const ItemDetailsPage = () => {
               </div>
             )}
 
-            {/* Standard Borrow specifics */}
-            {listingType === 'borrow' && (
-              <>
+            {/* Standard Rental Workflow */}
+            {(listingType === 'rent' || listingType === 'borrow') && !requestDates.isTradeProposal && (
+              <div className="flex flex-col gap-3.5">
+                {/* Duration Presets */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                    Select Rental Duration
+                  </label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[
+                      { id: '1d', label: '1 Day', days: 1 },
+                      { id: '3d', label: '3 Days', days: 3 },
+                      { id: '7d', label: '7 Days', days: 7 },
+                      { id: '14d', label: '14 Days', days: 14 }
+                    ].map((preset) => (
+                      <button
+                        type="button"
+                        key={preset.id}
+                        onClick={() => handleDurationPreset(preset.id, preset.days)}
+                        className={`py-2 px-2.5 rounded-xl border text-xs font-semibold transition-all text-center ${
+                          selectedDurationPreset === preset.id
+                            ? 'bg-[#0F382A] text-[#F5F2EB] border-[#0F382A] shadow-xs'
+                            : 'bg-surface-card text-ink-muted border-surface-border hover:bg-slate-100 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-2 gap-3">
                   <Input
-                    label="Start Date"
+                    label="Rental Start Date"
                     id="startDate"
                     type="date"
                     value={requestDates.startDate}
-                    onChange={(e) => setRequestDates({ ...requestDates, startDate: e.target.value })}
+                    onChange={(e) => {
+                      setRequestDates({ ...requestDates, startDate: e.target.value });
+                      setSelectedDurationPreset('custom');
+                    }}
                     required
                   />
                   <Input
-                    label="End Date"
+                    label="Return Date"
                     id="endDate"
                     type="date"
                     value={requestDates.endDate}
-                    onChange={(e) => setRequestDates({ ...requestDates, endDate: e.target.value })}
+                    onChange={(e) => {
+                      setRequestDates({ ...requestDates, endDate: e.target.value });
+                      setSelectedDurationPreset('custom');
+                    }}
                     required
                   />
+                </div>
+
+                {/* Complete Server-Side Price Breakdown */}
+                <div className="p-3.5 rounded-xl bg-surface-base border border-surface-border text-xs flex flex-col gap-1.5">
+                  <span className="font-bold text-ink-primary mb-1 flex items-center justify-between">
+                    <span>Rental Price Breakdown</span>
+                    <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full">
+                      Verified Rate
+                    </span>
+                  </span>
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span>Daily Rate:</span>
+                    <span>INR {pricingBreakdown.dailyPrice} / day</span>
+                  </div>
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span>Duration:</span>
+                    <span>{pricingBreakdown.days} day{pricingBreakdown.days > 1 ? 's' : ''}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span>Subtotal:</span>
+                    <span>INR {pricingBreakdown.grossRental}</span>
+                  </div>
+                  {pricingBreakdown.discountAmount > 0 && (
+                    <div className="flex items-center justify-between text-[#D4A853] font-medium">
+                      <span>Multi-day Discount ({pricingBreakdown.durationDiscountPercent}%):</span>
+                      <span>- INR {pricingBreakdown.discountAmount}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between text-ink-muted text-[11px] pt-1 border-t border-surface-border/60">
+                    <span>BorrowBox Platform Fee (20% included):</span>
+                    <span>INR {pricingBreakdown.commissionAmount}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-ink-muted text-[11px]">
+                    <span>Owner Payout (80%):</span>
+                    <span>INR {pricingBreakdown.ownerShare}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-ink-primary font-bold text-sm pt-1.5 border-t border-surface-border">
+                    <span>Total Payable Amount:</span>
+                    <span className="text-[#0F382A] dark:text-emerald-400 font-serif text-base">
+                      INR {pricingBreakdown.totalPayable}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
@@ -812,14 +948,14 @@ export const ItemDetailsPage = () => {
                   </label>
                   <textarea
                     id="message"
-                    rows={3}
-                    placeholder="Mention why you need the item, your section, or exam date..."
+                    rows={2}
+                    placeholder="Mention why you need the item, your department, or preferred pickup spot..."
                     value={requestDates.message}
                     onChange={(e) => setRequestDates({ ...requestDates, message: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border border-surface-border text-ink-primary text-xs outline-none focus:border-brand-600"
                   />
                 </div>
-              </>
+              </div>
             )}
 
             <div className="p-3 rounded-xl bg-emerald-950/5 dark:bg-emerald-950/30 border border-emerald-900/15 dark:border-emerald-800/40 text-emerald-900 dark:text-emerald-200 text-[11px] leading-relaxed">
@@ -831,7 +967,11 @@ export const ItemDetailsPage = () => {
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm" loading={submittingRequest}>
-                {listingType === 'trade' ? 'Send Trade Proposal' : listingType === 'wanted' ? 'Send Offer' : 'Submit Request'}
+                {listingType === 'trade' || requestDates.isTradeProposal
+                  ? 'Send Trade Proposal'
+                  : listingType === 'wanted'
+                  ? 'Send Offer'
+                  : 'Send Rental Booking Request'}
               </Button>
             </div>
           </form>

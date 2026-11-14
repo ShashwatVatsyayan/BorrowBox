@@ -54,9 +54,9 @@ export const ActivityPage = () => {
   return (
     <PageContainer>
       <div className="mb-5">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Activity & Requests</h1>
+        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Activity &amp; Rentals</h1>
         <p className="text-xs text-ink-muted mt-0.5">
-          Manage borrow requests, active lending sessions, and return confirmations
+          Manage rental bookings, student earnings, physical handovers, and return confirmations.
         </p>
       </div>
 
@@ -70,7 +70,7 @@ export const ActivityPage = () => {
               : 'border-transparent text-ink-muted hover:text-ink-primary'
           }`}
         >
-          <span>Lending (Requests for My Items)</span>
+          <span>Incoming Requests (For My Items)</span>
           <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-ink-muted">
             {receivedRequests.length}
           </span>
@@ -84,7 +84,7 @@ export const ActivityPage = () => {
               : 'border-transparent text-ink-muted hover:text-ink-primary'
           }`}
         >
-          <span>Borrowing (Items I Requested)</span>
+          <span>My Rentals (Items I Rented)</span>
           <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-ink-muted">
             {sentRequests.length}
           </span>

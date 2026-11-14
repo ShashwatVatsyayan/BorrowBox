@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Bell,
   SlidersHorizontal,
-  ChevronDown
+  ChevronDown,
+  MessageSquare
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -54,6 +55,16 @@ export const AppHeader = () => {
 
           {/* Theme Toggle Button */}
           <ThemeToggle size="sm" />
+
+          {/* Direct Messages */}
+          <Link
+            to="/app/messages"
+            className="relative p-2 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Direct Messages"
+            title="Messages and Negotiation Offers"
+          >
+            <MessageSquare size={18} />
+          </Link>
 
           {/* Notifications Bell */}
           <Link

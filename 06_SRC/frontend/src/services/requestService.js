@@ -1,30 +1,25 @@
 import { isConfigured, supabase, getLocalDB, saveLocalDB } from '../lib/supabase';
 import { authService } from './authService';
 import { checkDateOverlap } from '../utils/dateUtils';
+import { calculateRentalPricing } from '../utils/validators';
 
 export const requestService = {
-  async createRequest({ itemId, startDate, endDate, message, requestType = 'borrow', offerItem = '' }) {
+  async createRequest({
+    itemId,
+    startDate,
+    endDate,
+    message,
+    requestType = 'rent',
+    offerItem = '',
+    customDailyPrice = null,
+    discountPercent = 0
+  }) {
     const user = await authService.getUser();
     if (!user) throw new Error('Authentication required.');
 
-    if (isConfigured && supabase) {
-      const { data, error } = await supabase
-        .from('borrow_requests')
-        .insert({
-          item_id: itemId,
-          borrower_id: user.id,
-          start_date: startDate,
-          end_date: endDate,
-          message: message || '',
-          status: 'pending'
-        })
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    }
+    const start = startDate || new Date().toISOString().split('T')[0];
+    const end = endDate || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0];
 
-    // Local deterministic mode
     const db = getLocalDB();
     const item = db.items.find((i) => i.id === itemId);
     if (!item) throw new Error('Item not found');
@@ -33,35 +28,63 @@ export const requestService = {
       throw new Error('You cannot request or trade with your own item.');
     }
 
+    const days = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)));
+    const dailyPrice = customDailyPrice !== null ? Number(customDailyPrice) : (item.daily_price || 15);
+    const pricing = calculateRentalPricing(dailyPrice, days, discountPercent);
+
+    const normalizedType = requestType === 'borrow' ? 'rent' : requestType;
+
     const newReq = {
       id: `req-${Date.now()}`,
       item_id: itemId,
       borrower_id: user.id,
-      start_date: startDate || new Date().toISOString().split('T')[0],
-      end_date: endDate || new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0],
+      start_date: start,
+      end_date: end,
+      daily_price: pricing.dailyPrice,
+      total_days: pricing.days,
+      total_amount: pricing.totalPayable,
+      commission_amount: pricing.commissionAmount,
+      owner_share: pricing.ownerShare,
       message: message ? message.trim() : '',
-      request_type: requestType,
+      request_type: normalizedType,
       offer_item: offerItem,
       status: 'pending',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
 
+    if (isConfigured && supabase) {
+      try {
+        await supabase.from('borrow_requests').insert({
+          item_id: itemId,
+          borrower_id: user.id,
+          start_date: start,
+          end_date: end,
+          message: message || '',
+          status: 'pending'
+        });
+      } catch {
+        // Fallback to local
+      }
+    }
+
+    if (!db.borrow_requests) db.borrow_requests = [];
     db.borrow_requests.unshift(newReq);
 
     // Notify item owner
-    const notifTitle = requestType === 'trade'
+    const notifTitle = normalizedType === 'trade'
       ? 'New Trade Proposal'
-      : requestType === 'wanted'
-      ? 'New Offer on Wanted Request'
-      : 'New Borrow Request';
+      : normalizedType === 'wanted'
+      ? 'New Offer on Requested Item'
+      : 'New Rental Request';
 
-    const notifMessage = requestType === 'trade'
+    const notifMessage = normalizedType === 'trade'
       ? `${user.full_name || 'A student'} proposed a barter/trade for "${item.title}".`
-      : requestType === 'wanted'
-      ? `${user.full_name || 'A student'} offered an item for your wanted request "${item.title}".`
-      : `${user.full_name || 'A student'} requested to borrow "${item.title}".`;
+      : normalizedType === 'wanted'
+      ? `${user.full_name || 'A student'} offered an item for your requested item "${item.title}".`
+      : `${user.full_name || 'A student'} requested to rent "${item.title}" for ${days} days (INR ${pricing.totalPayable}).`;
 
+    if (!db.notifications) db.notifications = [];
     db.notifications.unshift({
       id: `notif-${Date.now()}`,
       user_id: item.owner_id,
@@ -146,12 +169,12 @@ export const requestService = {
     req.status = 'approved';
     req.updated_at = new Date().toISOString();
 
-    // Notify borrower
+    // Notify renter
     db.notifications.unshift({
       id: `notif-${Date.now()}`,
       user_id: req.borrower_id,
-      title: 'Borrow Request Approved',
-      message: `Your request for "${item.title}" was approved for ${req.start_date} to ${req.end_date}.`,
+      title: req.request_type === 'trade' ? 'Trade Proposal Approved' : 'Rental Request Approved',
+      message: `Your ${req.request_type === 'trade' ? 'trade proposal' : 'rental request'} for "${item.title}" was approved for ${req.start_date} to ${req.end_date}.`,
       type: 'request_approved',
       related_request_id: req.id,
       is_read: false,
@@ -159,7 +182,7 @@ export const requestService = {
     });
 
     // Notify students who saved this item for later
-    const actionTerm = req.request_type === 'trade' ? 'traded' : 'borrowed';
+    const actionTerm = req.request_type === 'trade' ? 'traded' : 'rented';
     const savers = (db.saved_items || []).filter(
       (s) => s.item_id === item.id && s.user_id !== req.borrower_id && s.user_id !== item.owner_id
     );

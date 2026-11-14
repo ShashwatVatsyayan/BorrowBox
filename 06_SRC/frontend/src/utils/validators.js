@@ -1,4 +1,11 @@
-import { CATEGORIES, CONDITIONS, DEFAULT_ALLOWED_DOMAINS } from './constants.js';
+import {
+  CATEGORIES,
+  CONDITIONS,
+  DEFAULT_ALLOWED_DOMAINS,
+  CATEGORY_PRICE_LIMITS,
+  MIN_RENTAL_PRICE,
+  DEFAULT_COMMISSION_PERCENTAGE
+} from './constants.js';
 
 export const validateEmail = (email, allowedDomains = DEFAULT_ALLOWED_DOMAINS) => {
   if (!email || typeof email !== 'string') {
@@ -99,6 +106,76 @@ export const validatePassword = (password) => {
   return { valid: true, criteria };
 };
 
+/**
+ * Validates rental price per day against category price ceiling and platform minimum.
+ */
+export const validateRentalPrice = (price, category) => {
+  const numericPrice = Number(price);
+  if (price === undefined || price === null || price === '' || isNaN(numericPrice)) {
+    return {
+      valid: false,
+      error: 'Rental price per day is required.',
+      maxPrice: CATEGORY_PRICE_LIMITS[category] || 50
+    };
+  }
+
+  if (numericPrice < MIN_RENTAL_PRICE) {
+    return {
+      valid: false,
+      error: `Minimum rental price is INR ${MIN_RENTAL_PRICE}/day.`,
+      maxPrice: CATEGORY_PRICE_LIMITS[category] || 50
+    };
+  }
+
+  const maxPrice = CATEGORY_PRICE_LIMITS[category] || 50;
+  if (numericPrice > maxPrice) {
+    return {
+      valid: false,
+      error: `Maximum rental price for ${category || 'this category'} is INR ${maxPrice}/day. Please adjust your price.`,
+      maxPrice
+    };
+  }
+
+  return {
+    valid: true,
+    error: null,
+    maxPrice
+  };
+};
+
+/**
+ * Calculates complete rental price breakdown with duration discount, commission, and owner share.
+ */
+export const calculateRentalPricing = (
+  dailyPrice,
+  days,
+  durationDiscountPercent = 0,
+  commissionPercent = DEFAULT_COMMISSION_PERCENTAGE
+) => {
+  const rate = Math.max(0, Number(dailyPrice) || 0);
+  const count = Math.max(1, Number(days) || 1);
+  const discountPct = Math.max(0, Math.min(50, Number(durationDiscountPercent) || 0));
+
+  const grossRental = rate * count;
+  const discountAmount = Math.round(grossRental * (discountPct / 100));
+  const rentalAmount = Math.max(0, grossRental - discountAmount);
+  const commissionAmount = Math.round(rentalAmount * (commissionPercent / 100));
+  const ownerShare = rentalAmount - commissionAmount;
+
+  return {
+    dailyPrice: rate,
+    days: count,
+    grossRental,
+    durationDiscountPercent: discountPct,
+    discountAmount,
+    rentalAmount,
+    commissionPercent,
+    commissionAmount,
+    ownerShare,
+    totalPayable: rentalAmount
+  };
+};
+
 export const validateItemForm = (values) => {
   const errors = {};
   if (!values.title || values.title.trim().length < 3) {
@@ -127,6 +204,23 @@ export const validateItemForm = (values) => {
 
   if (!values.images || values.images.length < 4) {
     errors.images = 'Please provide at least 4 photos showing the top, bottom, left side, and right side views of the item.';
+  }
+
+  // Validate rental price for rental listings
+  const isRental = !values.listing_type || values.listing_type === 'rent' || values.listing_type === 'borrow';
+  if (isRental && values.category) {
+    const priceValidation = validateRentalPrice(values.daily_price, values.category);
+    if (!priceValidation.valid) {
+      errors.daily_price = priceValidation.error;
+    }
+  }
+
+  // Validate budget for wanted requests
+  if (values.listing_type === 'wanted' && values.budget_per_day && values.category) {
+    const budgetValidation = validateRentalPrice(values.budget_per_day, values.category);
+    if (!budgetValidation.valid) {
+      errors.budget_per_day = budgetValidation.error;
+    }
   }
 
   if (values.listing_type === 'trade') {
@@ -160,12 +254,11 @@ export const validateBorrowDates = (startDate, endDate) => {
     return { valid: false, error: 'Start date must be on or before end date.' };
   }
 
-  // Maximum borrowing duration: 60 days
+  // Maximum rental duration: 60 days
   const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   if (diffDays > 60) {
-    return { valid: false, error: 'Borrowing duration cannot exceed 60 days.' };
+    return { valid: false, error: 'Rental duration cannot exceed 60 days.' };
   }
 
   return { valid: true };
 };
-

@@ -27,6 +27,7 @@ const AddItemPage = lazy(() => import('./pages/items/AddItemPage').then(m => ({ 
 const EditItemPage = lazy(() => import('./pages/items/EditItemPage').then(m => ({ default: m.EditItemPage })));
 const MyListingsPage = lazy(() => import('./pages/items/MyListingsPage').then(m => ({ default: m.MyListingsPage })));
 const ActivityPage = lazy(() => import('./pages/activity/ActivityPage').then(m => ({ default: m.ActivityPage })));
+const MessagesPage = lazy(() => import('./pages/messages/MessagesPage').then(m => ({ default: m.MessagesPage })));
 const RequestsPage = lazy(() => import('./pages/activity/RequestsPage').then(m => ({ default: m.RequestsPage })));
 const BorrowingsPage = lazy(() => import('./pages/activity/BorrowingsPage').then(m => ({ default: m.BorrowingsPage })));
 const LendingPage = lazy(() => import('./pages/activity/LendingPage').then(m => ({ default: m.LendingPage })));
@@ -76,6 +77,8 @@ export function App() {
               <Route path="/app/items/:id" element={<ProtectedRoute><ItemDetailsPage /></ProtectedRoute>} />
               <Route path="/app/items/:id/edit" element={<ProtectedRoute><EditItemPage /></ProtectedRoute>} />
               <Route path="/app/listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
+              <Route path="/app/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
+              <Route path="/app/messages/:conversationId" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
               <Route path="/app/activity" element={<ProtectedRoute><ActivityPage /></ProtectedRoute>} />
               <Route path="/app/requests" element={<ProtectedRoute><RequestsPage /></ProtectedRoute>} />
               <Route path="/app/borrowings" element={<ProtectedRoute><BorrowingsPage /></ProtectedRoute>} />

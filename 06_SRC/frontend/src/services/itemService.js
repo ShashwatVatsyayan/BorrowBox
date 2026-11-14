@@ -42,8 +42,12 @@ export const itemService = {
     if (category && category !== 'All') {
       result = result.filter((i) => i.category === category);
     }
-    if (listingType && listingType !== 'All') {
-      result = result.filter((i) => (i.listing_type || 'borrow') === listingType);
+    if (listingType && listingType !== 'All' && listingType !== 'all') {
+      if (listingType === 'rent' || listingType === 'borrow') {
+        result = result.filter((i) => !i.listing_type || i.listing_type === 'rent' || i.listing_type === 'borrow');
+      } else {
+        result = result.filter((i) => (i.listing_type || 'rent') === listingType);
+      }
     }
     if (condition && condition !== 'All') {
       result = result.filter((i) => i.condition === condition);
@@ -123,7 +127,11 @@ export const itemService = {
       category: itemData.category,
       condition: itemData.condition,
       location_label: itemData.location_label.trim(),
-      listing_type: itemData.listing_type || 'borrow',
+      listing_type: itemData.listing_type || 'rent',
+      daily_price: itemData.daily_price !== undefined ? Number(itemData.daily_price) : 15,
+      budget_per_day: itemData.budget_per_day !== undefined ? Number(itemData.budget_per_day) : null,
+      rental_durations: itemData.rental_durations || ['1 day', '3 days', '7 days', '14 days'],
+      duration_discounts: itemData.duration_discounts || { '3': 5, '7': 10, '14': 20 },
       lending_duration: itemData.lending_duration || '1 - 3 Days',
       trade_preference: itemData.trade_preference ? itemData.trade_preference.trim() : '',
       trade_item_desired: itemData.trade_item_desired ? itemData.trade_item_desired.trim() : '',
@@ -195,6 +203,10 @@ export const itemService = {
       condition: itemData.condition,
       location_label: itemData.location_label,
       listing_type: itemData.listing_type || item.listing_type,
+      daily_price: itemData.daily_price !== undefined ? Number(itemData.daily_price) : item.daily_price,
+      budget_per_day: itemData.budget_per_day !== undefined ? Number(itemData.budget_per_day) : item.budget_per_day,
+      rental_durations: itemData.rental_durations || item.rental_durations,
+      duration_discounts: itemData.duration_discounts || item.duration_discounts,
       lending_duration: itemData.lending_duration || item.lending_duration,
       trade_preference: itemData.trade_preference !== undefined ? itemData.trade_preference : item.trade_preference,
       trade_item_desired: itemData.trade_item_desired !== undefined ? itemData.trade_item_desired : item.trade_item_desired,

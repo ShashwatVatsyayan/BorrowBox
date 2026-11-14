@@ -40,9 +40,9 @@ export const ExplorePage = () => {
   return (
     <PageContainer>
       <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Explore Campus Items</h1>
+        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Explore Campus Rentals</h1>
         <p className="text-xs text-ink-muted mt-0.5">
-          Browse clothes, shoes, electronics, books, and hostel gear listed for borrowing or trade
+          Browse textbooks, calculators, lab gear, and room essentials available for rent or student requests
         </p>
       </div>
 

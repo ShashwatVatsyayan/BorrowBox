@@ -1,0 +1,7 @@
+{
+  "planning": "compact",
+  "context_depth": "dependency",
+  "verification_depth": "impact",
+  "delegation": "none",
+  "reason_codes": ["multiple-files", "rental-transformation", "messaging-feature", "trade-negotiation"]
+}

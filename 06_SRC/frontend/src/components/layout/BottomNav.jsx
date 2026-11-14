@@ -1,14 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Plus, Clock, User } from 'lucide-react';
+import { Home, Compass, Plus, MessageSquare, Clock } from 'lucide-react';
 
 export const BottomNav = () => {
   const navItems = [
     { to: '/app', label: 'Home', icon: Home, end: true },
     { to: '/app/explore', label: 'Explore', icon: Compass },
     { to: '/app/items/new', label: 'List', icon: Plus, isPrimary: true },
-    { to: '/app/activity', label: 'Activity', icon: Clock },
-    { to: '/app/profile', label: 'Profile', icon: User }
+    { to: '/app/messages', label: 'Messages', icon: MessageSquare },
+    { to: '/app/activity', label: 'Activity', icon: Clock }
   ];
 
   return (

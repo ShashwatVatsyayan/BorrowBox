@@ -48,8 +48,11 @@ export const DashboardPage = () => {
     // Type or Saved filter
     if (selectedListingType === 'saved') {
       if (!item.is_saved) return false;
+    } else if (selectedListingType === 'rent') {
+      const type = item.listing_type || 'rent';
+      if (type !== 'rent' && type !== 'borrow') return false;
     } else if (selectedListingType !== 'All') {
-      const type = item.listing_type || 'borrow';
+      const type = item.listing_type || 'rent';
       if (type !== selectedListingType) return false;
     }
     // Category filter
@@ -79,7 +82,7 @@ export const DashboardPage = () => {
             <div className="flex items-center gap-2 mb-1.5">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-semibold tracking-wide bg-emerald-50 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Campus Exchange Network</span>
+                <span>Campus Rental Network</span>
               </span>
               <span className="text-xs text-ink-muted font-medium">Chandigarh University</span>
             </div>
@@ -87,7 +90,7 @@ export const DashboardPage = () => {
               Welcome, {user?.full_name?.split(' ')[0] || 'Student'}
             </h1>
             <p className="text-xs sm:text-sm text-ink-muted mt-0.5 max-w-xl leading-relaxed">
-              Your verified university hub to borrow textbooks, trade electronics, and request hostel essentials.
+              BorrowBox — Rent What You Need. Earn From What You Own. Protected student rates and direct peer handoffs.
             </p>
           </div>
 
@@ -98,21 +101,21 @@ export const DashboardPage = () => {
               className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full bg-[#0F382A] hover:bg-[#164e3b] text-[#F5F2EB] font-semibold text-xs sm:text-sm transition-all shadow-xs hover:-translate-y-0.5 active:translate-y-0"
             >
               <PlusCircle size={14} />
-              <span>List to Lend</span>
-            </Link>
-            <Link
-              to="/app/items/new"
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full border border-[#D4A853] bg-[#D4A853]/15 hover:bg-[#D4A853]/25 text-[#0F382A] dark:text-[#D4A853] font-semibold text-xs sm:text-sm transition-all shadow-xs hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <ArrowLeftRight size={14} />
-              <span>Offer for Trade</span>
+              <span>List for Rent</span>
             </Link>
             <Link
               to="/app/items/new"
               className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full border border-surface-border bg-surface-card hover:bg-slate-100 dark:hover:bg-slate-800 text-ink-primary font-semibold text-xs sm:text-sm transition-all shadow-xs hover:-translate-y-0.5 active:translate-y-0"
             >
               <HelpCircle size={14} />
-              <span>Post Wanted</span>
+              <span>Request an Item</span>
+            </Link>
+            <Link
+              to="/app/messages"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full border border-[#D4A853] bg-[#D4A853]/15 hover:bg-[#D4A853]/25 text-[#0F382A] dark:text-[#D4A853] font-semibold text-xs sm:text-sm transition-all shadow-xs hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <ArrowLeftRight size={14} />
+              <span>Messages &amp; Offers</span>
             </Link>
           </div>
         </div>
@@ -131,7 +134,7 @@ export const DashboardPage = () => {
             </span>
           </div>
           <p className="font-serif text-xl sm:text-3xl font-bold text-ink-primary">{myListings.length}</p>
-          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Lending</p>
+          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Active Items</p>
         </Link>
 
         <Link
@@ -139,48 +142,41 @@ export const DashboardPage = () => {
           className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-surface-card border border-surface-border/90 hover:border-emerald-600/40 transition-all duration-200 shadow-xs group"
         >
           <div className="flex items-center justify-between mb-1 sm:mb-2">
-            <span className="text-[11px] sm:text-xs font-semibold text-ink-muted group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Active Borrows</span>
+            <span className="text-[11px] sm:text-xs font-semibold text-ink-muted group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Active Rentals</span>
             <span className="p-1 rounded-md sm:rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400">
               <BookOpen size={13} />
             </span>
           </div>
           <p className="font-serif text-xl sm:text-3xl font-bold text-ink-primary">{activeBorrowings.length}</p>
-          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Borrowed</p>
+          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Currently Rented</p>
         </Link>
 
-        <button
-          type="button"
-          onClick={() => {
-            setSelectedListingType(selectedListingType === 'trade' ? 'All' : 'trade');
-          }}
-          className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left transition-all duration-200 shadow-xs group ${
-            selectedListingType === 'trade'
-              ? 'bg-[#D4A853]/20 border-[#D4A853] ring-1 ring-[#D4A853]'
-              : 'bg-surface-card border-surface-border/90 hover:border-[#D4A853]/60'
-          }`}
+        <Link
+          to="/app/messages"
+          className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-surface-card border border-surface-border/90 hover:border-[#D4A853]/60 transition-all duration-200 shadow-xs group"
         >
           <div className="flex items-center justify-between mb-1 sm:mb-2">
-            <span className="text-[11px] sm:text-xs font-semibold text-ink-muted group-hover:text-[#D4A853] transition-colors">Trade & Barter</span>
+            <span className="text-[11px] sm:text-xs font-semibold text-ink-muted group-hover:text-[#D4A853] transition-colors">Messages &amp; Offers</span>
             <span className="p-1 rounded-md sm:rounded-lg bg-[#D4A853]/20 text-[#D4A853]">
               <ArrowLeftRight size={13} />
             </span>
           </div>
-          <p className="font-serif text-xl sm:text-3xl font-bold text-ink-primary">{tradeListings.length}</p>
-          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">For Swap</p>
-        </button>
+          <p className="font-serif text-xl sm:text-3xl font-bold text-ink-primary">Chat</p>
+          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Negotiate Rates</p>
+        </Link>
 
         <Link
           to="/app/requests"
           className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-surface-card border border-surface-border/90 hover:border-rose-400 transition-all duration-200 shadow-xs group"
         >
           <div className="flex items-center justify-between mb-1 sm:mb-2">
-            <span className="text-[11px] sm:text-xs font-semibold text-ink-muted group-hover:text-rose-600 transition-colors">Requests</span>
+            <span className="text-[11px] sm:text-xs font-semibold text-ink-muted group-hover:text-rose-600 transition-colors">Rental Requests</span>
             <span className="p-1 rounded-md sm:rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400">
               <Clock size={13} />
             </span>
           </div>
           <p className="font-serif text-xl sm:text-3xl font-bold text-ink-primary">{pendingReceived.length}</p>
-          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Pending</p>
+          <p className="text-[10px] sm:text-[11px] text-ink-light mt-0.5">Pending Approvals</p>
         </Link>
       </div>
 
@@ -201,15 +197,27 @@ export const DashboardPage = () => {
           </button>
           <button
             type="button"
-            onClick={() => setSelectedListingType('borrow')}
+            onClick={() => setSelectedListingType('rent')}
             className={`min-h-[36px] px-3.5 py-1.5 rounded-full font-semibold transition-all border flex items-center gap-1.5 shrink-0 ${
-              selectedListingType === 'borrow'
+              selectedListingType === 'rent'
                 ? 'bg-[#0F382A] text-[#F5F2EB] border-[#0F382A] shadow-xs'
                 : 'bg-surface-card text-ink-muted border-surface-border hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <Clock size={12} />
-            <span>To Borrow ({items.filter((i) => (i.listing_type || 'borrow') === 'borrow').length})</span>
+            <span>For Rent ({items.filter((i) => !i.listing_type || i.listing_type === 'rent' || i.listing_type === 'borrow').length})</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedListingType('wanted')}
+            className={`min-h-[36px] px-3.5 py-1.5 rounded-full font-semibold transition-all border flex items-center gap-1.5 shrink-0 ${
+              selectedListingType === 'wanted'
+                ? 'bg-[#0F382A] text-[#F5F2EB] border-[#0F382A] shadow-xs'
+                : 'bg-surface-card text-ink-muted border-surface-border hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <HelpCircle size={12} />
+            <span>Requested Items ({wantedListings.length})</span>
           </button>
           <button
             type="button"
@@ -221,26 +229,14 @@ export const DashboardPage = () => {
             }`}
           >
             <ArrowLeftRight size={12} />
-            <span>Permanent Trade ({tradeListings.length})</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelectedListingType('wanted')}
-            className={`min-h-[36px] px-3.5 py-1.5 rounded-full font-semibold transition-all border flex items-center gap-1.5 shrink-0 ${
-              selectedListingType === 'wanted'
-                ? 'bg-slate-800 text-white border-slate-800 shadow-xs'
-                : 'bg-surface-card text-ink-muted border-surface-border hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <HelpCircle size={12} />
-            <span>Wanted ({wantedListings.length})</span>
+            <span>Trades ({tradeListings.length})</span>
           </button>
           <button
             type="button"
             onClick={() => setSelectedListingType('saved')}
             className={`min-h-[36px] px-3.5 py-1.5 rounded-full font-semibold transition-all border flex items-center gap-1.5 shrink-0 ${
               selectedListingType === 'saved'
-                ? 'bg-rose-700 text-white border-rose-700 shadow-xs'
+                ? 'bg-[#0F382A] text-[#F5F2EB] border-[#0F382A] shadow-xs'
                 : 'bg-surface-card text-ink-muted border-surface-border hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >

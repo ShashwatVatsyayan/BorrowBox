@@ -4,9 +4,9 @@ import { CATEGORIES, CONDITIONS, LISTING_TYPES } from '../../utils/constants';
 
 const FILTER_TABS = [
   { id: 'all', label: 'All Items' },
-  { id: 'borrow', label: 'To Borrow' },
-  { id: 'trade', label: 'For Trade' },
-  { id: 'wanted', label: 'Wanted' }
+  { id: 'rent', label: 'For Rent' },
+  { id: 'wanted', label: 'Requested Items' },
+  { id: 'trade', label: 'Trades' }
 ];
 
 export const ItemFilters = ({ filters, onChange, onClear }) => {
