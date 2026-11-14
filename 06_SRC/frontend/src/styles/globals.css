@@ -196,9 +196,10 @@ html.dark .glass-block {
 /* Codemure Ink Bleed WebGL2 Transition Canvas */
 .ink-canvas {
   position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
   pointer-events: none;
   z-index: 999999;
   opacity: 0;

@@ -7,8 +7,8 @@
  */
 
 const BACKGROUND = {
-  light: '#F8FAFC',
-  dark: '#000000',
+  light: '#F5F2EB',
+  dark: '#080C0A',
 };
 
 const isCoarsePointer = () =>
@@ -53,15 +53,15 @@ export async function capturePage(theme, scale, maxTextureSize) {
   const { default: html2canvas } = await import('html2canvas');
   const canvas = await html2canvas(document.documentElement, {
     scale: safeScale,
-    backgroundColor: BACKGROUND[theme] || (theme === 'dark' ? '#000000' : '#F8FAFC'),
+    backgroundColor: BACKGROUND[theme] || (theme === 'dark' ? '#080C0A' : '#F5F2EB'),
     x: scrollX,
     y: scrollY,
     width,
     height,
-    scrollX: 0,
-    scrollY: 0,
-    windowWidth: width,
-    windowHeight: height,
+    scrollX,
+    scrollY,
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : width,
+    windowHeight: typeof window !== 'undefined' ? window.innerHeight : height,
     logging: false,
     useCORS: true,
     onclone: (doc) => {
@@ -71,8 +71,7 @@ export async function capturePage(theme, scale, maxTextureSize) {
       } else {
         doc.documentElement.classList.remove('dark');
       }
-      doc.documentElement.style.overflow = 'hidden';
-      doc.body.style.overflow = 'hidden';
+      // Leave scroll state intact so layout and centered containers do not shift
       // The live toggle is drawn above the overlay, so leave a hole for it if tagged
       doc.querySelectorAll('[data-ink-live]').forEach((el) => {
         el.style.visibility = 'hidden';

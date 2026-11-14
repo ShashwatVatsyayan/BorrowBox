@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Package, Clock, Plus, User, SlidersHorizontal, Settings, FileText, ExternalLink } from 'lucide-react';
+import { Home, Compass, Package, Clock, Plus, User, SlidersHorizontal, Settings } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export const DesktopSidebar = () => {
@@ -57,27 +57,10 @@ export const DesktopSidebar = () => {
       <div className="pt-3 border-t border-surface-border text-xs text-ink-muted">
         <p className="font-bold text-ink-primary truncate">{user?.full_name}</p>
         <p className="truncate text-[11px] text-ink-muted">{user?.email}</p>
-        <div className="mt-2.5 pt-2 border-t border-surface-border/50 flex flex-col gap-2">
-          <div className="flex items-center">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-800 text-[10px] whitespace-nowrap">
-              Verified Student
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 text-[10px] text-ink-muted whitespace-nowrap">
-            <a
-              href="https://portfolio-v2-alpha-ten-71.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors inline-flex items-center gap-0.5 font-medium"
-            >
-              Portfolio
-              <ExternalLink size={9} />
-            </a>
-            <span>•</span>
-            <NavLink to="/terms" className="hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">Terms</NavLink>
-            <span>•</span>
-            <NavLink to="/privacy" className="hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">Privacy</NavLink>
-          </div>
+        <div className="mt-2.5 pt-2 border-t border-surface-border/50 flex items-center">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-800 text-[10px] whitespace-nowrap">
+            Verified Student
+          </span>
         </div>
       </div>
     </aside>
