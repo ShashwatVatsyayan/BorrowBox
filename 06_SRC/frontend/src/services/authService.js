@@ -1,5 +1,6 @@
 import { isConfigured, supabase, getLocalDB, saveLocalDB } from '../lib/supabase';
 import { DEFAULT_ALLOWED_DOMAINS } from '../utils/constants';
+import { rateLimiter } from '../utils/rateLimiter';
 
 const CURRENT_USER_SESSION_KEY = 'borrowbox_auth_session';
 
@@ -29,6 +30,9 @@ export const authService = {
     if (!normalizedEmail) {
       throw new Error('Email address is required.');
     }
+
+    // Rate limiting: max 5 signup/auth attempts per minute
+    rateLimiter.consume('auth', normalizedEmail);
 
     // Backend domain verification - never trust frontend alone
     const domain = normalizedEmail.split('@')[1];
@@ -99,6 +103,9 @@ export const authService = {
       throw new Error('Email address is required.');
     }
 
+    // Rate limiting: max 2 resends per minute
+    rateLimiter.consume('resend', normalizedEmail);
+
     if (isConfigured && supabase) {
       const redirectUrl = typeof window !== 'undefined'
         ? `${window.location.origin}/auth/callback`
@@ -112,7 +119,6 @@ export const authService = {
         }
       });
       if (error) {
-        // Respect rate limits and provide clear feedback
         if (error.status === 429 || error.message?.toLowerCase().includes('rate limit')) {
           throw new Error('Too many requests. Please wait a moment before requesting another confirmation email.');
         }
@@ -122,11 +128,6 @@ export const authService = {
     }
 
     return { message: 'Confirmation link dispatched to your university email.' };
-  },
-
-  // Backward compatibility alias for legacy components
-  async resendOtp(email) {
-    return await this.resendConfirmationEmail(email);
   },
 
   async handleAuthCallback() {
@@ -180,7 +181,6 @@ export const authService = {
       }
     }
 
-    // If already logged in locally
     const currentSession = await this.getSession();
     if (currentSession?.user) {
       return currentSession;
@@ -191,6 +191,32 @@ export const authService = {
 
   async signInWithPassword({ email, password }) {
     const normalizedEmail = (email || '').trim().toLowerCase();
+
+    // 1. Special Authorized Admin Superuser Login: BorrowBoxAdmin@cuchd.in with Admin@321
+    // Does not require email confirmation
+    if (
+      normalizedEmail === 'borrowboxadmin@cuchd.in' &&
+      password === 'Admin@321'
+    ) {
+      const adminUser = {
+        id: '00000000-0000-0000-0000-000000000001',
+        email: 'BorrowBoxAdmin@cuchd.in',
+        full_name: 'BorrowBox Administrator',
+        university_uid: 'ADMIN-CU',
+        role: 'admin',
+        is_verified: true,
+        email_confirmed_at: '2026-11-14T00:00:00.000Z'
+      };
+      const session = {
+        user: adminUser,
+        access_token: 'admin-superuser-token-' + Date.now()
+      };
+      localStorage.setItem(CURRENT_USER_SESSION_KEY, JSON.stringify(session));
+      return { user: adminUser, session };
+    }
+
+    // Rate limiting: max 5 login attempts per minute per email
+    rateLimiter.consume('auth', normalizedEmail);
 
     if (isConfigured && supabase) {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -212,8 +238,7 @@ export const authService = {
       }
 
       // Authoritative verification check on user object
-      if (data?.user && !data.user.email_confirmed_at && !data.user.confirmed_at) {
-        // Prevent unverified sessions from bypassing verification
+      if (data?.user && !data.user.email_confirmed_at && !data.user.confirmed_at && data.user.role !== 'admin') {
         await supabase.auth.signOut().catch(() => {});
         const customErr = new Error('Your university email has not been confirmed yet. Please check your Outlook inbox.');
         customErr.code = 'email_not_confirmed';
@@ -227,19 +252,12 @@ export const authService = {
     // Local deterministic mode
     const db = getLocalDB();
     let user = db.users.find((u) => u.email.toLowerCase() === normalizedEmail);
-    if (!user) {
-      // Support demo aliases and UID matches
-      if (normalizedEmail === 'aarav.sharma@cuchd.in' || normalizedEmail === '23bcs12850@cuchd.in' || normalizedEmail === '23bcs12850') {
-        user = db.users.find((u) => u.id === '11111111-1111-1111-1111-111111111111');
-      } else if (normalizedEmail === 'priya.verma@cuchd.in' || normalizedEmail === '24bcs12850@cuchd.in' || normalizedEmail === '24bcs12850') {
-        user = db.users.find((u) => u.id === '22222222-2222-2222-2222-222222222222');
-      }
-    }
+
     if (!user) {
       throw new Error('Invalid email or password. Please check your credentials.');
     }
 
-    if (user.is_verified === false) {
+    if (user.is_verified === false && user.role !== 'admin') {
       const customErr = new Error('Your university email has not been confirmed yet. Please verify your email before logging in.');
       customErr.code = 'email_not_confirmed';
       customErr.email = normalizedEmail;
@@ -277,26 +295,5 @@ export const authService = {
       return true;
     }
     return true;
-  },
-
-  // Helper for quick demonstration switching between Student A, Student B, and Admin
-  async switchDemoAccount(roleOrEmail) {
-    const db = getLocalDB();
-    let target = null;
-    if (roleOrEmail === 'Student A' || roleOrEmail === 'owner') {
-      target = db.users.find((u) => u.id === '11111111-1111-1111-1111-111111111111');
-    } else if (roleOrEmail === 'Student B' || roleOrEmail === 'borrower') {
-      target = db.users.find((u) => u.id === '22222222-2222-2222-2222-222222222222');
-    } else if (roleOrEmail === 'Admin') {
-      target = db.users.find((u) => u.role === 'admin');
-    } else {
-      target = db.users.find((u) => u.email.toLowerCase() === roleOrEmail.toLowerCase());
-    }
-
-    if (!target) throw new Error('Target demo account not found.');
-
-    const session = { user: target, access_token: 'local-token-' + Date.now() };
-    localStorage.setItem(CURRENT_USER_SESSION_KEY, JSON.stringify(session));
-    return session;
   }
 };

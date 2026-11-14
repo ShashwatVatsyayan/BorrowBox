@@ -1,8 +1,9 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
+import { preloadTransitions } from './utils/preloadTransitions';
 
 // Public landing page kept eager for instant first contentful paint
 import { LandingPage } from './pages/public/LandingPage';
@@ -50,6 +51,10 @@ const PageFallback = () => (
 );
 
 export function App() {
+  useEffect(() => {
+    preloadTransitions();
+  }, []);
+
   return (
     <ThemeProvider>
       <AuthProvider>

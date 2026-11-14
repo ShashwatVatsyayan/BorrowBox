@@ -129,11 +129,14 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
     setSignInLoading(true);
     try {
       const normalizedEmail = signInEmail.trim().toLowerCase();
-      await login(normalizedEmail, signInPassword);
+      const res = await login(normalizedEmail, signInPassword);
+      const isAdmin = res?.user?.role === 'admin' || normalizedEmail === 'borrowboxadmin@cuchd.in';
       setTransitionMeta({
-        title: 'Entering Campus Network...',
-        subtitle: `Authenticated as ${normalizedEmail}. Welcome back to BorrowBox.`,
-        target: '/app'
+        title: isAdmin ? 'Admin Console Initializing...' : 'Entering Campus Network...',
+        subtitle: isAdmin
+          ? 'Launching BorrowBox Operations Command Terminal'
+          : `Authenticated as ${normalizedEmail}. Welcome back to BorrowBox.`,
+        target: isAdmin ? '/admin' : '/app'
       });
       setTransitioning(true);
     } catch (err) {
@@ -151,24 +154,6 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
           message: err.message || 'Invalid email or password.'
         });
       }
-      setSignInLoading(false);
-    }
-  };
-
-  // One-Click Evaluator Demo Profile
-  const handleQuickDemo = async (roleName, displayName = 'Student') => {
-    setSignInLoading(true);
-    setSignInError(null);
-    try {
-      await switchAccount(roleName);
-      setTransitionMeta({
-        title: `Welcome, ${displayName}!`,
-        subtitle: 'Launching campus dashboard & inventory feed...',
-        target: '/app'
-      });
-      setTransitioning(true);
-    } catch (err) {
-      setSignInError(err.message || 'Quick login failed.');
       setSignInLoading(false);
     }
   };
@@ -302,7 +287,7 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
                   id="verso-signin-email"
                   type="email"
                   className="verso-input"
-                  placeholder="e.g. aarav.sharma@cuchd.in"
+                  placeholder="e.g. 23bcs12850@cuchd.in"
                   value={signInEmail}
                   onChange={(e) => setSignInEmail(e.target.value)}
                   autoComplete="email"
@@ -350,31 +335,6 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
                 <span>{signInLoading ? 'Authenticating...' : 'Log In to Campus'}</span>
               </button>
 
-              {/* One-Click Demo Profiles for Evaluators */}
-              <div className="verso-demo-presets">
-                <p className="verso-demo-title">One-Click Demo Student Profiles</p>
-                <div className="verso-demo-grid">
-                  <button
-                    type="button"
-                    onClick={() => handleQuickDemo('Student A', 'Aarav Sharma')}
-                    className="verso-demo-btn"
-                    title="Unified Student Account: can borrow, lend, and trade"
-                  >
-                    <p className="verso-demo-name">Aarav Sharma</p>
-                    <p className="verso-demo-sub">23BCS12850 (Lend, Borrow, Trade)</p>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickDemo('Student B', 'Priya Verma')}
-                    className="verso-demo-btn"
-                    title="Unified Student Account: can borrow, lend, and trade"
-                  >
-                    <p className="verso-demo-name">Priya Verma</p>
-                    <p className="verso-demo-sub">24BCS11024 (Lend, Borrow, Trade)</p>
-                  </button>
-                </div>
-              </div>
-
               <p className="verso-mobile-switch">
                 Don't have an account yet?{' '}
                 <button
@@ -420,7 +380,7 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
                   id="verso-signup-name"
                   type="text"
                   className="verso-input"
-                  placeholder="e.g. Aarav Sharma"
+                  placeholder="e.g. Shashwat Vatsyayan"
                   value={signUpData.fullName}
                   onChange={(e) => {
                     setSignUpData((prev) => ({ ...prev, fullName: e.target.value }));

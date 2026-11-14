@@ -13,20 +13,17 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const currentSession = await authService.getSession();
-      if (currentSession) {
+      if (currentSession?.user) {
         setSession(currentSession);
         setUser(currentSession.user);
-      } else if (!isConfigured) {
-        // By default in offline demo mode without Supabase, auto-sign in as Student A (Aarav)
-        const defaultSession = await authService.switchDemoAccount('Student A');
-        setSession(defaultSession);
-        setUser(defaultSession.user);
       } else {
         setUser(null);
         setSession(null);
       }
     } catch (err) {
       console.error('Auth initialization error:', err);
+      setUser(null);
+      setSession(null);
     } finally {
       setLoading(false);
     }
@@ -38,8 +35,7 @@ export const AuthProvider = ({ children }) => {
     let subscription = null;
     if (isConfigured && supabase) {
       const { data } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-        if (newSession) {
-          // If the user's email is confirmed, update state
+        if (newSession?.user) {
           setSession(newSession);
           setUser(newSession.user);
           setLoading(false);
@@ -72,27 +68,10 @@ export const AuthProvider = ({ children }) => {
     return await authService.resendConfirmationEmail(email);
   };
 
-  // Legacy alias
-  const resendOtp = async (email) => {
-    return await authService.resendConfirmationEmail(email);
-  };
-
   const logout = async () => {
     await authService.signOut();
     setUser(null);
     setSession(null);
-  };
-
-  const switchAccount = async (target) => {
-    setLoading(true);
-    try {
-      const newSession = await authService.switchDemoAccount(target);
-      setSession(newSession);
-      setUser(newSession.user);
-      return newSession;
-    } finally {
-      setLoading(false);
-    }
   };
 
   const updateUserData = (updatedFields) => {
@@ -122,9 +101,7 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         resendConfirmationEmail,
-        resendOtp,
         logout,
-        switchAccount,
         updateUserData
       }}
     >

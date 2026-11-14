@@ -251,3 +251,4 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
 };
 
 export default EmailVerificationCard;
+

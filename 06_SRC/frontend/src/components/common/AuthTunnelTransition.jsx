@@ -8,7 +8,6 @@ export const AuthTunnelTransition = ({
   duration = 1700,
   onComplete
 }) => {
-  const [mounted, setMounted] = useState(false);
   const [isDissolving, setIsDissolving] = useState(false);
   const timersRef = useRef([]);
 
@@ -17,7 +16,6 @@ export const AuthTunnelTransition = ({
     timersRef.current = [];
 
     if (isActive) {
-      setMounted(true);
       setIsDissolving(false);
 
       // Trigger smooth card dissolve 300ms before navigation completes
@@ -36,31 +34,29 @@ export const AuthTunnelTransition = ({
         timersRef.current.forEach(clearTimeout);
       };
     } else {
-      setMounted(false);
       setIsDissolving(false);
     }
   }, [isActive, duration, onComplete]);
 
-  if (!isActive && !mounted) return null;
-
   return (
     <div
-      className={`fixed inset-0 min-h-screen min-h-[100dvh] w-full h-full z-[99999] bg-black flex flex-col items-center justify-center overflow-hidden transition-opacity duration-300 ${
-        isActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      className={`fixed inset-0 min-h-screen min-h-[100dvh] w-full h-full bg-black flex flex-col items-center justify-center overflow-hidden transition-all duration-300 ${
+        isActive
+          ? 'z-[99999] opacity-100 pointer-events-auto visible'
+          : '-z-50 opacity-0 pointer-events-none invisible'
       }`}
       aria-live="polite"
       role="status"
+      aria-hidden={!isActive}
     >
-      {/* Background WebGL2 LightTunnel Warp */}
-      <div
-        className="absolute inset-0 w-full h-full"
-      >
+      {/* Background WebGL2 LightTunnel Warp - Pre-warmed & Compiled Ahead of Time */}
+      <div className="absolute inset-0 w-full h-full">
         <LightTunnel
           cableColor="#061F17"
           pulseColor="#D4A853"
           tunnelColor="#0F382A"
           tunnelOpacity={0.35}
-          speed={0.4}
+          speed={isActive ? 0.4 : 0.05}
           pulseSpeed={4.8}
           pulseDensity={0.8}
           pulseLength={0.35}
@@ -69,18 +65,20 @@ export const AuthTunnelTransition = ({
           glow={1.8}
           thickness={0.4}
           brightness={1.2}
-          mouseInteraction={true}
-          clickSurge={true}
+          mouseInteraction={isActive}
+          clickSurge={isActive}
           intro={true}
         />
       </div>
 
-      {/* Center High-Contrast Dissolve Card - Standalone Logo, Zero Circles/Boxes/Shields */}
+      {/* Center High-Contrast Dissolve Card */}
       <div
         className={`relative z-10 flex flex-col items-center text-center p-6 sm:p-7 w-[calc(100%-2rem)] max-w-sm mx-auto rounded-3xl bg-black/85 backdrop-blur-md border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.25)] transition-all duration-450 ${
           isDissolving
             ? 'opacity-0 scale-105 blur-lg translate-y-2'
-            : 'opacity-100 scale-100 blur-0 translate-y-0 animate-in fade-in zoom-in-95 duration-300'
+            : isActive
+            ? 'opacity-100 scale-100 blur-0 translate-y-0 animate-in fade-in zoom-in-95 duration-300'
+            : 'opacity-0 scale-95'
         }`}
         style={{
           transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
@@ -100,18 +98,15 @@ export const AuthTunnelTransition = ({
         <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
           {title}
         </h3>
-        <p className="text-xs text-zinc-300 mt-1 max-w-xs leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed max-w-xs">
           {subtitle}
         </p>
 
-        {/* Animated Warp Energy Bar in Emerald & Gold */}
-        <div className="w-48 h-1.5 bg-zinc-900 rounded-full overflow-hidden mt-5 border border-zinc-800">
-          <div className="h-full bg-gradient-to-r from-emerald-600 via-[#D4A853] to-emerald-500 rounded-full w-full animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
-        </div>
+        {/* High-Tech Pulse Line */}
+        <div className="mt-5 w-24 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent animate-pulse" />
       </div>
     </div>
   );
 };
 
 export default AuthTunnelTransition;
-
