@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, User, Edit2 } from 'lucide-react';
 import { HoloCard } from '../common/HoloCard';
 import { useAuth } from '../../hooks/useAuth';
 import { generateStudentCardSvg } from '../../utils/studentCardArt';
+import { profileService } from '../../services/profileService';
 
 const HOLO_PRESETS = [
   { id: 'bursts', label: 'Bursts' },
@@ -17,26 +18,48 @@ const HOLO_PRESETS = [
 export const ProfileCardModal = ({ isOpen, onClose }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [liveProfile, setLiveProfile] = useState(null);
   const [selectedHoloPreset, setSelectedHoloPreset] = useState('bursts');
+
+  useEffect(() => {
+    if (isOpen && user?.id) {
+      profileService.getProfile(user.id)
+        .then((p) => {
+          if (p) setLiveProfile(p);
+        })
+        .catch(() => {});
+    }
+  }, [isOpen, user?.id]);
 
   if (!isOpen) return null;
 
-  const studentEmail = user?.email || user?.university_email || 'student@cuchd.in';
-  const immutableUid = user?.university_uid || (studentEmail.includes('@') ? studentEmail.split('@')[0].toUpperCase() : '23BCS12850');
-  const effectiveAvatar = user?.avatar_url || '/default_avatar_male.svg';
-  const fullName = user?.full_name || 'Student Peer';
-  const department = user?.department || 'Computer Science & Engineering';
-  const hostelRoom = user?.hostel_room || 'Chandigarh University Campus';
+  const effectiveUser = liveProfile || user;
+  const studentEmail = effectiveUser?.email || effectiveUser?.university_email || user?.email || 'student@cuchd.in';
+  const immutableUid = effectiveUser?.university_uid || user?.university_uid || (studentEmail.includes('@') ? studentEmail.split('@')[0].toUpperCase() : 'CU-STUDENT');
+  const effectiveAvatar = effectiveUser?.avatar_url || user?.avatar_url || '/default_avatar_male.svg';
+  
+  // Resolve student full name dynamically from latest profile, metadata, or email
+  const fullName = (
+    effectiveUser?.full_name ||
+    user?.full_name ||
+    user?.user_metadata?.full_name ||
+    (studentEmail.includes('@')
+      ? studentEmail.split('@')[0].replace(/[0-9]/g, '').split(/[._-]/).filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+      : 'Student User')
+  ).trim();
+
+  const department = effectiveUser?.department || user?.department || 'Computer Science & Engineering';
+  const hostelRoom = effectiveUser?.hostel_room || user?.hostel_room || 'Chandigarh University Campus';
 
   const cardArt = generateStudentCardSvg({
     fullName,
     uid: immutableUid,
     email: studentEmail,
     avatarUrl: effectiveAvatar,
-    gender: effectiveAvatar.includes('female') ? 'female' : 'male',
+    gender: String(effectiveAvatar).toLowerCase().includes('female') ? 'female' : 'male',
     department,
     hostelRoom,
-    role: user?.role || 'student',
+    role: effectiveUser?.role || user?.role || 'student',
     trustScore: '5.0'
   });
 

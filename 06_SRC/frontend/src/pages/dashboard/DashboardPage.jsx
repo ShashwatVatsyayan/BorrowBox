@@ -20,6 +20,7 @@ import { Loader } from '../../components/common/Loader';
 import { EmptyState } from '../../components/common/EmptyState';
 import { SkeletonGrid } from '../../components/common/Skeleton';
 import { CATEGORIES, LISTING_TYPES } from '../../utils/constants';
+import { getStudentFirstName } from '../../utils/userEnricher';
 import { useAuth } from '../../hooks/useAuth';
 import { useItems } from '../../hooks/useItems';
 import { useRequests } from '../../hooks/useRequests';
@@ -42,6 +43,7 @@ export const DashboardPage = () => {
   const tradeListings = items.filter((i) => i.listing_type === 'trade');
   const wantedListings = items.filter((i) => i.listing_type === 'wanted');
   const savedListings = items.filter((i) => i.is_saved);
+  const firstName = getStudentFirstName(user);
 
   // Filter items for the unified feed
   const filteredItems = items.filter((item) => {
@@ -87,7 +89,7 @@ export const DashboardPage = () => {
               <span className="text-xs text-ink-muted font-medium">Chandigarh University</span>
             </div>
             <h1 className="font-serif text-xl sm:text-3xl lg:text-4xl font-bold text-ink-primary tracking-tight">
-              Welcome, {user?.full_name?.split(' ')[0] || 'Student'}
+              Hello {firstName}
             </h1>
             <p className="text-xs sm:text-sm text-ink-muted mt-0.5 max-w-xl leading-relaxed">
               BorrowBox — Rent What You Need. Earn From What You Own. Protected student rates and direct peer handoffs.

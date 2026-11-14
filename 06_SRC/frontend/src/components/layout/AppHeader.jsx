@@ -12,11 +12,14 @@ import { useTheme } from '../../context/ThemeContext';
 import { Logo } from '../common/Logo';
 import { ThemeToggle } from '../common/ThemeToggle';
 import { ProfileCardModal } from '../profile/ProfileCardModal';
+import { getStudentFirstName } from '../../utils/userEnricher';
 
 export const AppHeader = () => {
   const { user } = useAuth();
   const { unreadCount } = useNotifications();
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+  const headerFirstName = getStudentFirstName(user);
 
   return (
     <header className="sticky top-0 z-40 w-full bg-surface-card border-b border-surface-border">
@@ -42,7 +45,7 @@ export const AppHeader = () => {
                 className="w-5 h-5 rounded-full object-cover border border-emerald-600/30 shrink-0"
                 onError={(e) => { e.currentTarget.src = '/default_avatar_male.svg'; }}
               />
-              <span className="max-w-[100px] truncate">{user?.full_name?.split(' ')[0] || 'User'}</span>
+              <span className="max-w-[100px] truncate">{headerFirstName}</span>
               <ChevronDown size={12} className="text-ink-muted group-hover:text-ink-primary transition-transform" />
             </button>
           </div>

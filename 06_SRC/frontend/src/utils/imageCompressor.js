@@ -87,3 +87,4 @@ export const compressImageFile = async (
     reader.readAsDataURL(file);
   });
 };
+

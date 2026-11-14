@@ -264,3 +264,4 @@ await runAsyncTest('Admin user BorrowBoxAdmin@cuchd.in can list items with 4 pho
 
 console.log(`\n=== SUMMARY: ${passed} PASSED, ${failed} FAILED ===`);
 if (failed > 0) process.exit(1);
+

@@ -56,7 +56,7 @@ export const DesktopSidebar = () => {
       </nav>
 
       <div className="pt-3 border-t border-surface-border text-xs text-ink-muted">
-        <p className="font-bold text-ink-primary truncate">{user?.full_name}</p>
+        <p className="font-bold text-ink-primary truncate">{user?.full_name || 'Student Member'}</p>
         <p className="truncate text-[11px] text-ink-muted">{user?.email}</p>
         <div className="mt-2.5 pt-2 border-t border-surface-border/50 flex items-center">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-800 text-[10px] whitespace-nowrap">

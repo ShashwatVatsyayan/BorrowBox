@@ -28,8 +28,33 @@ export function generateStudentCardSvg({
   const roleLabel = role === 'admin' ? 'CAMPUS MODERATOR' : 'VERIFIED CAMPUS PEER';
   const cleanUid = (uid || email.split('@')[0]).toUpperCase();
 
+  // Resolve best student full name
+  let effectiveName = fullName && fullName.trim() !== '' && fullName.trim() !== 'Student User' && fullName.trim() !== 'Student Peer'
+    ? fullName.trim()
+    : '';
+
+  if (!effectiveName && email && email.includes('@')) {
+    const prefix = email.split('@')[0];
+    const words = prefix.replace(/[0-9]/g, '').split(/[._-]/).filter(Boolean);
+    if (words.length > 0) {
+      effectiveName = words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+    }
+  }
+
+  if (!effectiveName) {
+    effectiveName = 'Student User';
+  }
+
+  // Dynamic font sizing for student full name to prevent overflow/clipping
+  let nameFontSize = 30;
+  if (effectiveName.length > 22) {
+    nameFontSize = 22;
+  } else if (effectiveName.length > 16) {
+    nameFontSize = 26;
+  }
+
   // Escape special XML characters
-  const safeName = fullName.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const safeName = effectiveName.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const safeUid = cleanUid.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const safeEmail = email.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const safeDept = department.replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -306,8 +331,8 @@ export function generateStudentCardSvg({
 
         <!-- Right Side: Student Credentials Column -->
         <g transform="translate(230, 125)">
-          <!-- Full Student Name (Large 30-34px Bold Pure White) -->
-          <text x="0" y="32" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" letter-spacing="-0.3">
+          <!-- Full Student Name (High-Contrast Bold Pure White) -->
+          <text x="0" y="32" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="${nameFontSize}" font-weight="900" fill="#FFFFFF" letter-spacing="-0.3">
             ${safeName}
           </text>
 
