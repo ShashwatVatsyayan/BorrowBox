@@ -195,17 +195,25 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
     setSignUpLoading(true);
     try {
       const autoUid = signUpData.email.split('@')[0].toUpperCase();
-      await signup({
+      const res = await signup({
         email: signUpData.email,
         password: signUpData.password,
         full_name: signUpData.fullName,
         university_uid: autoUid
       });
-      setTransitionMeta({
-        title: 'Welcome to BorrowBox!',
-        subtitle: `Registered ${signUpData.fullName}. Preparing your campus verification...`,
-        target: `/verify-email?email=${encodeURIComponent(signUpData.email)}`
-      });
+      if (res?.session) {
+        setTransitionMeta({
+          title: 'Welcome to BorrowBox!',
+          subtitle: `Authenticated as ${signUpData.fullName}. Launching campus hub...`,
+          target: '/app'
+        });
+      } else {
+        setTransitionMeta({
+          title: 'Verification Dispatched',
+          subtitle: `Confirmation sent to ${signUpData.email}. Opening verification portal...`,
+          target: `/verify-email?email=${encodeURIComponent(signUpData.email)}`
+        });
+      }
       setTransitioning(true);
     } catch (err) {
       setSignUpGeneralError(err.message || 'Registration failed. Please try again.');

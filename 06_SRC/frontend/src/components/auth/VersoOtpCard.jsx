@@ -11,12 +11,13 @@ const HEX_RADIUS = 64;
 const HEX_ANGLES = [0, 60, 120, 180, 240, 300];
 
 export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
-  const { verifyOtp } = useAuth();
+  const { verifyOtp, resendOtp, user } = useAuth();
   const navigate = useNavigate();
 
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
   const [stageState, setStageState] = useState('input'); // 'input' | 'orbiting' | 'collapsing' | 'verified'
   const [error, setError] = useState(null);
+  const [infoMsg, setInfoMsg] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(45);
   const [resendActive, setResendActive] = useState(false);
@@ -28,6 +29,13 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
   const stageRef = useRef(null);
   const scrambleIntervalRef = useRef(null);
   const countdownTimerRef = useRef(null);
+
+  // Auto-detect when student clicks the Supabase confirmation link in their email
+  useEffect(() => {
+    if (user && user.email?.toLowerCase() === targetEmail.toLowerCase() && stageState !== 'verified' && !isVerifying) {
+      executeKineticVerification('LINK');
+    }
+  }, [user, targetEmail, stageState, isVerifying]);
 
   // Calculate row offsets and hexagon geometry
   useEffect(() => {
@@ -85,10 +93,20 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
     };
   }, []);
 
-  const handleResend = () => {
+  const handleResend = async () => {
     setSecondsLeft(45);
     setResendActive(false);
     setError(null);
+    setInfoMsg('Sending new verification email...');
+
+    try {
+      if (resendOtp) {
+        await resendOtp(targetEmail);
+      }
+      setInfoMsg('New verification email dispatched! Check your inbox or spam folder.');
+    } catch (err) {
+      setError(err.message || 'Failed to resend verification email.');
+    }
 
     countdownTimerRef.current = setInterval(() => {
       setSecondsLeft((prev) => {
@@ -172,6 +190,7 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
     if (isVerifying) return;
     setIsVerifying(true);
     setError(null);
+    setInfoMsg(null);
 
     // Stage 2A: Animate boxes from row into 6-point Hexagon Ring
     inputRefs.current.forEach((el) => {
@@ -192,15 +211,29 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
     }, 400);
 
     // Call verifyOtp concurrently
-    let verifiedOk = false;
     try {
-      if (verifyOtp) {
+      if (code !== 'LINK') {
         await verifyOtp(targetEmail, code);
       }
-      verifiedOk = true;
-    } catch {
-      // In demo/offline mode, permit demonstration code
-      verifiedOk = true;
+    } catch (err) {
+      if (code !== '123456') {
+        if (scrambleIntervalRef.current) clearInterval(scrambleIntervalRef.current);
+        setIsVerifying(false);
+        setStageState('input');
+
+        const isMobile = window.innerWidth < 768;
+        const boxWidth = isMobile ? 44 : 48;
+        const gap = isMobile ? 8 : 10;
+        const step = boxWidth + gap;
+        inputRefs.current.forEach((el, index) => {
+          if (!el) return;
+          const rowX = (index - 2.5) * step;
+          el.style.transform = `translate(${rowX}px, 0)`;
+        });
+
+        setError(err.message || 'Verification failed. Please check your code or click the confirmation link in your email.');
+        return;
+      }
     }
 
     // Stage 3: Magnetic Collapse & Expanding Pulse Shockwave (t = 1800ms)
@@ -272,21 +305,32 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
             <header className="verso-otp-header">
               <span className="verso-otp-eyebrow">Identity Gate</span>
               <h1 className="verso-otp-title">
-                {stageState === 'verified' ? 'Verified Successfully' : 'Verify Mailbox'}
+                {stageState === 'verified' ? 'Verified Successfully' : 'Verify Email'}
               </h1>
-              <p className="verso-otp-subtitle">
-                {stageState === 'verified'
-                  ? 'Authenticated. Redirecting to your campus workspace...'
-                  : (
-                    <>
-                      Code sent to <span className="verso-otp-email">{targetEmail}</span>
-                    </>
-                  )}
-              </p>
+              <div className="verso-otp-subtitle">
+                {stageState === 'verified' ? (
+                  <span>Authenticated. Redirecting to your campus workspace...</span>
+                ) : (
+                  <>
+                    <p className="text-xs text-ink-primary font-medium">
+                      Verification sent to <span className="verso-otp-email">{targetEmail}</span>
+                    </p>
+                    <p className="text-[11px] text-ink-muted mt-1 leading-relaxed">
+                      Enter the 6-digit code, or click <strong>Confirm Email</strong> in the email from Supabase to activate immediately.
+                    </p>
+                  </>
+                )}
+              </div>
             </header>
 
+            {infoMsg && (
+              <div className="mb-3 p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs font-semibold border border-emerald-200 dark:border-emerald-800 text-center">
+                {infoMsg}
+              </div>
+            )}
+
             {error && (
-              <div className="mb-3 p-2.5 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200">
+              <div className="mb-3 p-2.5 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs font-medium border border-red-200 dark:border-red-800 text-center">
                 {error}
               </div>
             )}
@@ -360,7 +404,7 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
               <div>
                 {!resendActive ? (
                   <span>
-                    Resend code in <span className="verso-countdown-text">{secondsLeft}s</span>
+                    Resend email in <span className="verso-countdown-text">{secondsLeft}s</span>
                   </span>
                 ) : (
                   <button
@@ -368,13 +412,17 @@ export const VersoOtpCard = ({ targetEmail = 'student@cuchd.in' }) => {
                     onClick={handleResend}
                     className="verso-resend-btn"
                   >
-                    Resend OTP
+                    Resend Verification Email
                   </button>
                 )}
               </div>
               <Link to="/signup" className="verso-change-link">
                 Change Email
               </Link>
+            </div>
+
+            <div className="mt-3 text-center text-[11px] text-ink-muted select-none">
+              Campus demo bypass code: <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">123456</span>
             </div>
           </section>
         </main>

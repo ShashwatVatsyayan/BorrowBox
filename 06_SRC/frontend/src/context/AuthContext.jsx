@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
+import { isConfigured, supabase } from '../lib/supabase';
 
 export const AuthContext = createContext(null);
 
@@ -15,11 +16,14 @@ export const AuthProvider = ({ children }) => {
       if (currentSession) {
         setSession(currentSession);
         setUser(currentSession.user);
-      } else {
-        // By default, if nothing is selected in demo mode, auto-sign in as Student A (Aarav) so the app is instantly usable
+      } else if (!isConfigured) {
+        // By default in offline demo mode without Supabase, auto-sign in as Student A (Aarav)
         const defaultSession = await authService.switchDemoAccount('Student A');
         setSession(defaultSession);
         setUser(defaultSession.user);
+      } else {
+        setUser(null);
+        setSession(null);
       }
     } catch (err) {
       console.error('Auth initialization error:', err);
@@ -30,6 +34,26 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     initAuth();
+
+    let subscription = null;
+    if (isConfigured && supabase) {
+      const { data } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+        if (newSession) {
+          setSession(newSession);
+          setUser(newSession.user);
+          setLoading(false);
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setSession(null);
+          setLoading(false);
+        }
+      });
+      subscription = data?.subscription;
+    }
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (email, password) => {
@@ -48,6 +72,10 @@ export const AuthProvider = ({ children }) => {
     setSession(data.session);
     setUser(data.user);
     return data;
+  };
+
+  const resendOtp = async (email) => {
+    return await authService.resendOtp(email);
   };
 
   const logout = async () => {
@@ -95,6 +123,7 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         verifyOtp,
+        resendOtp,
         logout,
         switchAccount,
         updateUserData
