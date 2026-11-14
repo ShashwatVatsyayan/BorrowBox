@@ -224,42 +224,53 @@ def build_pdf():
     # ==========================================
     # PAGE 1: COVER PAGE
     # ==========================================
-    # BorrowBox Logo at the top
-    bb_logo_path = os.path.join("College Project Report", "extracted_images", "borrowbox_logo.png")
-    if os.path.exists(bb_logo_path):
-        story.append(Spacer(1, 12))
-        story.append(Image(bb_logo_path, width=95, height=68))
-        story.append(Spacer(1, 16))
+    # 1. Chandigarh University Logo at the top
+    cu_logo_path = os.path.join("College Project Report", "extracted_images", "cu_official_logo.png")
+    if not os.path.exists(cu_logo_path):
+        cu_logo_path = os.path.join("College Project Report", "extracted_images", "page_1_X6.png")
+    if os.path.exists(cu_logo_path):
+        story.append(Spacer(1, 10))
+        story.append(Image(cu_logo_path, width=200, height=74))
+        story.append(Spacer(1, 18))
     else:
         story.append(Spacer(1, 35))
 
-    story.append(Paragraph("BORROWBOX: CAMPUS PEER-TO-PEER RENTAL MARKETPLACE AND ASSET SHARING PLATFORM", title_style))
-    story.append(Spacer(1, 12))
-    story.append(Paragraph("A PROJECT REPORT", subtitle_style))
-    story.append(Spacer(1, 45))
+    # 2. BorrowBox Heading (Short and Precise)
+    story.append(Paragraph("BORROWBOX", ParagraphStyle('CoverMainTitle', parent=title_style, fontSize=22, leading=26)))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("Campus Peer-to-Peer Rental Marketplace", subtitle_style))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("A PROJECT REPORT", ParagraphStyle('CoverReportLabel', parent=subtitle_style, fontSize=11, leading=15, fontName='Times-Bold', textColor=colors.HexColor("#334155"))))
+    story.append(Spacer(1, 16))
 
+    # 3. BorrowBox Logo
+    bb_logo_path = os.path.join("College Project Report", "extracted_images", "borrowbox_logo.png")
+    if os.path.exists(bb_logo_path):
+        story.append(Image(bb_logo_path, width=85, height=61))
+        story.append(Spacer(1, 20))
+    else:
+        story.append(Spacer(1, 20))
+
+    # 4. In fulfillment till engineering part
+    story.append(Paragraph("in partial fulfillment for the award of the degree of", center_text))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("BACHELOR OF ENGINEERING", center_bold))
+    story.append(Paragraph("IN", center_text))
+    story.append(Paragraph("COMPUTER SCIENCE AND ENGINEERING", center_bold))
+    story.append(Spacer(1, 22))
+
+    # 5. Submitted by
     story.append(Paragraph("Submitted by:", center_text))
     story.append(Spacer(1, 5))
     story.append(Paragraph("Shashwat Vatsyayan (24BCS12850)", center_bold))
     story.append(Spacer(1, 3))
     story.append(Paragraph("Harshit Kulhari (24BCS10424)", center_bold))
-    story.append(Spacer(1, 45))
+    story.append(Spacer(1, 26))
 
-    story.append(Paragraph("in partial fulfillment for the award of the degree of", center_text))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("BACHELOR OF ENGINEERING", center_bold))
-    story.append(Paragraph("IN", center_text))
-    story.append(Paragraph("COMPUTER SCIENCE ENGINEERING", center_bold))
-    story.append(Spacer(1, 35))
-
-    # Chandigarh University Logo
-    cu_logo_path = os.path.join("College Project Report", "extracted_images", "page_1_X6.png")
-    if os.path.exists(cu_logo_path):
-        story.append(Image(cu_logo_path, width=220, height=71))
-    story.append(Spacer(1, 32))
-
-    story.append(Paragraph("CHANDIGARH UNIVERSITY", center_bold))
-    story.append(Spacer(1, 4))
+    # 6. University details at the bottom
+    story.append(Paragraph("DEPARTMENT OF COMPUTER SCIENCE &amp; ENGINEERING", ParagraphStyle('CoverDept', parent=center_text, fontName='Times-Bold', fontSize=10, leading=14)))
+    story.append(Paragraph("CHANDIGARH UNIVERSITY, GHARUAN, MOHALI", center_bold))
+    story.append(Spacer(1, 3))
     story.append(Paragraph("MAY-2026", center_text))
     story.append(PageBreak())
 
