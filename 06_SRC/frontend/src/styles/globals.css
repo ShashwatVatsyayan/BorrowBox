@@ -193,12 +193,19 @@ html.dark .glass-block {
   z-index: 9999;
 }
 
-/* Ink Bleed Overlay Disabled - Native Zero-Shift GPU Theme Transitions Active */
+/* Codemure Ink Bleed WebGL2 Transition Canvas */
 .ink-canvas {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999999;
+  opacity: 0;
+}
+
+.ink-canvas.is-active {
+  opacity: 1;
 }
 
 /* Meaningful Campus Micro-Interactions */

@@ -146,10 +146,13 @@ export function ThemeProvider({ children }) {
   };
 
   const toggleTheme = (eventOrPoint) => {
-    const next = resolvedTheme === 'dark' ? 'light' : 'dark';
     const point = extractPoint(eventOrPoint);
+    if (inkTransitionRef.current) {
+      inkTransitionRef.current.toggle(point);
+      return;
+    }
 
-    // Prioritize native View Transitions with expanding circular clip-path for 100% zero-shift GPU transitions
+    const next = resolvedTheme === 'dark' ? 'light' : 'dark';
     if (typeof document !== 'undefined' && document.startViewTransition) {
       const x = point?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
       const y = point?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
@@ -184,13 +187,10 @@ export function ThemeProvider({ children }) {
             pseudoElement: '::view-transition-new(root)'
           }
         );
-      }).catch(() => {
-        // Fallback gracefully if ready promise rejects
-      });
+      }).catch(() => {});
       return;
     }
 
-    // Fallback circular animation for browsers without document.startViewTransition
     createRippleFallback(point, next);
     applyDomTheme(next);
     setThemeState(next);
@@ -214,6 +214,11 @@ export function ThemeProvider({ children }) {
 
     if (target !== resolvedTheme) {
       const point = extractPoint(eventOrPoint);
+      if (inkTransitionRef.current) {
+        inkTransitionRef.current.toggle(point);
+        return;
+      }
+
       if (typeof document !== 'undefined' && document.startViewTransition) {
         const x = point?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
         const y = point?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 0);

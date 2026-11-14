@@ -20,13 +20,13 @@ export const AuthTunnelTransition = ({
       setMounted(true);
       setIsDissolving(false);
 
-      // Trigger cinematic dissolve 450ms before complete
+      // Trigger smooth card dissolve 300ms before navigation completes
       const dissolveTimer = setTimeout(() => {
         setIsDissolving(true);
-      }, Math.max(300, duration - 450));
+      }, Math.max(300, duration - 300));
       timersRef.current.push(dissolveTimer);
 
-      // Finish transition and dissolve seamlessly into dashboard
+      // Finish transition and navigate seamlessly without revealing previous page
       const completeTimer = setTimeout(() => {
         if (onComplete) onComplete();
       }, duration);
@@ -45,25 +45,15 @@ export const AuthTunnelTransition = ({
 
   return (
     <div
-      className={`fixed inset-0 min-h-screen min-h-[100dvh] w-full h-full z-[99999] bg-black flex flex-col items-center justify-center overflow-hidden transition-all duration-450 ${
-        isDissolving
-          ? 'opacity-0 pointer-events-none'
-          : isActive
-          ? 'opacity-100 pointer-events-auto'
-          : 'opacity-0 pointer-events-none'
+      className={`fixed inset-0 min-h-screen min-h-[100dvh] w-full h-full z-[99999] bg-black flex flex-col items-center justify-center overflow-hidden transition-opacity duration-300 ${
+        isActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
-      style={{
-        transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
-      }}
       aria-live="polite"
       role="status"
     >
       {/* Background WebGL2 LightTunnel Warp */}
       <div
-        className={`absolute inset-0 w-full h-full transition-all duration-450 ${
-          isDissolving ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'
-        }`}
-        style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+        className="absolute inset-0 w-full h-full"
       >
         <LightTunnel
           cableColor="#061F17"
