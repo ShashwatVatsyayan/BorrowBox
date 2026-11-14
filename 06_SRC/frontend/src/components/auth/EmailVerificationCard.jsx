@@ -10,10 +10,11 @@ import {
   AlertCircle,
   ChevronDown,
   ChevronUp,
-  ShieldCheck,
+  Shield,
   Inbox
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import { authService } from '../../services/authService';
 import { Logo } from '../common/Logo';
 import { ThemeToggle } from '../common/ThemeToggle';
 import './EmailVerificationCard.css';
@@ -31,11 +32,28 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
 
   const timerRef = useRef(null);
 
-  // If user becomes verified in session (e.g. from background onAuthStateChange), navigate to app
+  // Background reactive listener and polling for session confirmation
   useEffect(() => {
-    if (user && (user.email_confirmed_at || user.confirmed_at || user.is_verified)) {
-      navigate('/app', { replace: true });
-    }
+    let pollTimer = null;
+
+    const checkStatus = async () => {
+      try {
+        const session = await authService.getSession();
+        const activeUser = session?.user || user;
+        if (activeUser && (activeUser.email_confirmed_at || activeUser.confirmed_at || activeUser.is_verified)) {
+          navigate('/auth/callback', { replace: true });
+        }
+      } catch {
+        // Non-blocking background poll
+      }
+    };
+
+    checkStatus();
+    pollTimer = setInterval(checkStatus, 3000);
+
+    return () => {
+      if (pollTimer) clearInterval(pollTimer);
+    };
   }, [user, navigate]);
 
   // Resend cooldown timer
@@ -65,7 +83,7 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
 
     try {
       await resendConfirmationEmail(targetEmail);
-      setSuccessMsg('Confirmation link resent successfully. Please check your Outlook inbox.');
+      setSuccessMsg('A new confirmation email has been sent. Please check your Outlook inbox.');
       setCanResend(false);
       setCooldown(60);
 
@@ -80,7 +98,11 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
         });
       }, 1000);
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to resend confirmation email. Please try again shortly.');
+      if (err.message?.toLowerCase().includes('rate limit') || err.resetInSeconds) {
+        setErrorMsg('Rate limit reached. Please wait a moment before requesting another confirmation email.');
+      } else {
+        setErrorMsg(err.message || 'Failed to resend confirmation email. Please try again shortly.');
+      }
     } finally {
       setLoading(false);
     }
@@ -92,27 +114,40 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
 
   return (
     <div className="email-verify-page">
-      {/* Top Navigation */}
-      <header className="max-w-4xl w-full mx-auto flex items-center justify-between py-4 px-4 z-20">
+      {/* Top Header */}
+      <header className="max-w-4xl w-full mx-auto flex items-center justify-between py-3 px-4 z-20">
         <Logo size="md" to="/" />
         <ThemeToggle size="sm" />
       </header>
 
-      {/* Main Card Container */}
+      {/* Main Two-Column Authentication Card */}
       <div className="email-verify-wrapper my-auto">
         <div className="email-verify-glow" aria-hidden="true" />
 
         <main className="email-verify-card" role="region" aria-label="Email Verification Portal">
-          {/* Left Decorative Blade (Verso Brand Accent) */}
-          <aside className="email-verify-blade" aria-label="Security Status">
+          {/* =========================================================================
+              LEFT PANEL: Deep Forest Green Brand Identity
+              ========================================================================= */}
+          <aside className="email-verify-blade" aria-label="Verification Status">
             <div className="email-verify-blade-inner">
-              <div className="email-verify-badge-icon">
-                <ShieldCheck size={28} />
+              <div className="email-verify-blade-brand">
+                <img
+                  src="/logo-dark.svg"
+                  alt="BorrowBox"
+                  className="h-9 w-auto max-w-[180px] object-contain drop-shadow"
+                  draggable={false}
+                />
               </div>
-              <h2 className="email-verify-blade-title">Identity Verification</h2>
+
+              <div className="email-verify-blade-icon-wrap">
+                <Shield size={32} className="text-teal-400" />
+              </div>
+
+              <h2 className="email-verify-blade-title">One Last Step</h2>
               <p className="email-verify-blade-desc">
-                Chandigarh University student domain protection ensures trusted, campus-exclusive equipment rentals.
+                Verify your university email to activate your BorrowBox account.
               </p>
+
               <div className="email-verify-domain-tag">
                 <span className="domain-dot" />
                 <span>Authorized Domain: @cuchd.in</span>
@@ -120,43 +155,51 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
             </div>
           </aside>
 
-          {/* Right Content Pane */}
+          {/* =========================================================================
+              RIGHT PANEL: Outlook Confirmation Instructions & Actions
+              ========================================================================= */}
           <section className="email-verify-pane" aria-live="polite">
             <header className="email-verify-header">
               <div className="email-verify-icon-wrapper">
-                <Mail size={24} className="text-brand-600 dark:text-brand-400" />
+                <Mail size={24} className="text-[#0D9488]" />
               </div>
-              <span className="email-verify-eyebrow">Account Activation</span>
-              <h1 className="email-verify-title">Verify your university email</h1>
+              <span className="email-verify-eyebrow">ACCOUNT ACTIVATION</span>
+              <h1 className="email-verify-title">Check your Outlook</h1>
               <p className="email-verify-desc">
-                We've sent a confirmation link to your Chandigarh University email address.
+                We've sent a confirmation link to your Chandigarh University email address. Open Outlook and confirm your email to activate your account.
               </p>
             </header>
 
-            {/* Email Address Pill Display */}
+            {/* Registered Email Prominent Address Box */}
             <div className="email-verify-address-box">
-              <Inbox size={16} className="text-ink-muted flex-shrink-0" />
+              <Inbox size={16} className="text-[#64748B] flex-shrink-0" />
               <span className="email-verify-address-text" title={targetEmail}>
                 {targetEmail}
               </span>
             </div>
 
-            {/* Status Messages */}
+            {/* Subtle Waiting State Indicator (Non-aggressive) */}
+            <div className="email-verify-waiting-badge">
+              <span className="waiting-pulse-dot" />
+              <span className="waiting-text">Waiting for email confirmation...</span>
+            </div>
+
+            {/* Status Feedback Messages */}
             {successMsg && (
               <div className="email-verify-alert is-success" role="alert">
-                <CheckCircle2 size={16} className="flex-shrink-0" />
+                <CheckCircle2 size={16} className="flex-shrink-0 text-emerald-600" />
                 <span>{successMsg}</span>
               </div>
             )}
 
             {errorMsg && (
               <div className="email-verify-alert is-error" role="alert">
-                <AlertCircle size={16} className="flex-shrink-0" />
+                <AlertCircle size={16} className="flex-shrink-0 text-rose-600" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
-            {/* Primary Action: Open Outlook */}
+            {/* Primary Action Button: Open Outlook */}
             <div className="email-verify-action-block">
               <button
                 type="button"
@@ -168,11 +211,11 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
               </button>
 
               <p className="email-verify-instruction">
-                Open the email from BorrowBox and click <strong>Confirm your email</strong> to activate your account.
+                Open the email from BorrowBox and click <strong>Confirm your email</strong>.
               </p>
             </div>
 
-            {/* Secondary Actions Row */}
+            {/* Secondary Controls: Resend, Change Email, Back to Sign In */}
             <div className="email-verify-controls">
               <button
                 type="button"
@@ -180,7 +223,7 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
                 disabled={!canResend || loading}
                 className="email-verify-btn-resend"
               >
-                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+                <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
                 <span>
                   {loading
                     ? 'Resending...'
@@ -196,12 +239,12 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
                 </Link>
                 <span className="link-divider">•</span>
                 <Link to="/login" className="email-verify-link">
-                  Back to login
+                  Back to Sign In
                 </Link>
               </div>
             </div>
 
-            {/* Help Section */}
+            {/* Expandable Help Accordion */}
             <div className="email-verify-help-section">
               <button
                 type="button"
@@ -220,16 +263,16 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
                 <div className="email-verify-help-content">
                   <ul className="email-verify-help-list">
                     <li>
-                      <strong>Check Junk or Spam:</strong> Institutional mail servers occasionally route automated confirmations into the Junk Email folder.
+                      <strong>Check Junk or Spam:</strong> Institutional Outlook mail filters may occasionally route automated verification emails into your Junk Email folder.
                     </li>
                     <li>
-                      <strong>Check the 'Other' Tab:</strong> In Outlook Web, toggle between the Focused and Other tab.
+                      <strong>Check the 'Other' Tab:</strong> In Outlook Web, toggle between the Focused and Other tab at the top of your inbox.
                     </li>
                     <li>
-                      <strong>Verify Address Spelling:</strong> Ensure your registered email matches your exact student UID handle.
+                      <strong>Check Address Spelling:</strong> Verify that your entered student email ({targetEmail}) has no typos. Use the "Change email address" link above if needed.
                     </li>
                     <li>
-                      <strong>Delivery Latency:</strong> Campus email filters may take 1-2 minutes to deliver external verification tokens.
+                      <strong>Campus Network Latency:</strong> University mail relays can take 1-2 minutes during peak hours to process external security links.
                     </li>
                   </ul>
                 </div>
@@ -240,15 +283,25 @@ export const EmailVerificationCard = ({ targetEmail = 'student@cuchd.in' }) => {
             <footer className="email-verify-footer">
               <Link to="/login" className="email-verify-back-btn">
                 <ArrowLeft size={14} />
-                <span>Return to Sign In</span>
+                <span>Back to Sign In</span>
               </Link>
             </footer>
           </section>
         </main>
       </div>
+
+      {/* Page Footer */}
+      <footer className="max-w-md w-full mx-auto py-3 text-center text-xs text-[#64748B] z-20">
+        <div className="flex items-center justify-center gap-4">
+          <Link to="/terms" className="hover:text-[#0D9488] transition-colors">Terms</Link>
+          <span>•</span>
+          <Link to="/privacy" className="hover:text-[#0D9488] transition-colors">Privacy</Link>
+          <span>•</span>
+          <Link to="/" className="hover:text-[#0D9488] transition-colors">Home</Link>
+        </div>
+      </footer>
     </div>
   );
 };
 
 export default EmailVerificationCard;
-

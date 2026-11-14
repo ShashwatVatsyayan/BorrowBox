@@ -47,15 +47,44 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
   const [signInError, setSignInError] = useState(null);
   const [signInLoading, setSignInLoading] = useState(false);
 
-  // Sign-Up Form State
-  const [signUpData, setSignUpData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    agreeTerms: false
+  // Sign-Up Form State with preserved registration context support
+  const [signUpData, setSignUpData] = useState(() => {
+    try {
+      const saved = typeof window !== 'undefined' ? sessionStorage.getItem('borrowbox_pending_reg') : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          fullName: parsed.fullName || '',
+          email: parsed.email || '',
+          password: '',
+          confirmPassword: '',
+          agreeTerms: false
+        };
+      }
+    } catch {
+      // Ignored
+    }
+    return {
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      agreeTerms: false
+    };
   });
-  const [derivedUid, setDerivedUid] = useState('');
+  const [derivedUid, setDerivedUid] = useState(() => {
+    try {
+      const saved = typeof window !== 'undefined' ? sessionStorage.getItem('borrowbox_pending_reg') : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.universityUid) return parsed.universityUid;
+        if (parsed.email) return parsed.email.split('@')[0].toUpperCase();
+      }
+    } catch {
+      // Ignored
+    }
+    return '';
+  });
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [signUpErrors, setSignUpErrors] = useState({});
   const [signUpGeneralError, setSignUpGeneralError] = useState(null);
@@ -195,6 +224,18 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
     try {
       const normalizedEmail = signUpData.email.trim().toLowerCase();
       const autoUid = normalizedEmail.split('@')[0].toUpperCase();
+      // Securely preserve registration context (NEVER storing password) across external Outlook session
+      try {
+        sessionStorage.setItem('borrowbox_pending_reg', JSON.stringify({
+          fullName: signUpData.fullName.trim(),
+          email: normalizedEmail,
+          universityUid: autoUid,
+          timestamp: Date.now()
+        }));
+      } catch {
+        // Storage fail-safe
+      }
+
       await signup({
         email: normalizedEmail,
         password: signUpData.password,

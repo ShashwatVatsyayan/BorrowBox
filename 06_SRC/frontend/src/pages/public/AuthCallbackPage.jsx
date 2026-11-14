@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { CheckCircle2, AlertCircle, ArrowRight, RefreshCw, LogIn } from 'lucide-react';
+import { CheckCircle2, AlertCircle, ArrowRight, RefreshCw, LogIn, Sparkles } from 'lucide-react';
 import { authService } from '../../services/authService';
+import { profileService } from '../../services/profileService';
 import { Logo } from '../../components/common/Logo';
 import { ThemeToggle } from '../../components/common/ThemeToggle';
 import { isConfigured, supabase } from '../../lib/supabase';
@@ -10,8 +11,10 @@ export const AuthCallbackPage = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState('processing'); // 'processing' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState(null);
-  const [countdown, setCountdown] = useState(3);
-  const countdownIntervalRef = useRef(null);
+  const [destination, setDestination] = useState('/app');
+  const [destinationLabel, setDestinationLabel] = useState('Campus Hub');
+  const [countdown, setCountdown] = useState(2);
+  const isProcessedRef = useRef(false);
 
   useEffect(() => {
     document.title = 'Confirming Account | BorrowBox';
@@ -19,8 +22,11 @@ export const AuthCallbackPage = () => {
     let isMounted = true;
 
     const processCallback = async () => {
+      if (isProcessedRef.current) return;
+      isProcessedRef.current = true;
+
       try {
-        // 1. Check for error parameters in hash or query string
+        // 1. Check for error parameters in query or hash
         if (typeof window !== 'undefined') {
           const urlParams = new URLSearchParams(window.location.search);
           const hashParams = window.location.hash
@@ -34,9 +40,10 @@ export const AuthCallbackPage = () => {
             urlParams.get('error');
 
           if (errorDesc) {
-            const friendlyErr = errorDesc.toLowerCase().includes('expired') || errorDesc.toLowerCase().includes('invalid')
-              ? 'This confirmation link is invalid or has expired. Please sign in or request a new confirmation email.'
-              : errorDesc.replace(/\+/g, ' ');
+            const friendlyErr =
+              errorDesc.toLowerCase().includes('expired') || errorDesc.toLowerCase().includes('invalid')
+                ? 'This confirmation link is invalid or has expired. Please sign in or request a new confirmation email.'
+                : errorDesc.replace(/\+/g, ' ');
             if (isMounted) {
               setErrorMessage(friendlyErr);
               setStatus('error');
@@ -45,11 +52,20 @@ export const AuthCallbackPage = () => {
           }
         }
 
-        // 2. Allow Supabase client to exchange code/hash for an authenticated session
+        // 2. Execute authoritative token exchange / verification via Supabase API
         const result = await authService.handleAuthCallback();
 
-        // 3. Inspect user & session verification status
+        // 3. Retrieve verified user
         let verifiedUser = result?.user || (await authService.getUser());
+
+        // Fallback polling for session establishment (up to 3 attempts)
+        if (!verifiedUser && isConfigured && supabase) {
+          for (let i = 0; i < 3; i++) {
+            await new Promise((res) => setTimeout(res, 800));
+            verifiedUser = await authService.getUser();
+            if (verifiedUser) break;
+          }
+        }
 
         if (verifiedUser) {
           const isConfirmed = Boolean(
@@ -59,14 +75,50 @@ export const AuthCallbackPage = () => {
           );
 
           if (isConfirmed) {
+            // 4. Restore pending registration data (full_name, etc.) if preserved in sessionStorage
+            if (typeof window !== 'undefined') {
+              try {
+                const pendingRegStr = sessionStorage.getItem('borrowbox_pending_reg');
+                if (pendingRegStr) {
+                  const pending = JSON.parse(pendingRegStr);
+                  if (pending.fullName && verifiedUser.id) {
+                    await profileService.updateProfile(verifiedUser.id, {
+                      full_name: pending.fullName,
+                      university_uid: pending.universityUid || verifiedUser.email.split('@')[0].toUpperCase()
+                    }).catch(() => {});
+                  }
+                  sessionStorage.removeItem('borrowbox_pending_reg');
+                }
+              } catch {
+                // Ignore storage parsing issues
+              }
+            }
+
+            // 5. Determine whether onboarding is incomplete
+            let nextTarget = '/app';
+            let label = 'Campus Hub';
+            try {
+              const profile = await profileService.getProfile(verifiedUser.id).catch(() => null);
+              const isProfileIncomplete = !profile?.department || !profile?.hostel_room || !profile?.bio;
+              if (isProfileIncomplete) {
+                nextTarget = '/app/profile/edit?onboarding=true';
+                label = 'Student Profile Setup';
+              }
+            } catch {
+              nextTarget = '/app';
+            }
+
             if (isMounted) {
+              setDestination(nextTarget);
+              setDestinationLabel(label);
               setStatus('success');
-              // Auto-redirect countdown
-              countdownIntervalRef.current = setInterval(() => {
+
+              // Auto-navigate countdown
+              const timer = setInterval(() => {
                 setCountdown((prev) => {
                   if (prev <= 1) {
-                    clearInterval(countdownIntervalRef.current);
-                    navigate('/app', { replace: true });
+                    clearInterval(timer);
+                    navigate(nextTarget, { replace: true });
                     return 0;
                   }
                   return prev - 1;
@@ -77,35 +129,18 @@ export const AuthCallbackPage = () => {
           }
         }
 
-        // 4. Fallback listener: Supabase auth state change might complete asynchronously
-        if (isConfigured && supabase) {
-          const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-            if (session?.user && (session.user.email_confirmed_at || session.user.confirmed_at)) {
-              if (isMounted) {
-                setStatus('success');
-                setTimeout(() => navigate('/app', { replace: true }), 2000);
-              }
-            }
-          });
-
-          // Wait up to 3 seconds for async token exchange
-          setTimeout(() => {
-            if (isMounted && status === 'processing') {
-              // Confirmation link processed but session not created automatically in browser
-              setStatus('success');
-            }
-          }, 2500);
-
-          return () => {
-            authListener?.subscription?.unsubscribe();
-          };
-        } else {
-          // Local demo mode
+        // 6. Local deterministic fallback (offline demo)
+        if (!isConfigured) {
           if (isMounted) {
+            setDestination('/app/profile/edit?onboarding=true');
+            setDestinationLabel('Student Profile Setup');
             setStatus('success');
-            setTimeout(() => navigate('/app', { replace: true }), 2000);
+            setTimeout(() => navigate('/app/profile/edit?onboarding=true', { replace: true }), 1500);
           }
+          return;
         }
+
+        throw new Error('Verification token could not be validated. The link may have already been used.');
       } catch (err) {
         if (isMounted) {
           setErrorMessage(err.message || 'Unable to confirm your email. The link may have expired.');
@@ -118,7 +153,6 @@ export const AuthCallbackPage = () => {
 
     return () => {
       isMounted = false;
-      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
     };
   }, [navigate]);
 
@@ -130,19 +164,19 @@ export const AuthCallbackPage = () => {
         <ThemeToggle size="sm" />
       </header>
 
-      {/* Main Card */}
+      {/* Main Authentication Confirmation Card */}
       <main className="max-w-md w-full mx-auto my-auto">
         <div className="bg-surface-card p-6 sm:p-8 rounded-2xl border border-surface-border shadow-md">
           {status === 'processing' && (
             <div className="flex flex-col items-center text-center py-4">
-              <div className="w-12 h-12 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-600 dark:text-brand-400 mb-4 animate-spin">
-                <RefreshCw size={24} />
+              <div className="w-12 h-12 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 flex items-center justify-center text-[#0D9488] mb-4">
+                <RefreshCw size={24} className="animate-spin" />
               </div>
               <h1 className="text-xl font-bold text-ink-primary mb-2">
                 Verifying your university email...
               </h1>
               <p className="text-xs text-ink-muted max-w-sm">
-                Authenticating with Chandigarh University security domain. Please wait a moment while we activate your account.
+                Authenticating with Chandigarh University security domain. Please wait while we activate your student credentials.
               </p>
             </div>
           )}
@@ -159,30 +193,30 @@ export const AuthCallbackPage = () => {
                 University Email Confirmed!
               </h1>
               <p className="text-xs text-ink-muted mb-6 max-w-sm">
-                Your Chandigarh University student account is now active. You have full access to campus equipment rentals, borrowings, and peer negotiation.
+                Your Chandigarh University student account is active. Continuing to {destinationLabel}...
               </p>
 
               <button
                 type="button"
-                onClick={() => navigate('/app')}
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-sm"
+                onClick={() => navigate(destination, { replace: true })}
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold text-sm transition-all shadow-sm"
               >
-                <span>Proceed to Campus Hub</span>
+                <span>Continue to {destinationLabel}</span>
                 <ArrowRight size={16} />
               </button>
 
               <p className="text-[11px] text-ink-muted mt-3">
-                Redirecting automatically in {countdown}s...
+                Opening in {countdown}s...
               </p>
             </div>
           )}
 
           {status === 'error' && (
             <div className="flex flex-col items-center text-center py-2">
-              <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 flex items-center justify-center text-red-600 dark:text-red-400 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-4">
                 <AlertCircle size={26} />
               </div>
-              <span className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-1">
+              <span className="text-[11px] font-bold text-rose-600 uppercase tracking-wider mb-1">
                 Verification Unsuccessful
               </span>
               <h1 className="text-xl font-bold text-ink-primary mb-2">
@@ -195,7 +229,7 @@ export const AuthCallbackPage = () => {
               <div className="w-full flex flex-col gap-2.5">
                 <Link
                   to="/login"
-                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-all shadow-xs"
+                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold text-xs transition-all shadow-xs"
                 >
                   <LogIn size={14} />
                   <span>Sign In to Your Account</span>
@@ -217,11 +251,11 @@ export const AuthCallbackPage = () => {
       {/* Footer */}
       <footer className="max-w-md w-full mx-auto text-center text-xs text-ink-muted">
         <div className="flex items-center justify-center gap-4">
-          <Link to="/terms" className="hover:text-brand-600">Terms</Link>
+          <Link to="/terms" className="hover:text-[#0D9488]">Terms</Link>
           <span>•</span>
-          <Link to="/privacy" className="hover:text-brand-600">Privacy</Link>
+          <Link to="/privacy" className="hover:text-[#0D9488]">Privacy</Link>
           <span>•</span>
-          <Link to="/" className="hover:text-brand-600">Home</Link>
+          <Link to="/" className="hover:text-[#0D9488]">Home</Link>
         </div>
       </footer>
     </div>
@@ -229,4 +263,3 @@ export const AuthCallbackPage = () => {
 };
 
 export default AuthCallbackPage;
-

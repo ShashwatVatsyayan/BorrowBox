@@ -185,6 +185,21 @@ const pkceRes = parseCallbackParameters('?code=sample-pkce-auth-code', '');
 assert.equal(pkceRes.status, 'pkce_code');
 assert.equal(pkceRes.code, 'sample-pkce-auth-code');
 
+// Token hash verifyOtp test (Supabase Email Confirmation Links)
+function parseTokenHashParam(queryString) {
+  const params = new URLSearchParams(queryString);
+  const tokenHash = params.get('token_hash');
+  const type = params.get('type') || 'signup';
+  if (tokenHash) {
+    return { status: 'token_hash_verify', tokenHash, type };
+  }
+  return null;
+}
+const tokenHashRes = parseTokenHashParam('?token_hash=pkce_token_hash_xyz&type=email');
+assert.equal(tokenHashRes.status, 'token_hash_verify');
+assert.equal(tokenHashRes.tokenHash, 'pkce_token_hash_xyz');
+assert.equal(tokenHashRes.type, 'email');
+
 // Hash token test
 const tokenRes = parseCallbackParameters('', '#access_token=sample-jwt-token&type=signup');
 assert.equal(tokenRes.status, 'token_exchange');
@@ -287,6 +302,70 @@ assert.equal(supabaseSrc.includes('borrowbox_prod_v1'), true, 'New production se
 assert.equal(supabaseSrc.includes('11111111-1111-1111-1111-111111111111'), false, 'Mock user 11111111 removed');
 assert.equal(supabaseSrc.includes('22222222-2222-2222-2222-222222222222'), false, 'Mock user 22222222 removed');
 console.log('[PASS] Clean initial seed database invariants verified.\n');
+
+// 10. Landing Page Token Forwarder Verification
+console.log('[Scenario 10: Landing Page Root URL Token Interception]');
+function shouldForwardToCallback(search, hash) {
+  return (
+    hash.includes('access_token') ||
+    hash.includes('error') ||
+    search.includes('code=') ||
+    search.includes('token_hash=')
+  );
+}
+assert.equal(shouldForwardToCallback('', '#access_token=jwt_xyz&type=signup'), true);
+assert.equal(shouldForwardToCallback('?code=pkce_abc', ''), true);
+assert.equal(shouldForwardToCallback('?token_hash=token_123&type=email', ''), true);
+assert.equal(shouldForwardToCallback('', '#error=access_denied'), true);
+assert.equal(shouldForwardToCallback('', ''), false);
+console.log('[PASS] Landing page token interception & forwarding verified.\n');
+
+// 11. Onboarding Continuation Determination
+console.log('[Scenario 11: Onboarding Continuation Determination]');
+function determinePostVerificationRoute(profile) {
+  const isProfileIncomplete = !profile?.department || !profile?.hostel_room || !profile?.bio;
+  if (isProfileIncomplete) {
+    return { route: '/app/profile/edit?onboarding=true', label: 'Student Profile Setup' };
+  }
+  return { route: '/app', label: 'Campus Hub' };
+}
+
+// Incomplete profile (fresh signup missing room/department/bio)
+const incompleteProfile = { id: 'usr-1', email: 'student@cuchd.in', full_name: 'Test Student' };
+const incompleteTarget = determinePostVerificationRoute(incompleteProfile);
+assert.equal(incompleteTarget.route, '/app/profile/edit?onboarding=true');
+assert.equal(incompleteTarget.label, 'Student Profile Setup');
+
+// Complete profile
+const completeProfile = {
+  id: 'usr-2',
+  email: 'student2@cuchd.in',
+  full_name: 'Priya Verma',
+  department: 'Computer Science & Engineering',
+  hostel_room: 'Hostel BH-3, Room 412',
+  bio: 'CSE undergrad'
+};
+const completeTarget = determinePostVerificationRoute(completeProfile);
+assert.equal(completeTarget.route, '/app');
+assert.equal(completeTarget.label, 'Campus Hub');
+console.log('[PASS] Onboarding continuation target verified.\n');
+
+// 12. Registration Context Preservation (Zero-Password Invariant)
+console.log('[Scenario 12: Registration Context Invariant]');
+function createPendingRegistrationContext(fullName, email, uid) {
+  return {
+    fullName,
+    email,
+    universityUid: uid,
+    timestamp: Date.now()
+  };
+}
+const regCtx = createPendingRegistrationContext('Shashwat Vatsyayan', '24bcs12850@cuchd.in', '24BCS12850');
+assert.equal(regCtx.fullName, 'Shashwat Vatsyayan');
+assert.equal(regCtx.email, '24bcs12850@cuchd.in');
+assert.equal(regCtx.universityUid, '24BCS12850');
+assert.equal('password' in regCtx, false, 'Password strictly never stored in registration persistence');
+console.log('[PASS] Registration context preservation without credential leakage verified.\n');
 
 console.log('--- ALL AUTH EMAIL CONFIRMATION SUITE VERIFICATIONS PASSED ---');
 

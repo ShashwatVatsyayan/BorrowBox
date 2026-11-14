@@ -134,8 +134,47 @@ export const authService = {
     if (isConfigured && supabase) {
       if (typeof window === 'undefined') return { session: null, error: null };
 
-      // 1. Check for PKCE 'code' query parameter
       const urlParams = new URLSearchParams(window.location.search);
+
+      // 1. Check for explicit error parameters in query string
+      const queryError = urlParams.get('error_description') || urlParams.get('error');
+      if (queryError) {
+        throw new Error(queryError.replace(/\+/g, ' '));
+      }
+
+      // 2. Check for hash errors and tokens (e.g. #access_token=... or #error=access_denied)
+      if (window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const hashError = hashParams.get('error_description') || hashParams.get('error');
+        if (hashError) {
+          throw new Error(hashError.replace(/\+/g, ' '));
+        }
+
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        if (accessToken) {
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken || ''
+          });
+          if (error) throw error;
+          return data;
+        }
+      }
+
+      // 3. Check for token_hash (used by Supabase Auth email confirmation links: {{ .ConfirmationURL }})
+      const tokenHash = urlParams.get('token_hash');
+      const otpType = urlParams.get('type') || 'signup';
+      if (tokenHash) {
+        const { data, error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: otpType
+        });
+        if (error) throw error;
+        return data;
+      }
+
+      // 4. Check for PKCE 'code' query parameter
       const code = urlParams.get('code');
       if (code) {
         const { data, error } = await supabase.auth.exchangeCodeForSession(code);
@@ -143,16 +182,7 @@ export const authService = {
         return data;
       }
 
-      // 2. Check for hash errors (e.g. #error=access_denied&error_description=...)
-      if (window.location.hash) {
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const hashError = hashParams.get('error_description') || hashParams.get('error');
-        if (hashError) {
-          throw new Error(hashError.replace(/\+/g, ' '));
-        }
-      }
-
-      // 3. Fallback to active session check
+      // 5. Fallback to active session check
       const { data, error } = await supabase.auth.getSession();
       if (error) throw error;
       return data;

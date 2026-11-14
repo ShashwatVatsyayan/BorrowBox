@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, Upload } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Lock, Mail, Upload, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
@@ -11,7 +11,10 @@ import { profileService } from '../../services/profileService';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
 export const EditProfilePage = () => {
-  usePageTitle('Edit Profile');
+  const [searchParams] = useSearchParams();
+  const isOnboarding = searchParams.get('onboarding') === 'true';
+
+  usePageTitle(isOnboarding ? 'Complete Student Profile' : 'Edit Profile');
   const { user, updateUserData } = useAuth();
   const navigate = useNavigate();
 
@@ -82,7 +85,7 @@ export const EditProfilePage = () => {
       if (updateUserData) {
         updateUserData(updates);
       }
-      navigate('/app/profile');
+      navigate(isOnboarding ? '/app' : '/app/profile');
     } catch (err) {
       setError(err.message || 'Failed to update profile.');
     } finally {
@@ -100,9 +103,35 @@ export const EditProfilePage = () => {
 
   return (
     <PageContainer maxWidth="max-w-xl">
+      {isOnboarding && (
+        <div className="mb-5 p-4 rounded-2xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+            <ShieldCheck size={20} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300">
+                Email Confirmed
+              </span>
+              <span className="text-xs text-teal-700 dark:text-teal-400">• Step 2 of 2</span>
+            </div>
+            <h2 className="text-sm font-bold text-ink-primary mt-0.5">
+              Complete Your Student Profile & Campus Pass
+            </h2>
+            <p className="text-xs text-ink-muted mt-0.5">
+              Set up your academic department and hostel handoff location to activate your Holographic Student ID Pass and start renting.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="mb-5">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">Edit Profile</h1>
-        <p className="text-xs text-ink-muted mt-0.5">Manage your public campus name and bio</p>
+        <h1 className="text-xl sm:text-2xl font-extrabold text-ink-primary tracking-tight">
+          {isOnboarding ? 'Complete Student Profile' : 'Edit Profile'}
+        </h1>
+        <p className="text-xs text-ink-muted mt-0.5">
+          {isOnboarding ? 'Set up your public student details and campus pass credentials' : 'Manage your public campus name and bio'}
+        </p>
       </div>
 
       <div className="bg-surface-card p-6 rounded-2xl border border-surface-border shadow-xs">
@@ -240,11 +269,15 @@ export const EditProfilePage = () => {
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-surface-border">
-            <Button variant="outline" size="sm" onClick={() => navigate('/app/profile')}>
-              Cancel
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(isOnboarding ? '/app' : '/app/profile')}
+            >
+              {isOnboarding ? 'Skip for Now' : 'Cancel'}
             </Button>
             <Button type="submit" variant="primary" size="sm" loading={saving}>
-              Save Profile
+              {isOnboarding ? 'Complete Profile & Enter Hub' : 'Save Profile'}
             </Button>
           </div>
         </form>

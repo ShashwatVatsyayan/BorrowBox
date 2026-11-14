@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, Calculator, FlaskConical, Shield, CheckCircle2, Clock, MapPin, ExternalLink, Play } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Logo } from '../../components/common/Logo';
@@ -15,6 +15,26 @@ export const LandingPage = () => {
   usePageTitle('Campus Peer Lending');
   const { resolvedTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Supabase confirmation email safety forwarder:
+  // If Supabase redirects to Site URL (/) with confirmation token, hash fragments, or code,
+  // immediately forward to /auth/callback to establish session and continue registration.
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash || '';
+      const search = window.location.search || '';
+      const hasAuthTokens =
+        hash.includes('access_token') ||
+        hash.includes('error') ||
+        search.includes('code=') ||
+        search.includes('token_hash=');
+
+      if (hasAuthTokens) {
+        navigate('/auth/callback' + search + hash, { replace: true });
+      }
+    }
+  }, [navigate]);
 
   const [showIntro, setShowIntro] = useState(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('intro')) {
