@@ -1,7 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const metaEnv = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {};
+const procEnv = typeof process !== 'undefined' && process.env ? process.env : {};
+
+const supabaseUrl = metaEnv.VITE_SUPABASE_URL || metaEnv.NEXT_PUBLIC_SUPABASE_URL || procEnv.VITE_SUPABASE_URL || procEnv.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = metaEnv.VITE_SUPABASE_ANON_KEY || metaEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || metaEnv.VITE_SUPABASE_PUBLISHABLE_KEY || procEnv.VITE_SUPABASE_ANON_KEY || procEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 export const isConfigured = Boolean(
   supabaseUrl &&
@@ -229,7 +232,27 @@ export const getLocalDB = () => {
 };
 
 export const saveLocalDB = (db) => {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(db));
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(db));
+  } catch (err) {
+    if (err && (err.name === 'QuotaExceededError' || err.code === 22 || err.code === 1014)) {
+      console.warn('LocalStorage quota limit reached. Optimizing storage cache...');
+      try {
+        const optimized = { ...db };
+        if (Array.isArray(optimized.notifications)) {
+          optimized.notifications = optimized.notifications.slice(0, 20);
+        }
+        if (Array.isArray(optimized.messages)) {
+          optimized.messages = optimized.messages.slice(0, 50);
+        }
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(optimized));
+        return;
+      } catch (retryErr) {
+        console.error('Failed to save to localStorage after cache optimization:', retryErr);
+      }
+    }
+    throw err;
+  }
 };
 
 export const resetLocalDB = () => {

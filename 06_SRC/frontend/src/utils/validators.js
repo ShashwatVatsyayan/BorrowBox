@@ -202,7 +202,10 @@ export const validateItemForm = (values) => {
     errors.location_label = 'Please specify a general campus pickup area.';
   }
 
-  if (!values.images || values.images.length < 4) {
+  const validImages = Array.isArray(values.images)
+    ? values.images.filter((img) => typeof img === 'string' && img.trim().length > 0)
+    : [];
+  if (validImages.length < 4) {
     errors.images = 'Please provide at least 4 photos showing the top, bottom, left side, and right side views of the item.';
   }
 

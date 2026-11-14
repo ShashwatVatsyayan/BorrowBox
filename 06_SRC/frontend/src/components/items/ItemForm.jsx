@@ -11,7 +11,7 @@ import { validateItemForm, validateRentalPrice, calculateRentalPricing } from '.
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { ImageUploader } from './ImageUploader';
-import { ArrowLeftRight, Clock, HelpCircle, IndianRupee, Tag, ShieldCheck } from 'lucide-react';
+import { ArrowLeftRight, Clock, HelpCircle, IndianRupee, Tag, ShieldCheck, AlertCircle } from 'lucide-react';
 
 export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Rental Listing', loading = false }) => {
   const [formData, setFormData] = useState({
@@ -84,14 +84,25 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Renta
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const result = validateItemForm(formData);
+    const cleanImages = (formData.images || []).filter((img) => typeof img === 'string' && img.trim().length > 0);
+    const dataToValidate = {
+      ...formData,
+      images: cleanImages
+    };
+
+    const result = validateItemForm(dataToValidate);
     if (!result.valid) {
       setErrors(result.errors);
+      // Scroll to top of form smoothly to show error banner
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       return;
     }
 
     const payload = {
       ...formData,
+      images: cleanImages,
       daily_price: Number(formData.daily_price) || 15,
       budget_per_day: formData.budget_per_day ? Number(formData.budget_per_day) : null,
       duration_discounts: {
@@ -108,6 +119,18 @@ export const ItemForm = ({ initialValues, onSubmit, submitLabel = 'Publish Renta
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 bg-surface-card p-5 sm:p-6 rounded-2xl border border-surface-border shadow-xs">
+      {Object.keys(errors).length > 0 && (
+        <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-state-danger text-xs flex items-center gap-2.5 shadow-xs">
+          <AlertCircle size={18} className="shrink-0" />
+          <div className="flex flex-col">
+            <span className="font-bold">Please complete all required listing fields:</span>
+            <span className="text-[11px] opacity-90">
+              {Object.values(errors).filter(Boolean).join(' • ')}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Listing Purpose Selector */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted">

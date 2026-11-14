@@ -1,15 +1,20 @@
-import { isConfigured, supabase, getLocalDB, saveLocalDB } from '../lib/supabase';
-import { DEFAULT_ALLOWED_DOMAINS } from '../utils/constants';
-import { rateLimiter } from '../utils/rateLimiter';
+import { isConfigured, supabase, getLocalDB, saveLocalDB } from '../lib/supabase.js';
+import { DEFAULT_ALLOWED_DOMAINS } from '../utils/constants.js';
+import { rateLimiter } from '../utils/rateLimiter.js';
 
 const CURRENT_USER_SESSION_KEY = 'borrowbox_auth_session';
 
 export const authService = {
   async getSession() {
     if (isConfigured && supabase) {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) throw error;
-      return data.session;
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (!error && data?.session) {
+          return data.session;
+        }
+      } catch (err) {
+        console.warn('Supabase getSession error, falling back to local session:', err);
+      }
     }
     const sessionStr = localStorage.getItem(CURRENT_USER_SESSION_KEY);
     if (!sessionStr) return null;
@@ -304,8 +309,7 @@ export const authService = {
 
   async signOut() {
     if (isConfigured && supabase) {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await supabase.auth.signOut().catch(() => {});
     }
     localStorage.removeItem(CURRENT_USER_SESSION_KEY);
     return true;

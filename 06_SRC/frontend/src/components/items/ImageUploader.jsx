@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { Camera, Upload, Link as LinkIcon, X, CheckCircle2, AlertCircle } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Camera, Upload, Link as LinkIcon, X, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { compressImageFile } from '../../utils/imageCompressor';
 
 const REQUIRED_ANGLES = [
   { id: 0, label: 'Top / Front View', hint: 'Clear overall angle showing item front or top' },
@@ -10,8 +11,9 @@ const REQUIRED_ANGLES = [
 
 export const ImageUploader = ({ images = [], onChange, error = null }) => {
   const fileInputRefs = useRef([]);
+  const [processingIndex, setProcessingIndex] = useState(null);
 
-  const handleFileSelect = (index, e) => {
+  const handleFileSelect = async (index, e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -20,28 +22,42 @@ export const ImageUploader = ({ images = [], onChange, error = null }) => {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const newImages = [...images];
-      newImages[index] = reader.result;
+    setProcessingIndex(index);
+    try {
+      const compressedDataUrl = await compressImageFile(file, 1200, 1200, 0.78);
+      const newImages = [...(images || [])];
+      while (newImages.length <= index) {
+        newImages.push('');
+      }
+      newImages[index] = compressedDataUrl;
       onChange(newImages);
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error('Image compression failed:', err);
+      alert('Failed to process image: ' + (err.message || 'Unknown error'));
+    } finally {
+      setProcessingIndex(null);
+      if (e.target) e.target.value = '';
+    }
   };
 
   const handleUrlAdd = (index) => {
     const url = window.prompt(`Enter direct image URL for ${REQUIRED_ANGLES[index].label}:`);
     if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image'))) {
-      const newImages = [...images];
+      const newImages = [...(images || [])];
+      while (newImages.length <= index) {
+        newImages.push('');
+      }
       newImages[index] = url.trim();
       onChange(newImages);
     }
   };
 
   const handleRemove = (index) => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    onChange(newImages);
+    const newImages = [...(images || [])];
+    if (newImages[index]) {
+      newImages[index] = '';
+      onChange(newImages);
+    }
   };
 
   const handleFillDemoAngles = () => {
@@ -53,7 +69,8 @@ export const ImageUploader = ({ images = [], onChange, error = null }) => {
     ]);
   };
 
-  const count = images.filter(Boolean).length;
+  const validImages = (images || []).filter((img) => typeof img === 'string' && img.trim().length > 0);
+  const count = validImages.length;
   const isComplete = count >= 4;
 
   return (
@@ -72,24 +89,33 @@ export const ImageUploader = ({ images = [], onChange, error = null }) => {
       </div>
 
       <p className="text-xs text-ink-muted">
-        To protect both listers and borrowers, upload at least 4 clear photos showing the <b>top, bottom, and both side angles</b> of the physical item.
+        To protect both listers and borrowers, upload at least 4 clear photos showing the <b>top, bottom, and both side angles</b> of the physical item. Photos are automatically compressed to ensure instant loading.
       </p>
 
       {/* 4 Angle Slots Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {REQUIRED_ANGLES.map((angle, idx) => {
-          const imgUrl = images[idx];
+          const imgUrl = images?.[idx];
+          const hasImage = typeof imgUrl === 'string' && imgUrl.trim().length > 0;
+          const isCurrentProcessing = processingIndex === idx;
+
           return (
             <div
               key={angle.id}
               className={`relative flex flex-col rounded-xl border overflow-hidden bg-surface-card transition-all ${
-                imgUrl
+                hasImage
                   ? 'border-emerald-300 dark:border-emerald-800'
                   : 'border-dashed border-slate-300 dark:border-slate-700'
               }`}
             >
               <div className="relative aspect-square w-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-                {imgUrl ? (
+                {isCurrentProcessing ? (
+                  <div className="flex flex-col items-center justify-center p-3 text-center">
+                    <Loader2 size={24} className="animate-spin text-brand-600 mb-1" />
+                    <span className="text-[11px] font-bold text-ink-primary">Optimizing...</span>
+                    <span className="text-[9px] text-ink-muted mt-0.5">Compressing photo</span>
+                  </div>
+                ) : hasImage ? (
                   <>
                     <img src={imgUrl} alt={angle.label} className="w-full h-full object-cover" />
                     <button
@@ -115,7 +141,7 @@ export const ImageUploader = ({ images = [], onChange, error = null }) => {
               </div>
 
               {/* Action Buttons for slot */}
-              {!imgUrl && (
+              {!hasImage && !isCurrentProcessing && (
                 <div className="p-1.5 flex items-center gap-1 bg-slate-50 dark:bg-slate-900 border-t border-surface-border">
                   <input
                     type="file"
@@ -130,7 +156,7 @@ export const ImageUploader = ({ images = [], onChange, error = null }) => {
                     className="flex-1 py-1 px-1.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-ink-primary hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center gap-1"
                   >
                     <Upload size={10} />
-                    <span>File</span>
+                    <span>Upload</span>
                   </button>
                   <button
                     type="button"
