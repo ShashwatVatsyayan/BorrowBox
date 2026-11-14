@@ -11,6 +11,7 @@ import { LandingPage } from './pages/public/LandingPage';
 const SignupPage = lazy(() => import('./pages/public/SignupPage').then(m => ({ default: m.SignupPage })));
 const LoginPage = lazy(() => import('./pages/public/LoginPage').then(m => ({ default: m.LoginPage })));
 const VerifyEmailPage = lazy(() => import('./pages/public/VerifyEmailPage').then(m => ({ default: m.VerifyEmailPage })));
+const AuthCallbackPage = lazy(() => import('./pages/public/AuthCallbackPage').then(m => ({ default: m.AuthCallbackPage })));
 const ForgotPasswordPage = lazy(() => import('./pages/public/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('./pages/public/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 const TermsPage = lazy(() => import('./pages/public/TermsPage').then(m => ({ default: m.TermsPage })));
@@ -60,6 +61,7 @@ export function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/verify-email" element={<VerifyEmailPage />} />
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/terms" element={<TermsPage />} />

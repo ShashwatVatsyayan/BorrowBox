@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     if (isConfigured && supabase) {
       const { data } = supabase.auth.onAuthStateChange(async (event, newSession) => {
         if (newSession) {
+          // If the user's email is confirmed, update state
           setSession(newSession);
           setUser(newSession.user);
           setLoading(false);
@@ -67,15 +68,13 @@ export const AuthProvider = ({ children }) => {
     return await authService.signUp(payload);
   };
 
-  const verifyOtp = async (email, token) => {
-    const data = await authService.verifyOtp({ email, token });
-    setSession(data.session);
-    setUser(data.user);
-    return data;
+  const resendConfirmationEmail = async (email) => {
+    return await authService.resendConfirmationEmail(email);
   };
 
+  // Legacy alias
   const resendOtp = async (email) => {
-    return await authService.resendOtp(email);
+    return await authService.resendConfirmationEmail(email);
   };
 
   const logout = async () => {
@@ -122,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         signup,
-        verifyOtp,
+        resendConfirmationEmail,
         resendOtp,
         logout,
         switchAccount,
@@ -133,4 +132,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-

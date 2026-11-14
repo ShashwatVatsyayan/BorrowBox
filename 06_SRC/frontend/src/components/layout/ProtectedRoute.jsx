@@ -18,6 +18,19 @@ export const ProtectedRoute = ({ children, requireAdmin = false }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // Never allow an unverified user to bypass confirmation by navigating directly to a protected route
+  const isEmailConfirmed = Boolean(
+    user.email_confirmed_at || user.confirmed_at || user.is_verified === true
+  );
+  if (!isEmailConfirmed) {
+    return (
+      <Navigate
+        to={`/verify-email?email=${encodeURIComponent(user.email || '')}`}
+        replace
+      />
+    );
+  }
+
   if (requireAdmin && user.role !== 'admin') {
     return <Navigate to="/app" replace />;
   }
@@ -25,3 +38,4 @@ export const ProtectedRoute = ({ children, requireAdmin = false }) => {
   return children;
 };
 
+export default ProtectedRoute;

@@ -128,15 +128,29 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
 
     setSignInLoading(true);
     try {
-      await login(signInEmail, signInPassword);
+      const normalizedEmail = signInEmail.trim().toLowerCase();
+      await login(normalizedEmail, signInPassword);
       setTransitionMeta({
         title: 'Entering Campus Network...',
-        subtitle: `Authenticated as ${signInEmail}. Welcome back to BorrowBox.`,
+        subtitle: `Authenticated as ${normalizedEmail}. Welcome back to BorrowBox.`,
         target: '/app'
       });
       setTransitioning(true);
     } catch (err) {
-      setSignInError(err.message || 'Invalid email or password.');
+      if (
+        err.code === 'email_not_confirmed' ||
+        err.message?.toLowerCase().includes('confirm your university email') ||
+        err.message?.toLowerCase().includes('not confirmed')
+      ) {
+        setSignInError({
+          message: 'Your university email has not been confirmed yet. Please verify your account via the confirmation link sent to your Outlook inbox.',
+          unconfirmedEmail: signInEmail.trim().toLowerCase()
+        });
+      } else {
+        setSignInError({
+          message: err.message || 'Invalid email or password.'
+        });
+      }
       setSignInLoading(false);
     }
   };
@@ -194,26 +208,21 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
 
     setSignUpLoading(true);
     try {
-      const autoUid = signUpData.email.split('@')[0].toUpperCase();
-      const res = await signup({
-        email: signUpData.email,
+      const normalizedEmail = signUpData.email.trim().toLowerCase();
+      const autoUid = normalizedEmail.split('@')[0].toUpperCase();
+      await signup({
+        email: normalizedEmail,
         password: signUpData.password,
-        full_name: signUpData.fullName,
+        full_name: signUpData.fullName.trim(),
         university_uid: autoUid
       });
-      if (res?.session) {
-        setTransitionMeta({
-          title: 'Welcome to BorrowBox!',
-          subtitle: `Authenticated as ${signUpData.fullName}. Launching campus hub...`,
-          target: '/app'
-        });
-      } else {
-        setTransitionMeta({
-          title: 'Verification Dispatched',
-          subtitle: `Confirmation sent to ${signUpData.email}. Opening verification portal...`,
-          target: `/verify-email?email=${encodeURIComponent(signUpData.email)}`
-        });
-      }
+
+      // Always display dedicated email verification screen on registration
+      setTransitionMeta({
+        title: 'Verification Link Dispatched',
+        subtitle: `Confirmation link sent to ${normalizedEmail}. Opening activation portal...`,
+        target: `/verify-email?email=${encodeURIComponent(normalizedEmail)}`
+      });
       setTransitioning(true);
     } catch (err) {
       setSignUpGeneralError(err.message || 'Registration failed. Please try again.');
@@ -268,8 +277,19 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
             </div>
 
             {signInError && (
-              <div className="mb-3 p-2.5 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200">
-                {signInError}
+              <div className="mb-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs font-medium border border-red-200 dark:border-red-800 flex flex-col gap-2">
+                <div>{typeof signInError === 'string' ? signInError : signInError.message}</div>
+                {signInError?.unconfirmedEmail && (
+                  <div className="pt-1.5 border-t border-red-200/60 dark:border-red-800/60 flex items-center justify-between">
+                    <Link
+                      to={`/verify-email?email=${encodeURIComponent(signInError.unconfirmedEmail)}`}
+                      className="text-brand-600 dark:text-brand-400 font-semibold hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>Verify Email / Resend Link</span>
+                      <ExternalLink size={12} />
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 

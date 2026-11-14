@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { VersoOtpCard } from '../../components/auth/VersoOtpCard';
+import { EmailVerificationCard } from '../../components/auth/EmailVerificationCard';
 
 export const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams();
-  const email = searchParams.get('email') || '23bcs12850@cuchd.in';
+  const email = searchParams.get('email') || 'student@cuchd.in';
 
-  return <VersoOtpCard targetEmail={email} />;
+  useEffect(() => {
+    document.title = 'Verify Email | BorrowBox';
+  }, []);
+
+  return <EmailVerificationCard targetEmail={email} />;
 };
 
 export default VerifyEmailPage;

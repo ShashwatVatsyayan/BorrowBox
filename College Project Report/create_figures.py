@@ -504,3 +504,4 @@ if __name__ == '__main__':
     make_fig3_handshake()
     make_fig4_settings()
     print("All figures successfully generated!")
+
