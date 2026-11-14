@@ -307,12 +307,54 @@ void main() {
   float awake = mix(0.2, 1.0, tilted);
   float strength = uIntensity * f.mask * (1.0 - frame) * awake;
   float band = uPreset == 5 ? spoke : layered ? 0.25 + 0.75 * smoothstep(0.3, 0.95, 0.5 + 0.5 * cos(phase * TAU * 0.5 + 1.3)) : 1.0;
-  vec3 color = layered
-    ? 1.0 - (1.0 - art) * (1.0 - clamp(foil * look.w * band * strength, 0.0, 1.0))
-    : mix(art, foil, clamp(strength * look.w, 0.0, 1.0));
-  color += sparkles(p, halfway, sweep, mix(0.55, 1.0, tilted)) * uEdge * frame;
-  color += uFoil * sheen * 0.12 * frame;
-  color += vec3(sheen * 0.07 + shine * 0.3) * uGlare;
+
+  // Dedicated Protection Zones to ensure information clarity and scannability:
+  // 1. Barcode & QR Code Zone (y: ~0.66 to 0.94, x: ~0.05 to 0.95):
+  //    Must remain 100% glare-free, reflection-free and scannable by any barcode scanner or phone camera.
+  float inBarcodeX = smoothstep(0.04, 0.07, uv.x) * (1.0 - smoothstep(0.93, 0.96, uv.x));
+  float inBarcodeY = smoothstep(0.65, 0.68, uv.y) * (1.0 - smoothstep(0.93, 0.96, uv.y));
+  float barcodeZone = inBarcodeX * inBarcodeY;
+
+  // 2. Student Photograph Zone (y: ~0.13 to 0.40, x: ~0.06 to 0.36):
+  //    Face and portrait must remain visually clear without harsh rainbow patterns obscuring it.
+  float inPhotoX = smoothstep(0.05, 0.08, uv.x) * (1.0 - smoothstep(0.34, 0.37, uv.x));
+  float inPhotoY = smoothstep(0.12, 0.15, uv.y) * (1.0 - smoothstep(0.39, 0.42, uv.y));
+  float photoZone = inPhotoX * inPhotoY;
+
+  // 3. Student Credentials & Name Zone (y: ~0.13 to 0.48, x: ~0.35 to 0.95):
+  //    Essential student text must have maximum legibility, high contrast, and no blinding radial glare.
+  float inTextX = smoothstep(0.34, 0.37, uv.x) * (1.0 - smoothstep(0.93, 0.96, uv.x));
+  float inTextY = smoothstep(0.12, 0.15, uv.y) * (1.0 - smoothstep(0.47, 0.50, uv.y));
+  float textZone = inTextX * inTextY;
+
+  // Card edge / border proximity boost:
+  // Concentrates vibrant holographic patterns toward card edges, corners, security frame, and microchip.
+  float edgeDist = min(min(uv.x, 1.0 - uv.x), min(uv.y, (1.0 - uv.y) * uAspect));
+  float edgeBoost = 1.0 + 0.85 * (1.0 - smoothstep(0.0, 0.14, edgeDist));
+
+  // Security foil attenuation mask:
+  // - Barcode & QR Code: 0.0 foil reflection (100% clean scannability).
+  // - Photograph: 85% reduced foil (subtle protective sheen).
+  // - Credentials text: 75% reduced foil (crisp, high contrast readability).
+  // - Borders, ribbons, corners, chip: full vibrant holographic dispersion!
+  float foilMask = (1.0 - barcodeZone * 1.0 - photoZone * 0.85 - textZone * 0.75) * edgeBoost;
+  foilMask = clamp(foilMask, 0.0, 1.5);
+
+  float effectiveStrength = strength * foilMask;
+
+  // Protective Additive Specular Foil Blend:
+  // Instead of destructive mix() which replaces printed art with rainbow color,
+  // we add the foil reflection as an authentic iridescent specular sheen on top of the art.
+  vec3 foilLight = foil * look.w * band * effectiveStrength * 0.52;
+  vec3 color = art + foilLight + (art * sheen * 0.15 * (1.0 - barcodeZone));
+
+  // Sparkles along outer holographic borders and corners
+  color += sparkles(p, halfway, sweep, mix(0.55, 1.0, tilted)) * uEdge * frame * (1.0 - barcodeZone * 0.95);
+  color += uFoil * sheen * 0.12 * frame * (1.0 - barcodeZone);
+
+  // Soft specular surface glare, attenuated over barcode and photo so scanners are never blinded
+  float glareMask = 1.0 - barcodeZone * 0.98 - photoZone * 0.6;
+  color += vec3(sheen * 0.05 + shine * 0.24) * uGlare * glareMask;
   color = pow(clamp(color, 0.0, 1.0), vec3(1.0 / 2.2));
   outColor = vec4(color * alpha, alpha);
 }

@@ -125,10 +125,10 @@ export const PublicProfileModal = ({ userId, isOpen, onClose }) => {
                   image={cardArt}
                   alt={`${profile.full_name} Student Card`}
                   preset="bursts"
-                  width={280}
-                  intensity={0.9}
+                  width={310}
+                  intensity={0.88}
                   edgeSparkle={0.8}
-                  glare={0.55}
+                  glare={0.45}
                   radius={16}
                 />
               </div>

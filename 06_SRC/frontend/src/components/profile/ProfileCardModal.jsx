@@ -48,7 +48,7 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 pb-[env(safe-area-inset-bottom,0px)] bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div
-        className="relative w-full max-w-sm sm:max-w-md bg-surface-card border border-surface-border rounded-3xl shadow-2xl overflow-hidden my-auto animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md sm:max-w-lg bg-surface-card border border-surface-border rounded-3xl shadow-2xl overflow-hidden my-auto animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="profile-card-title"
@@ -85,10 +85,10 @@ export const ProfileCardModal = ({ isOpen, onClose }) => {
               image={cardArt}
               alt={`${fullName} Student Card`}
               preset={selectedHoloPreset}
-              width={260}
-              intensity={0.92}
+              width={320}
+              intensity={0.88}
               edgeSparkle={0.85}
-              glare={0.6}
+              glare={0.45}
               radius={18}
               hoverScale={1.04}
             />
