@@ -84,7 +84,7 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
 
   /**
    * Verso Skewed Blade Transition Engine
-   * Total duration: 750ms, Midpoint swap: 350ms
+   * Total duration: 650ms, Midpoint swap: 320ms
    */
   const handleToggleMode = () => {
     if (isAnimatingRef.current) return;
@@ -95,19 +95,19 @@ export const VersoAuthCard = ({ initialMode = 'signin', onModeChange }) => {
     // Phase 1: Trigger blade expansion sweep across the card
     setIsSweeping(true);
 
-    // Phase 2: Exact Midpoint (350ms) - forms swapped while 100% covered by dark blade
+    // Phase 2: Exact Midpoint (320ms) - forms swapped while 100% covered by dark blade
     setTimeout(() => {
       setMode(nextMode);
       if (typeof onModeChange === 'function') {
         onModeChange(nextMode);
       }
-    }, 350);
+    }, 320);
 
-    // Phase 3: Complete transition (750ms) - blade settles into destination resting half
+    // Phase 3: Complete transition (650ms) - blade settles into destination resting half
     setTimeout(() => {
       setIsSweeping(false);
       isAnimatingRef.current = false;
-    }, 750);
+    }, 650);
   };
 
   // Sign-In Form Submission

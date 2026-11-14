@@ -20,7 +20,7 @@ export const Logo = ({
   const effectiveVariant = variant || (isDark ? 'dark' : 'light');
   const logoSrc = effectiveVariant === 'dark' ? '/logo-dark.svg' : '/logo.svg';
 
-  // Responsive mobile and desktop sizing for horizontal lockup (1120x300 aspect ratio)
+  // Responsive mobile and desktop sizing for horizontal lockup (840x300 aspect ratio)
   const sizeClasses = {
     xs: 'h-8 sm:h-9 w-auto max-w-[150px] sm:max-w-[170px]',
     sm: 'h-9 sm:h-10 md:h-11 w-auto max-w-[170px] sm:max-w-[200px]',

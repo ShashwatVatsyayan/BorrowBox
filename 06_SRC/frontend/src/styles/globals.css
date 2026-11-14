@@ -177,11 +177,20 @@ html.dark .glass-block {
   box-shadow: 0 14px 40px -15px rgba(0, 0, 0, 0.85), 0 0 20px -8px rgba(16, 185, 129, 0.12);
 }
 
-/* Zero-shift GPU-accelerated View Transition */
+/* Zero-shift GPU-accelerated View Transition with Circular Reveal */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 350ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
 }
 
 /* Ink Bleed Overlay Disabled - Native Zero-Shift GPU Theme Transitions Active */

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="244" height="244" viewBox="28 28 244 244" role="img" aria-labelledby="icon-title">
+  <title id="icon-title">BorrowBox Icon</title>
+  <defs>
+    <linearGradient id="teal-icon" x1="30" y1="25" x2="270" y2="270" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14B8A6"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+  <rect x="28" y="28" width="244" height="244" rx="58" fill="#102A43"/>
+  <path d="M82 111.5 150 74l68 37.5v76L150 225l-68-37.5z" fill="none" stroke="#F8FAFC" stroke-width="10" stroke-linejoin="round"/>
+  <path d="m82 111.5 68 39 68-39M150 150.5V225" fill="none" stroke="#F8FAFC" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M101 91.5 150 64l49 27.5" fill="none" stroke="#5EEAD4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M108 174c8 17 23 27 42 27 17 0 31-8 40-21" fill="none" stroke="#5EEAD4" stroke-width="9" stroke-linecap="round"/>
+  <path d="m180 180 10 0 0 10" fill="none" stroke="#5EEAD4" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

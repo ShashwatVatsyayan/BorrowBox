@@ -96,12 +96,12 @@ export const AuthTunnelTransition = ({
           transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
-        {/* Visible Standalone Logo Directly From Folder - No Circle, No Box */}
-        <div className="mb-5 flex items-center justify-center">
+        {/* Centered Standalone Logo */}
+        <div className="mb-5 flex items-center justify-center w-full">
           <img
             src="/logo-dark.svg"
-            alt="BorrowBox - Community Borrowing Platform"
-            className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-[0_0_20px_rgba(16,185,129,0.45)]"
+            alt="BorrowBox"
+            className="h-12 sm:h-14 md:h-16 w-auto max-w-[260px] object-contain drop-shadow-[0_0_20px_rgba(16,185,129,0.45)] mx-auto"
             draggable={false}
           />
         </div>

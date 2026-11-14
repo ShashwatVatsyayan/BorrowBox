@@ -108,12 +108,12 @@ export const SiteIntroSplash = ({ onFinish }) => {
 
       {/* Main animated Logo & StrokeText wordmark */}
       <div className="relative z-10 w-full max-w-[92vw] sm:max-w-4xl px-2 sm:px-4 flex flex-col items-center">
-        {/* Prominent Visible Standalone Logo Directly From Folder - No Box, No Circle */}
-        <div className="mb-4 flex items-center justify-center">
+        {/* Centered 1:1 Box Icon Mark Above StrokeText Wordmark */}
+        <div className="mb-4 flex items-center justify-center w-full">
           <img
-            src="/logo-dark.svg"
-            alt="BorrowBox - Community Borrowing Platform"
-            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_24px_rgba(16,185,129,0.4)]"
+            src="/logo-icon-dark.svg"
+            alt="BorrowBox Emblem"
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain drop-shadow-[0_0_24px_rgba(16,185,129,0.45)] mx-auto"
             draggable={false}
           />
         </div>

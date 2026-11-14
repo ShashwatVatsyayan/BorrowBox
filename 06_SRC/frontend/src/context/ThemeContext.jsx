@@ -107,12 +107,60 @@ export function ThemeProvider({ children }) {
     return undefined;
   };
 
+  const createRippleFallback = (point, targetTheme) => {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+    const x = point?.x ?? window.innerWidth / 2;
+    const y = point?.y ?? window.innerHeight / 2;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const ripple = document.createElement('div');
+    ripple.className = 'theme-switch-ripple-fallback';
+    ripple.style.position = 'fixed';
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.style.width = '0px';
+    ripple.style.height = '0px';
+    ripple.style.borderRadius = '50%';
+    ripple.style.pointerEvents = 'none';
+    ripple.style.zIndex = '999999';
+    ripple.style.backgroundColor = targetTheme === 'dark' ? '#080C0A' : '#FAFAF9';
+    ripple.style.transform = 'translate(-50%, -50%)';
+    ripple.style.transition = 'width 460ms cubic-bezier(0.4, 0, 0.2, 1), height 460ms cubic-bezier(0.4, 0, 0.2, 1), opacity 460ms ease';
+    ripple.style.opacity = '0.92';
+
+    document.body.appendChild(ripple);
+
+    requestAnimationFrame(() => {
+      ripple.style.width = `${endRadius * 2}px`;
+      ripple.style.height = `${endRadius * 2}px`;
+      setTimeout(() => {
+        ripple.style.opacity = '0';
+        setTimeout(() => {
+          ripple.remove();
+        }, 250);
+      }, 350);
+    });
+  };
+
   const toggleTheme = (eventOrPoint) => {
     const next = resolvedTheme === 'dark' ? 'light' : 'dark';
+    const point = extractPoint(eventOrPoint);
 
-    // Prioritize native View Transitions for 100% zero-shift GPU transitions
+    // Prioritize native View Transitions with expanding circular clip-path for 100% zero-shift GPU transitions
     if (typeof document !== 'undefined' && document.startViewTransition) {
-      document.startViewTransition(() => {
+      const x = point?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
+      const y = point?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
+      const endRadius = typeof window !== 'undefined'
+        ? Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          )
+        : 1000;
+
+      const transition = document.startViewTransition(() => {
         applyDomTheme(next);
         setThemeState(next);
         try {
@@ -121,20 +169,35 @@ export function ThemeProvider({ children }) {
           // Ignore storage errors
         }
       });
+
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${endRadius}px at ${x}px ${y}px)`
+            ]
+          },
+          {
+            duration: 480,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            pseudoElement: '::view-transition-new(root)'
+          }
+        );
+      }).catch(() => {
+        // Fallback gracefully if ready promise rejects
+      });
       return;
     }
 
-    const point = extractPoint(eventOrPoint);
-    if (inkTransitionRef.current) {
-      inkTransitionRef.current.toggle(point);
-    } else {
-      applyDomTheme(next);
-      setThemeState(next);
-      try {
-        localStorage.setItem(THEME_STORAGE_KEY, next);
-      } catch {
-        // Ignore storage errors
-      }
+    // Fallback circular animation for browsers without document.startViewTransition
+    createRippleFallback(point, next);
+    applyDomTheme(next);
+    setThemeState(next);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      // Ignore storage errors
     }
   };
 
@@ -149,10 +212,49 @@ export function ThemeProvider({ children }) {
 
     if (target === resolvedTheme && newTheme === theme) return;
 
-    if (target !== resolvedTheme && inkTransitionRef.current) {
+    if (target !== resolvedTheme) {
       const point = extractPoint(eventOrPoint);
-      inkTransitionRef.current.toggle(point);
+      if (typeof document !== 'undefined' && document.startViewTransition) {
+        const x = point?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
+        const y = point?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
+        const endRadius = typeof window !== 'undefined'
+          ? Math.hypot(
+              Math.max(x, window.innerWidth - x),
+              Math.max(y, window.innerHeight - y)
+            )
+          : 1000;
+
+        const transition = document.startViewTransition(() => {
+          setThemeState(newTheme);
+          applyDomTheme(newTheme);
+          try {
+            localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+          } catch {
+            // Ignore storage errors
+          }
+        });
+
+        transition.ready.then(() => {
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`
+              ]
+            },
+            {
+              duration: 480,
+              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              pseudoElement: '::view-transition-new(root)'
+            }
+          );
+        }).catch(() => {});
+        return;
+      }
+
+      createRippleFallback(point, target);
       setThemeState(newTheme);
+      applyDomTheme(newTheme);
       try {
         localStorage.setItem(THEME_STORAGE_KEY, newTheme);
       } catch {

@@ -26,7 +26,7 @@
   --verso-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --verso-easing: cubic-bezier(0.65, 0, 0.35, 1);
-  --verso-duration: 750ms;
+  --verso-duration: 650ms;
 }
 
 /* Page Outer Container */
@@ -142,12 +142,12 @@
   }
   .verso-pane--signin {
     grid-column: 1 / 2;
-    padding-right: 5.5rem;
+    padding-right: 5rem;
     padding-left: 2.5rem;
   }
   .verso-pane--signup {
     grid-column: 2 / 3;
-    padding-left: 5.5rem;
+    padding-left: 5rem;
     padding-right: 2.5rem;
     padding-top: 2.75rem;
     padding-bottom: 3.75rem;
@@ -318,7 +318,11 @@
   text-align: center;
   padding: 2.25rem;
   will-change: transform, opacity;
-  transition: opacity 250ms ease;
+  transition: opacity 220ms ease;
+}
+
+.verso-card.is-sweeping .band_inner {
+  opacity: 0;
 }
 
 .band_tag {
@@ -383,8 +387,7 @@
     top: -5%;
     bottom: -5%;
     height: 110%;
-    width: 54%;
-    transform: skewX(-8deg);
+    transform: skewX(-5deg);
     transform-origin: center center;
     transition: left var(--verso-duration) var(--verso-easing),
                 width var(--verso-duration) var(--verso-easing),
@@ -392,30 +395,30 @@
   }
 
   .band_inner {
-    transform: skewX(8deg); /* Perfect Inverse Skew */
+    transform: skewX(5deg); /* Perfect Inverse Skew */
   }
 
   /* Resting in Sign-In Mode (Blade on the right) */
   .verso-card.is-signin .auth_band {
-    left: auto;
-    right: -10%;
-    width: 62%;
+    left: 48%;
+    right: auto;
+    width: 56%;
     box-shadow: -8px 0 32px var(--verso-accent-gold-glow), inset 2px 0 0 var(--verso-accent-gold);
   }
 
   /* Resting in Sign-Up Mode (Blade on the left) */
   .verso-card.is-signup .auth_band {
-    left: -10%;
+    left: -4%;
     right: auto;
-    width: 62%;
+    width: 56%;
     box-shadow: 8px 0 32px var(--verso-accent-gold-glow), inset -2px 0 0 var(--verso-accent-gold);
   }
 
   /* Mid-Transition Sweep State (covers 100% of card) */
   .verso-card.is-sweeping .auth_band {
-    left: -15% !important;
+    left: -8% !important;
     right: auto !important;
-    width: 130% !important;
+    width: 116% !important;
   }
 }
 
